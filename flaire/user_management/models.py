@@ -5,8 +5,11 @@ from django.db.models import Model
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    display_name = models.CharField(max_length=63)
     email_address = models.EmailField()
+    bio = models.TextField(blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)  # Stores profile images
+
+    followers = models.ManyToManyField("self", symmetrical=False, related_name="following", blank=True)
 
     def __str__(self):
-        return self.display_name
+        return self.user.username

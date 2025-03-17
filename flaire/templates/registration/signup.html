@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Log-In {% endblock %}
+{% block style %} {% endblock %}
+
+{% block content %}
+
+<nav>
+    <h3>FLAIRE</h3>
+</nav>
+
+<h2>Welcome to Flaire!</h2>
+<form method="POST">
+    {% csrf_token %}
+    
+    <div class="input-container">
+        <i class="fa fa-user"></i> 
+        {{ form.email }}
+    </div>
+
+    <div class="input-container">
+        <i class="fa fa-user"></i> 
+        {{ form.username }}
+    </div>
+
+    <div class="input-container">
+        <i class="fa fa-user"></i> 
+        {{ form.password1 }}
+    </div>
+
+    <button type="submit">sign up</button>
+</form>
+
+<p>already have an account? <a>log in</a></p>
+
+{% endblock %}

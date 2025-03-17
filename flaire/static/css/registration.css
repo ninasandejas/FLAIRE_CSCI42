@@ -1,0 +1,8 @@
+html, body {
+    background: #ECE4E4;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    font-family: "Noto Sans";
+    overflow-x: hidden;
+}

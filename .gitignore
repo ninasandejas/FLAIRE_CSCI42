@@ -1,0 +1,6 @@
+flaire/.env
+db.sqlite3
+**/**/__pycache__
+flairenv/
+.DS_Store
+media

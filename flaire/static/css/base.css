@@ -1,0 +1,49 @@
+* {
+    font-family: 'Playfair Display';
+}
+
+body {
+    background-color: #FDF9F6;
+    color: #482738;
+}
+
+p,
+li {
+    font-size: 18px;
+}
+
+
+#header {
+    border-bottom: 2px solid #CBA1BE;
+    padding: 15px;
+}
+
+ul.navbar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+ul.navbar li:first-child {
+    margin-right: auto;
+}
+
+ul.navbar li {
+    display: inline;
+    margin-left: 20px;
+    font-size: 18px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:visited {
+    color: #482738;
+}
+
+.active a {
+    color: #CBA1BE;
+}

@@ -1,9 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Playfair+Display+SC&display=swap');
+
 html, body {
     background: #ECE4E4;
     margin: 0;
     padding: 0;
     width: 100vw;
-    font-family: "Noto Sans";
+    height: 100vh;
+    font-family: 'Playfair Display', serif;
     overflow-x: hidden;
 }
 
+body {
+    height: 100vh;
+}
+
+.form-container {
+    margin-left: 25vw;
+    margin-top: 10px;
+    width: 50vw;
+    height: 55vh;
+    background-color: #FDF9F6;
+    border-radius: 11px;
+
+    display: grid;
+    grid-template-columns: 37.5vw 12.5vw;
+}
+
+/* .signup-form{
+    width: 37.5vw;
+} */
+
+input {
+    /* width: 100%; */
+    /* padding: 12px 40px; */
+    /* margin: 10px 0; */
+    width: 60%;
+    height: 35px;
+    border: none;
+    color: #975683;
+    /* font-family: "Playfair Display", serif;
+    font-size: 1rem; */
+
+    border-radius: 50px;
+    background: rgba(236, 228, 228, 0.60);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.input-container {
+    margin-left: 87px;
+    margin-top: 10px;
+}
+
+.mannequin-img {
+    width: 8.5vw;
+}
+
+/* .input-container {
+
+} */

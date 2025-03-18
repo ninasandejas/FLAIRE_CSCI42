@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %} Log-In {% endblock %}
+{% block title %} Sign Up {% endblock %}
 {% block style %} 
-<link rel = "stylesheet" href = "../css/flight_schedules.css">
+<link rel="stylesheet" type="text/css" href="{% static 'css/registration.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -15,28 +15,34 @@
 <h2>Welcome to Flaire!</h2>
 
 <div class = "form-container">
-    <form method="POST">
-        {% csrf_token %}
+    <div class = "signup-form">
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="input-container">
+                <i class="fa fa-user"></i> 
+                {{ form.email }}
+            </div>
         
-        <div class="input-container">
-            <i class="fa fa-user"></i> 
-            {{ form.email }}
-        </div>
+            <div class="input-container">
+                <i class="fa fa-user"></i> 
+                {{ form.username }}
+            </div>
+        
+            <div class="input-container">
+                <i class="fa fa-user"></i> 
+                {{ form.password1 }}
+            </div>
+        
+            <button type="submit">sign up</button>
+        </form>
     
-        <div class="input-container">
-            <i class="fa fa-user"></i> 
-            {{ form.username }}
-        </div>
-    
-        <div class="input-container">
-            <i class="fa fa-user"></i> 
-            {{ form.password1 }}
-        </div>
-    
-        <button type="submit">sign up</button>
-    </form>
-</div>
+        <p>already have an account? <a>log in</a></p>
+    </div>
 
-<p>already have an account? <a>log in</a></p>
+    <div class = "mannequin-img-div">
+        <img src="{% static 'img/mannequin.png' %}" alt="Mannequin" class = "mannequin-img">
+    </div>
+</div>
 
 {% endblock %}

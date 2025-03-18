@@ -24,34 +24,39 @@ from django.urls import reverse_lazy
 #         form.save()
 #         return super().form_valid(form)
 
+
 class UserLoginView(FormView):
     model = User
     template_name = "registration/login.html"
     form_class = LoginForm
     redirect_authenticated_user = True
 
+
     def get_success_url(self):
-        return reverse_lazy('placeholder')  # Redirect to homepage after successful login
+        return reverse_lazy('user_management:placeholder')  # Redirect to homepage after successful login
 
 
 class UserCreateView(CreateView):
     model = User
     form_class = SignUpForm
     template_name = "registration/signup.html"
-    success_url = reverse_lazy('login')
+
 
     def form_valid(self, form):
         user = form.save()
         
         Profile.objects.create(
             user=user,
-            display_name=user.username, 
             email_address=user.email  
         )
 
         login(self.request, user)  
 
-        return redirect(self.success_url)
+        return redirect(self.get_success_url())
+    
+
+    def get_success_url(self):
+        return reverse_lazy('user_management:placeholder') 
     
     
 class PlaceholderView(View):

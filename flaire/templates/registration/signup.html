@@ -2,7 +2,9 @@
 {% load static %}
 
 {% block title %} Log-In {% endblock %}
-{% block style %} {% endblock %}
+{% block style %} 
+<link rel = "stylesheet" href = "../css/flight_schedules.css">
+{% endblock %}
 
 {% block content %}
 
@@ -11,26 +13,29 @@
 </nav>
 
 <h2>Welcome to Flaire!</h2>
-<form method="POST">
-    {% csrf_token %}
+
+<div class = "form-container">
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div class="input-container">
+            <i class="fa fa-user"></i> 
+            {{ form.email }}
+        </div>
     
-    <div class="input-container">
-        <i class="fa fa-user"></i> 
-        {{ form.email }}
-    </div>
-
-    <div class="input-container">
-        <i class="fa fa-user"></i> 
-        {{ form.username }}
-    </div>
-
-    <div class="input-container">
-        <i class="fa fa-user"></i> 
-        {{ form.password1 }}
-    </div>
-
-    <button type="submit">sign up</button>
-</form>
+        <div class="input-container">
+            <i class="fa fa-user"></i> 
+            {{ form.username }}
+        </div>
+    
+        <div class="input-container">
+            <i class="fa fa-user"></i> 
+            {{ form.password1 }}
+        </div>
+    
+        <button type="submit">sign up</button>
+    </form>
+</div>
 
 <p>already have an account? <a>log in</a></p>
 

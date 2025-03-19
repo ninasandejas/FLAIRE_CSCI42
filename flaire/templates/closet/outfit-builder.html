@@ -1,8 +1,30 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}Outfit Builder{% endblock %}
 
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/closet/outfit-builder.css' %}">
+{% endblock %}
+
 {% block content %}
-<h1>Build your outfit</h1>
-<p>test</p>
+<div id="main">
+    <div id="column1">
+        <!-- <div id="namefield-container"> <i>insert outfit name</i> </div> -->
+        <div id="namefield-container"> <input type="text" id="outfit-name" name="outfit-name"
+                placeholder="Enter outfit name..."> </div>
+        <div id="layering-panel"> panel </div>
+        <div id="collage-dropzone"> dropzone </div>
+        <div id="button-container">
+            <button class="button">Save to Outfits</button>
+        </div>
+    </div>
+    <div id="column2">
+        <div id="drawers-container"> drawers go here </div>
+        <div id="grid-container"></div>
+    </div>
+</div>
+<div id="footer"> ♡ </div>
+{% endblock %}
+
+{% block scripts %}
 {% endblock %}

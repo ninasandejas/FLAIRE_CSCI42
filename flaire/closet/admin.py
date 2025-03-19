@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import *
+
+# class ClothingItemAdmin(admin.ModelAdmin):
+#     list_display = []
+
+# class OutfitAdmin(admin.ModelAdmin):

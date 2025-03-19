@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Playfair+Display+SC&display=swap');
 
-html, body {
+html, body.for-specific {
     background: #ECE4E4;
     margin: 0;
     padding: 0;
@@ -23,38 +23,108 @@ body {
     border-radius: 11px;
 
     display: grid;
-    grid-template-columns: 37.5vw 12.5vw;
+    grid-template-columns: 30vw 20vw;
 }
 
-/* .signup-form{
-    width: 37.5vw;
-} */
-
-input {
-    /* width: 100%; */
-    /* padding: 12px 40px; */
-    /* margin: 10px 0; */
-    width: 60%;
-    height: 35px;
-    border: none;
-    color: #975683;
-    /* font-family: "Playfair Display", serif;
-    font-size: 1rem; */
-
-    border-radius: 50px;
-    background: rgba(236, 228, 228, 0.60);
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-}
-
-.input-container {
-    margin-left: 87px;
-    margin-top: 10px;
+.mannequin-img-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .mannequin-img {
     width: 8.5vw;
 }
 
-/* .input-container {
+.signup-form {
+    margin-top: 50px;
+}
 
-} */
+.input-container {
+    position: relative;
+    margin-left: 75px;
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    width: 80%;
+    border-radius: 50px;
+    background: rgba(236, 228, 228, 0.60);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.input-container img {
+    position: absolute;
+    left: 15px;
+    /* width: 20px;
+    height: 20px; */
+}
+
+.input-container input {
+    width: 80%;
+    height: 35px;
+    border: none;
+    border-radius: 50px;
+    background: transparent;
+    color: #975683;
+    padding-left: 45px;
+    font-size: 1rem;
+    outline: none;
+    box-shadow: none;
+}
+
+.signup-button {
+    display: block; /* Ensures it takes full width available */
+    margin: 30px auto 0 auto; /* Top margin + auto centering */
+    width: 25%;
+    height: 45px;
+    flex-shrink: 0;
+    margin-top: 30px;
+    border: none;
+    border-radius: 50px;
+    background: #F4E6F0;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.has-account {
+    margin-top: 40px;
+    font-size: 15px;
+    color: #975683;
+    text-align: center;
+    font-family: "Playfair Display";
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.signup-to-login {
+    color: #482738;
+    font-weight: 700;
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+    text-decoration-skip-ink: auto;
+    text-decoration-thickness: auto;
+    text-underline-offset: auto;
+    text-underline-position: from-font;
+}
+
+.welcome-heading {
+    margin-top: 80px;
+    color: #482738;
+    text-align: center;
+    font-family: "Playfair Display";
+    font-size: 30px;
+    font-style: italic;
+    font-weight: 700;
+    line-height: normal;    
+}
+
+.flaire {
+    color: #975683;
+    font-size: 30px;
+    font-style: normal;
+}
+
+.exclaim {
+    font-style: normal;
+}

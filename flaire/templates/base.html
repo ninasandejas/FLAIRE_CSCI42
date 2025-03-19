@@ -1,13 +1,37 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> {% block title %} {% endblock %}  </title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Playfair+Display+SC&display=swap" rel="stylesheet">
-    {% block style %} {% endblock %}
+    <link href='https://fonts.googleapis.com/css?family=Playfair Display' rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block styles %}{% endblock %}
+    <title>Flaire</title>
 </head>
+
 <body>
-    {% block content %} {% endblock %}
+    <nav id="header">
+        <ul class="navbar">
+            <li class="{% if active_tab == 'home'%}active{% endif %}" style="float:left">
+                <a href="{% url 'home'%}">FLAIRE</a>
+            </li>
+            <li class="{% if active_tab == 'wishlist'%}active{% endif %}">
+                <a href="">wishlist</a>
+            </li>
+            <li class="{% if active_tab == 'showrooms'%}active{% endif %}">
+                <a href="">showrooms</a>
+            </li>
+            <li class="{% if active_tab == 'closet'%}active{% endif %}">
+                <a href="{% url 'closet:closet' %}">closet</a>
+            </li>
+            <li class="{% if active_tab == 'profile'%}active{% endif %}">
+                <a href="">profile</a>
+            </li>
+        </ul>
+    </nav>
+    {% block content %}{% endblock %}
+    {% block scripts %}{% endblock %}
 </body>
 </html>

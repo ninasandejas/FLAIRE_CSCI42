@@ -1,0 +1,130 @@
+.container {
+    display: flex;
+}
+
+#main {
+    display: flex;
+    justify-content: center;
+    padding: 50px 0;
+}
+
+#column1 {
+    width: 350px;
+    height: 500px;
+    border-style: solid;
+    border-color: #F4e6F0;
+    text-align: center;
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    grid-template-rows: 3fr 380px 1fr 3fr;
+    grid-template-areas:
+        "namefieldcontainer namefieldcontainer"
+        "layeringpanel collagedropzone"
+        ". ."
+        "buttoncontainer buttoncontainer"
+    ;
+    flex-shrink: 0;
+}
+
+#namefield-container {
+    grid-area: namefieldcontainer;
+    height: 100%;
+    color: #7B6A73;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#outfit-name {
+    background-color: #FDF9F6;
+    border: none;
+    outline: none;
+    width: 60%;
+    padding: 5px;
+    text-align: center;
+    font-size: 15px;
+}
+
+/* #outfit-name:focus {
+    outline: 2px solid #F4E6F0;
+} */
+
+#layering-panel {
+    grid-area: layeringpanel;
+    background-color: #ECE4E4;
+}
+
+#collage-dropzone {
+    grid-area: collagedropzone;
+    background-color: #FFFFFF;
+}
+
+#button-container {
+    grid-area: buttoncontainer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.button {
+    background-color: #F4E6F0;
+    border: none;
+    color: #7B6A73;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    border-radius: 30px;
+}
+
+.button:hover {
+    background-color: #DFBCD4;
+    color: #ffffff;
+}
+
+
+
+#column2 {
+    width: 700px;
+    height: 500px;
+    border-style: solid;
+    border-color: #F4e6F0;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+#drawers-container {
+    padding: 15px;
+    padding-top: 30px;
+}
+
+#grid-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 15px;
+    width: 70%;
+    height: 300px;
+    margin: auto;
+    background-color: #FDF9F6;
+
+}
+
+.grid-item {
+    background-color: white;
+    /* border: 1px solid #F4e6F0; */
+    border-radius: 8px;
+    aspect-ratio: 1;
+    overflow: hidden;
+}
+
+#footer {
+    border-top: 2px solid #CBA1BE;
+    padding: 15px;
+    text-align: center;
+}

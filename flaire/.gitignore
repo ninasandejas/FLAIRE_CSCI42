@@ -112,18 +112,13 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-flairenv/
-flaire/.env
-.*env
-.*venv
-*env/
-*venv/
-*ENV/
-*env.bak/
-*venv.bak/
-
-# macOS system files
-.DS_Store
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 
 # Spyder project settings
 .spyderproject

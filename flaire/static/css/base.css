@@ -14,7 +14,7 @@ li {
 
 
 #header {
-    border-bottom: 2px solid #CBA1BE;
+    border-bottom: 2px solid #CCA2BF;
     padding: 15px;
 }
 
@@ -45,5 +45,5 @@ a:visited {
 }
 
 .active a {
-    color: #CBA1BE;
+    color: #CCA2BF;
 }

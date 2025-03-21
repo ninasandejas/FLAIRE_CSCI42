@@ -1,0 +1,28 @@
+#main {
+    display: flex;
+    justify-content: center;
+    padding: 50px 0;
+}
+
+#user-info-column {
+    /* width: 400px; */
+    flex: 4;
+    /* min-width: 300px; */
+    height: 500px;
+    border-style: solid;
+    border-color: #F4e6F0;
+    text-align: center;
+    display: grid;
+    flex-shrink: 0;
+}
+
+#widget-column {
+    /* width: 700px; */
+    flex: 7;
+    /* min-width: 525px; */
+    height: 500px;
+    border-style: solid;
+    border-color: #F4e6F0;
+    text-align: center;
+    flex-shrink: 0;
+}

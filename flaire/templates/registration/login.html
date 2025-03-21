@@ -3,36 +3,37 @@
 
 {% block title %} Log-In {% endblock %}
 {% block styles %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/registration.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/user_management/registration.css' %}">
 {% endblock %}
 
 {% block content %}
 
-<h2 class = "welcome-back">Welcome back!</span></h2>
+<h2 class="welcome-back">Welcome back!</span></h2>
 
-<div class = "form-container">
-    <div class = "login-form">
+<div class="form-container">
+    <div class="login-form">
         <form method="POST">
             {% csrf_token %}
-        
+
             <div class="input-container">
                 <img src="{% static 'img/user-icon.png' %}" alt="user icon" class="input-icon">
                 {{ form.username }}
             </div>
-        
+
             <div class="input-container">
                 <img src="{% static 'img/lock.png' %}" alt="lock icon" class="input-icon">
                 {{ form.password }}
             </div>
-        
-            <button type="submit" class = "login-button">log in</button>
+
+            <button type="submit" class="login-button">log in</button>
         </form>
-    
-        <p class = "has-account">don't have an account? <a class = "signup-to-login" href = "{% url 'user_management:signup' %}">sign up</a></p>
+
+        <p class="has-account">don't have an account? <a class="signup-to-login"
+                href="{% url 'user_management:signup' %}">sign up</a></p>
     </div>
 
-    <div class = "mannequin-img-div">
-        <img src="{% static 'img/mannequin.png' %}" alt="Mannequin" class = "mannequin-img">
+    <div class="mannequin-img-div">
+        <img src="{% static 'img/mannequin.png' %}" alt="Mannequin" class="mannequin-img">
     </div>
 </div>
 

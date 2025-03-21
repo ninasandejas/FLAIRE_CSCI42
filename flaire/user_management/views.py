@@ -57,4 +57,6 @@ class UserCreateView(CreateView):
 
 class ProfileView(View):
     def get(self, request):
-        return render(request, "profile.html", {"active_tab": "profile"})
+        return render(
+            request, "user_management/profile.html", {"active_tab": "profile"}
+        )

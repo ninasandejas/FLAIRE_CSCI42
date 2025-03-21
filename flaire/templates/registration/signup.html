@@ -2,44 +2,45 @@
 {% load static %}
 
 {% block title %} Sign Up {% endblock %}
-{% block styles %} 
-<link rel="stylesheet" type="text/css" href="{% static 'css/registration.css' %}">
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/user_management/registration.css' %}">
 {% endblock %}
 
 {% block content %}
 
-<h2 class = "welcome-heading">Welcome to <span class = "flaire">Flaire</span><span class = "exclaim">!</span></h2>
+<h2 class="welcome-heading">Welcome to <span class="flaire">Flaire</span><span class="exclaim">!</span></h2>
 
 <!-- CSS mostly done! just need to make it more responsive and make the 
  positions be more relative in position towards each other -->
-<div class = "form-container">
-    <div class = "signup-form">
+<div class="form-container">
+    <div class="signup-form">
         <form method="POST">
             {% csrf_token %}
-            
+
             <div class="input-container">
                 <img src="{% static 'img/@.png' %}" alt="@ icon" class="input-icon">
                 {{ form.email }}
             </div>
-        
+
             <div class="input-container">
                 <img src="{% static 'img/user-icon.png' %}" alt="user icon" class="input-icon">
                 {{ form.username }}
             </div>
-        
+
             <div class="input-container">
                 <img src="{% static 'img/lock.png' %}" alt="lock icon" class="input-icon">
                 {{ form.password1 }}
             </div>
-        
-            <button type="submit" class = "signup-button">sign up</button>
+
+            <button type="submit" class="signup-button">sign up</button>
         </form>
-    
-        <p class = "has-account">already have an account? <a class = "signup-to-login" href = "{% url 'user_management:login' %}">log in</a></p>
+
+        <p class="has-account">already have an account? <a class="signup-to-login"
+                href="{% url 'user_management:login' %}">log in</a></p>
     </div>
 
-    <div class = "mannequin-img-div">
-        <img src="{% static 'img/mannequin.png' %}" alt="Mannequin" class = "mannequin-img">
+    <div class="mannequin-img-div">
+        <img src="{% static 'img/mannequin.png' %}" alt="Mannequin" class="mannequin-img">
     </div>
 </div>
 

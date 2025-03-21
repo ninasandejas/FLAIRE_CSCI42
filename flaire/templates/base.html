@@ -11,7 +11,7 @@
     <title>Flaire</title>
 </head>
 
-<body class = "for-specific">
+<body class="for-specific">
     <nav id="header">
         <ul class="navbar">
             <li class="{% if active_tab == 'home'%}active{% endif %}" style="float:left">
@@ -27,7 +27,7 @@
                 <a href="{% url 'closet:closet' %}">closet</a>
             </li>
             <li class="{% if active_tab == 'profile'%}active{% endif %}">
-                <a href="">profile</a>
+                <a href="{% url 'user_management:profile' %}">profile</a>
             </li>
         </ul>
     </nav>

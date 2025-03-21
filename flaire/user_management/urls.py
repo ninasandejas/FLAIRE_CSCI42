@@ -1,13 +1,13 @@
-from django.urls import path
-from .views import UserLoginView, UserCreateView, PlaceholderView
-
 from django.conf import settings
 from django.conf.urls.static import static
+from django.urls import path
 
-app_name = 'user_management'
+from .views import *
+
+app_name = "user_management"
 
 urlpatterns = [
-    path('login/', UserLoginView.as_view(), name='login'),
-    path('signup/', UserCreateView.as_view(), name='signup'),
-    path('placeholder/', PlaceholderView.as_view(), name='placeholder'),
+    path("login/", UserLoginView.as_view(), name="login"),
+    path("signup/", UserCreateView.as_view(), name="signup"),
+    path("profile/", ProfileView.as_view(), name="profile"),
 ]

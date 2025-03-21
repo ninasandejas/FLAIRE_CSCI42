@@ -27,7 +27,7 @@ from .models import Profile
 
 class UserLoginView(FormView):
     model = User
-    template_name = "registration/login.html"
+    template_name = "user_management/login.html"
     form_class = LoginForm
     redirect_authenticated_user = True
 
@@ -40,7 +40,7 @@ class UserLoginView(FormView):
 class UserCreateView(CreateView):
     model = User
     form_class = SignUpForm
-    template_name = "registration/signup.html"
+    template_name = "user_management/signup.html"
 
     def form_valid(self, form):
         user = form.save()

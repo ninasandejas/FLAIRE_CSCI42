@@ -128,3 +128,23 @@
     padding: 15px;
     text-align: center;
 }
+
+.add-item-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #CBA1BE;
+    text-decoration: none;
+    width: 100%;
+    height: 100%;
+    transition: background-color 0.2s;
+}
+
+.add-item-link:hover {
+    background-color: #F4E6F0;
+    border: none;
+    color: #7B6A73;
+    cursor: pointer;
+}

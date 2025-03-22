@@ -134,3 +134,5 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+TINIFY_API_KEY = os.getenv("TINIFY_API_KEY")

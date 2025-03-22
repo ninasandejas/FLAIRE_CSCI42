@@ -1,7 +1,9 @@
+import os
+
+import tinify
+from django.conf import settings
 from django.db import models
 from user_management.models import Profile
-
-# from django.forms import CharField
 
 
 class ClothingItem(models.Model):
@@ -45,13 +47,27 @@ class ClothingItem(models.Model):
             ("GREEN", "Green"),
             ("KHAKI", "Khaki"),
             ("SILVER", "Silver"),
-            ("GOLD", "GOld"),
+            ("GOLD", "Gold"),
             ("MULTI", "Multicolor"),
         ],
         default="BLACK",
         null=False,
         blank=False,
     )
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        # Only try to compress if it's a PNG and the file exists
+        if self.image and self.image.name.endswith(".png"):
+            image_path = self.image.path
+            if os.path.exists(image_path):
+                try:
+                    tinify.key = settings.TINIFY_API_KEY
+                    source = tinify.from_file(image_path)
+                    source.to_file(image_path)
+                except tinify.Error as e:
+                    print("❌ TinyPNG compression failed:", e)
 
 
 class Outfit(models.Model):

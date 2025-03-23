@@ -1,2 +1,3 @@
 psycopg
 pillow
+tinify

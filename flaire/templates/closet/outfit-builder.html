@@ -9,7 +9,6 @@
 {% block content %}
 <div id="main">
     <div id="column1">
-        <!-- <div id="namefield-container"> <i>insert outfit name</i> </div> -->
         <div id="namefield-container"> <input type="text" id="outfit-name" name="outfit-name"
                 placeholder="Enter outfit name..."> </div>
         <div id="layering-panel"> panel </div>
@@ -23,9 +22,11 @@
         <div id="grid-container"></div>
     </div>
 </div>
+<canvas id="hidden-canvas" style="display: none;"></canvas>
 <div id="footer"> ♡ </div>
 {% endblock %}
 
 {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
 <script src="{% static 'js/closet/outfit-builder.js' %}"></script>
 {% endblock %}

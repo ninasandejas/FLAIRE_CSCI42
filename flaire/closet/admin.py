@@ -4,7 +4,14 @@ from .models import ClothingItem, Outfit
 
 
 class ClothingItemAdmin(admin.ModelAdmin):
-    list_display = ("id", "owner", "brand", "category", "color", "date_created")
+    list_display = (
+        "id",
+        "owner",
+        "category",
+        "brand",
+        "color",
+        "image",
+    )
     list_filter = ("category", "color", "brand")
     search_fields = (
         "brand",

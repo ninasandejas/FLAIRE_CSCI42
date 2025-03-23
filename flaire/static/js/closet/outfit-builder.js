@@ -5,13 +5,27 @@ document.addEventListener("DOMContentLoaded", function () {
     const totalSquares = 15;
     let selectedElement = null;
 
-    loadClothingImages();
+    loadClothingImages("TOP"); //default
 
     setupDropzoneEvents();
     setupKeyboardEvents();
 
-    function loadClothingImages() {
-        fetch("/closet/images/")
+    const tabs = document.querySelectorAll(".drawer-tab");
+
+    tabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+            tabs.forEach(t => t.classList.remove("active"));
+            tab.classList.add("active");
+
+            const category = tab.dataset.category;
+            loadClothingImages(category);
+        });
+    });
+
+    function loadClothingImages(category = "TOP") {
+        gridContainer.innerHTML = ""; // Clear the grid
+
+        fetch(`/closet/images/?category=${category}`)
             .then((response) => response.json())
             .then((data) => {
                 const images = data.images;
@@ -170,6 +184,3 @@ document.addEventListener("DOMContentLoaded", function () {
         wrapper.querySelectorAll(".resize-handle").forEach(handle => handle.remove());
     }
 });
-
-
-

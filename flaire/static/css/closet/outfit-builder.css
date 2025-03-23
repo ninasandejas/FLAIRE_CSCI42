@@ -173,16 +173,39 @@
 #column2 {
     width: 700px;
     height: 500px;
-    /* border-style: solid; */
-    /* border-color: #F4e6F0; */
+    /* border-style: solid;
+    border-color: #F4e6F0; */
     text-align: center;
     flex-shrink: 0;
 }
 
-#drawers-container {
-    padding: 15px;
+#drawer-tabs {
     padding-top: 30px;
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+
 }
+
+.drawer-tab {
+    border: none;
+    background-color: #FDF9F6;
+    color: #482738;
+    padding: 10px 10px 5px 10px;
+    font-size: 16px;
+    transition: color 0.1s ease-in-out;
+}
+
+.drawer-tab:hover {
+    color: #CBA1BE;
+}
+
+.drawer-tab.active {
+    border-bottom: solid;
+    border-color: #CBA1BE;
+}
+
 
 #grid-container {
     display: grid;

@@ -13,6 +13,11 @@ def add_clothing_item(request):
 
 
 def clothing_item_images(request):
+    category = request.GET.get("category")
     items = ClothingItem.objects.all()
+
+    if category:
+        items = items.filter(category=category.upper())
+
     image_urls = [item.image.url for item in items]
     return JsonResponse({"images": image_urls})

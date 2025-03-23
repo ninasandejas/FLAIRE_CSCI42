@@ -11,8 +11,11 @@
     <div id="column1">
         <div id="namefield-container"> <input type="text" id="outfit-name" name="outfit-name"
                 placeholder="Enter outfit name..."> </div>
-        <div id="layering-panel"> panel </div>
-        <div id="collage-dropzone"> dropzone </div>
+        <div id="layering-panel">
+            <div id="layering-panel-header">layering panel</div>
+            <div id="layer-thumbnails-area"></div>
+        </div>
+        <div id="collage-dropzone"></div>
         <div id="button-container">
             <button class="button">Save to Outfits</button>
         </div>
@@ -34,6 +37,7 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
 <script src="{% static 'js/closet/outfit-builder.js' %}"></script>
 {% endblock %}

@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.shortcuts import render
 from django.urls import include, path
+from django.contrib.auth import views as auth_views
 
 
 def home(request):
@@ -28,4 +29,5 @@ urlpatterns = [
     path("", include("user_management.urls")),
     path("closet/", include("closet.urls", namespace="closet")),
     path("", home, name="home"),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]

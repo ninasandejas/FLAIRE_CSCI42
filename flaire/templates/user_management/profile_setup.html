@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Complete Your Profile {% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/user_management/profile_setup.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<h2 class="setup-heading">Complete Your Profile</h2>
+
+<div class="form-container">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="file-upload">
+            <input type="file" id="profile_picture" name="profile_picture" accept="image/*" hidden>
+            <label for="profile_picture" class="upload-label">+</label>
+        </div>
+        <div class = "text">
+            <h5>Add Profile Picture</h5>
+        </div>
+
+        <div class="bio-container">
+            <label for="{{ form.bio.id_for_label }}" class="input-label"></label>
+            {{ form.bio }}
+        </div>
+
+        {% if form.errors %}
+            <div class="error-container">
+                <ul class="error-list">
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <li class="error-message">{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        <div class= "redirect">
+            <button type="submit" class="submit-button">Save</button>
+        </div>
+        <div class="text">
+            <a href="{% url 'user_management:profile' %}" class="skip">skip this step</a>    
+        </div>
+    </form>
+
+</div>
+
+{% endblock %}

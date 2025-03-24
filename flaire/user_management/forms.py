@@ -13,6 +13,7 @@ class LoginForm(AuthenticationForm):
         widget=forms.PasswordInput(attrs=
         {'class': 'form-control', 'placeholder': 'password'}))
 
+
 class SignUpForm(UserCreationForm):
     username = forms.CharField(
         widget=forms.TextInput(attrs={
@@ -46,11 +47,22 @@ class SignUpForm(UserCreationForm):
         return cleaned_data
     
 
+class ProfileSetupForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ["profile_picture", "bio"]
+        widgets = {
+            "bio": forms.Textarea(attrs={"placeholder": "Tell us something about yourself...", "rows": 3}),
+            "maxlength": "150",
+            "style": "resize: none;"
+        }
 
-# class ProfileForm(forms.ModelForm):
-#     class Meta:
-#         model = Profile 
-#         fields = [
-#             "username",
-#             "email_address"
-#         ]
+    def clean(self):
+        cleaned_data = super().clean()
+        profile_picture = cleaned_data.get("profile_picture")
+        bio = cleaned_data.get("bio")
+
+        if not profile_picture and not bio:
+            raise forms.ValidationError("You must fill in at least one field (profile picture or bio).")
+
+        return cleaned_data

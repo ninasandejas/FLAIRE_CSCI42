@@ -71,9 +71,7 @@ body {
 .signup-button,
 .login-button {
     display: block;
-    /* Ensures it takes full width available */
     margin: 30px auto 0 auto;
-    /* Top margin + auto centering */
     width: 25%;
     height: 45px;
     flex-shrink: 0;

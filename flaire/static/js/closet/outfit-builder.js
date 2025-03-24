@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     if (i === 0) {
                         const plusLink = document.createElement("a");
-                        plusLink.href = "/closet/add/";
+                        plusLink.href = `/closet/add/?category=${category}`;
                         plusLink.classList.add("add-item-link");
                         plusLink.innerHTML = "+";
                         square.appendChild(plusLink);

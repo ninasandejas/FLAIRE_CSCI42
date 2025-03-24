@@ -35,24 +35,24 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 80px;  /* Adjust size */
-    height: 80px; /* Adjust size */
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-    background-color: #ddd;  /* Light grey background */
-    color: #555;  /* Darker text */
-    font-size: 40px; /* Big "+" symbol */
+    background-color: #ddd;
+    color: #555;
+    font-size: 40px;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .upload-label:hover {
-    background-color: #bbb; /* Darker on hover */
+    background-color: #bbb;
 }
 
 .bio-container textarea {
     width: 80%;
-    height: 80px; /* Adjust height */
+    height: 80px;
     border-radius: 20px;
     background: white;
     color: #975683;
@@ -60,12 +60,11 @@ body {
     font-size: 1rem;
     outline: none;
     box-shadow: none;
-    resize: none; /* Prevents resizing */
-    overflow: hidden; /* Keeps the text within limits */
+    resize: none;
+    overflow: hidden;
 }
 
 .submit-button {
-    /* display: block; */
     width: 25%;
     height: 45px;
     border: none;

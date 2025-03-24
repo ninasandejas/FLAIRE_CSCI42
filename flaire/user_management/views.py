@@ -24,7 +24,6 @@ from .models import Profile
 #         form.save()
 #         return super().form_valid(form)
 
-
 class UserLoginView(FormView):
     model = User
     template_name = "user_management/login.html"
@@ -47,6 +46,12 @@ class UserLoginView(FormView):
             return redirect(self.get_success_url())
         else:
             return self.form_invalid(form)
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if 'next' in self.request.GET:
+            context['warning_message'] = "*you need to be logged in to access this page."
+        return context
 
 
 class UserCreateView(CreateView):
@@ -87,7 +92,7 @@ class ProfileSetupView(LoginRequiredMixin, UpdateView):
         profile_picture = form.cleaned_data.get("profile_picture")
 
         if not bio and not profile_picture:
-            form.add_error(None, "Please provide at least a bio or a profile picture.")
+            form.add_error(None, "please provide at least a bio or a profile picture.")
             return self.form_invalid(form)
 
         return super().form_valid(form)
@@ -95,6 +100,9 @@ class ProfileSetupView(LoginRequiredMixin, UpdateView):
 
 class ProfileView(View):
     def get(self, request):
+        profile = Profile.objects.get(user=request.user)
         return render(
-            request, "user_management/profile.html", {"active_tab": "profile"}
+                request, 
+                "user_management/profile.html", 
+                {"profile": profile, "active_tab": "profile"}
         )

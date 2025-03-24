@@ -24,12 +24,17 @@
                 <img src="{% static 'img/lock.png' %}" alt="lock icon" class="input-icon">
                 {{ form.password }}
             </div>
-
+            {% if warning_message %}
+            <p class="warning">{{ warning_message }}</p>
+            {% endif %}
             <button type="submit" class="login-button">log in</button>
         </form>
 
-        <p class="has-account">don't have an account? <a class="signup-to-login"
-                href="{% url 'user_management:signup' %}">sign up</a></p>
+        <p class="has-account">don't have an account? 
+            <a class="signup-to-login"
+                href="{% url 'user_management:signup' %}">sign up
+            </a>
+        </p>            
     </div>
 
     <div class="mannequin-img-div">

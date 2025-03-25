@@ -40,6 +40,7 @@
     align-items: center;
     gap: 10px;
     overflow: hidden;
+    outline: 1px solid #ECE4E4;
 }
 
 #layering-panel-header {
@@ -91,7 +92,7 @@
     background-color: white;
     position: relative;
     overflow: hidden;
-    border: 1px dashed #DFBCD4;
+    outline: 1px dashed #DFBCD4;
 }
 
 .dropped-item {
@@ -159,7 +160,7 @@
     height: 100%;
 }
 
-.button {
+#save-button {
     background-color: #F4E6F0;
     border: none;
     color: #7B6A73;
@@ -175,7 +176,7 @@
     user-select: none;
 }
 
-.button:hover {
+#save-button:hover {
     background-color: #DFBCD4;
     color: #ffffff;
 }
@@ -232,7 +233,6 @@
 
 .grid-item {
     background-color: white;
-    /* border: 1px solid #F4e6F0; */
     border-radius: 8px;
     aspect-ratio: 1;
     overflow: hidden;

@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function loadClothingImages(category = "TOP") {
-        gridContainer.innerHTML = ""; // Clear the grid
+        gridContainer.innerHTML = ""; // clear the grid
 
         fetch(`/closet/images/?category=${category}`)
             .then((response) => response.json())
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     if (i === 0) {
                         const plusLink = document.createElement("a");
-                        plusLink.href = `/closet/add/?category=${category}`;
+                        plusLink.href = `/closet/add-clothing-item/?category=${category}`;
                         plusLink.classList.add("add-item-link");
                         plusLink.innerHTML = "+";
                         square.appendChild(plusLink);
@@ -46,13 +46,21 @@ document.addEventListener("DOMContentLoaded", function () {
                         img.alt = `Clothing Item ${i}`;
                         img.draggable = true;
                         img.classList.add("draggable-item");
+
                         Object.assign(img.style, {
-                            height: "100%",
-                            objectFit: "cover"
+                            width: "auto",
+                            height: "auto",
+                            maxWidth: "100%",
+                            maxHeight: "100%",
+                            objectFit: "contain"
                         });
 
                         img.addEventListener("dragstart", (e) => {
                             e.dataTransfer.setData("text/plain", img.src);
+                        });
+
+                        img.addEventListener("click", () => {
+                            addToDropzone(img.src);
                         });
 
                         square.appendChild(img);
@@ -92,10 +100,11 @@ document.addEventListener("DOMContentLoaded", function () {
             const img = document.createElement("img");
             img.src = imageUrl;
             Object.assign(img.style, {
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                pointerEvents: "none"
+                width: "auto",
+                height: "auto",
+                maxWidth: "100%",
+                maxHeight: "100%",
+                objectFit: "contain"
             });
 
             document.querySelectorAll(".resizable-draggable").forEach(el => {
@@ -141,6 +150,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
     }
+
 
     document.addEventListener("click", (e) => {
         if (e.target.classList.contains("resize-handle")) {
@@ -244,4 +254,43 @@ document.addEventListener("DOMContentLoaded", function () {
     function removeResizeHandles(wrapper) {
         wrapper.querySelectorAll(".resize-handle").forEach(handle => handle.remove());
     }
+
+    document.getElementById("save-button").addEventListener("click", function () {
+        document.querySelectorAll(".resizable-draggable").forEach(el => {
+            el.classList.remove("selected");
+            removeResizeHandles(el);
+        });
+        const dropzone = document.getElementById("collage-dropzone");
+
+        html2canvas(dropzone, {
+            backgroundColor: "#FFFFFF",
+            logging: false,
+        }).then(canvas => {
+            canvas.toBlob(function (blob) {
+                const formData = new FormData();
+                formData.append("image", blob, "outfit.png");
+
+                fetch("/closet/save-outfit/", {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "X-CSRFToken": getCSRFToken(),
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert("Outfit saved!");
+                    })
+                    .catch(error => {
+                        console.error("Error saving outfit:", error);
+                        alert("Failed to save outfit.");
+                    });
+            }, "image/png");
+        });
+    });
+
+    function getCSRFToken() {
+        return document.cookie.split("; ").find(row => row.startsWith("csrftoken="))?.split("=")[1];
+    }
+
 });

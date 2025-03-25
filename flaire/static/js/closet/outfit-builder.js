@@ -47,7 +47,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         img.draggable = true;
                         img.classList.add("draggable-item");
                         Object.assign(img.style, {
-                            width: "100%",
                             height: "100%",
                             objectFit: "cover"
                         });

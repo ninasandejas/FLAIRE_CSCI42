@@ -13,7 +13,7 @@ class ClothingItem(models.Model):
     image = models.ImageField(upload_to="clothingitemimages/", blank=False)
     date_created = models.DateTimeField(auto_now_add=True, null=False)
     date_updated = models.DateTimeField(auto_now=True, null=False)
-    brand = models.CharField(max_length=100, null=True)
+    brand = models.CharField(max_length=100, null=True, blank=True)
     category = models.CharField(
         max_length=10,
         choices=[

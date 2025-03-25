@@ -11,14 +11,12 @@
 #column1 {
     width: 350px;
     height: 500px;
-    /* border-style: solid; */
-    /* border-color: #F4e6F0; */
     text-align: center;
     display: grid;
     grid-template-columns: 90px 1fr;
     grid-template-rows: 3fr 380px 1fr 3fr;
     grid-template-areas:
-        "namefieldcontainer namefieldcontainer"
+        "outfitheader outfitheader"
         "layeringpanel collagedropzone"
         ". ."
         "buttoncontainer buttoncontainer"
@@ -26,35 +24,12 @@
     flex-shrink: 0;
 }
 
-#namefield-container {
-    grid-area: namefieldcontainer;
-    height: 100%;
-    color: #7B6A73;
-    display: flex;
+#outfit-header {
+    grid-area: outfitheader;
     justify-content: center;
     align-items: center;
+    user-select: none;
 }
-
-#outfit-name {
-    background-color: #FDF9F6;
-    border: none;
-    outline: none;
-    width: 60%;
-    padding: 5px;
-    text-align: center;
-    font-size: 15px;
-}
-
-/* #layering-panel {
-    grid-area: layeringpanel;
-    background-color: #ECE4E4;
-    overflow-y: auto;
-    padding: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-} */
 
 #layering-panel {
     grid-area: layeringpanel;
@@ -197,6 +172,7 @@
     font-size: 16px;
     border-radius: 30px;
     transition: background-color 0.3s ease-in-out;
+    user-select: none;
 }
 
 .button:hover {
@@ -209,8 +185,6 @@
 #column2 {
     width: 700px;
     height: 500px;
-    /* border-style: solid;
-    border-color: #F4e6F0; */
     text-align: center;
     flex-shrink: 0;
 }

@@ -9,22 +9,37 @@
 {% block content %}
 <div id="main">
     <div id="column1">
-        <!-- <div id="namefield-container"> <i>insert outfit name</i> </div> -->
-        <div id="namefield-container"> <input type="text" id="outfit-name" name="outfit-name"
-                placeholder="Enter outfit name..."> </div>
-        <div id="layering-panel"> panel </div>
-        <div id="collage-dropzone"> dropzone </div>
+        <div id="outfit-header">
+            <p>Drag and drop to create your outfit!</p>
+        </div>
+        <div id="layering-panel">
+            <div id="layering-panel-header">layering panel</div>
+            <div id="layer-thumbnails-area"></div>
+        </div>
+        <div id="collage-dropzone"></div>
         <div id="button-container">
-            <button class="button">Save to Outfits</button>
+            <button id="save-button">Save to Outfits</button>
         </div>
     </div>
     <div id="column2">
-        <div id="drawers-container"> drawers go here </div>
+        <div id="drawer-tabs">
+            <button class="drawer-tab active" data-category="TOP">Tops</button>
+            <button class="drawer-tab" data-category="BOTTOM">Bottoms</button>
+            <button class="drawer-tab" data-category="DRESS">Dresses</button>
+            <button class="drawer-tab" data-category="JEWELRY">Jewelry</button>
+            <button class="drawer-tab" data-category="BAG">Bags</button>
+            <button class="drawer-tab" data-category="SHOES">Shoes</button>
+        </div>
         <div id="grid-container"></div>
     </div>
 </div>
+<canvas id="hidden-canvas" style="display: none;"></canvas>
 <div id="footer"> ♡ </div>
 {% endblock %}
 
 {% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+<script src="{% static 'js/closet/outfit-builder.js' %}"></script>
 {% endblock %}

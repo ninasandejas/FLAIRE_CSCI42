@@ -32,6 +32,15 @@
                 {{ form.password1 }}
             </div>
 
+            <div class = "form-errors">
+                {% if form.email.errors %}
+                <small class="text-danger">{{ form.email.errors.0 }}</small>
+                {% endif %}
+                {% if form.username.errors %}
+                <small class="text-danger">{{ form.username.errors.0 }}</small>
+                {% endif %}
+            </div>
+
             <button type="submit" class="signup-button">sign up</button>
         </form>
 

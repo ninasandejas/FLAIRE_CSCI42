@@ -26,9 +26,29 @@
             <li class="{% if active_tab == 'closet'%}active{% endif %}">
                 <a href="{% url 'closet:closet' %}">closet</a>
             </li>
-            <li class="{% if active_tab == 'profile'%}active{% endif %}">
-                <a href="{% url 'user_management:profile' %}">profile</a>
+            {% if request.user.is_authenticated %}
+            <li class="{% if active_tab == 'closet'%}active{% endif %}">
+                <form method="POST" action="{% url 'logout' %}" class = "logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button">Logout</button>
+                </form>
             </li>
+            <li class="{% if active_tab == 'profile'%}active{% endif %}">
+                <a href="{% url 'user_management:profile' %}">
+                    <img src="{% static 'img/user-icon.png' %}" alt="User Profile" style="height: 24px">
+                </a>
+            </li>
+            {% else %}
+            {% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'signup' %}
+            <li>
+                <a href="{% url 'user_management:login' %}">
+                    login
+                </a>
+            </li>
+            {% endif %}
+            {% endif %}
+
+           
         </ul>
     </nav>
     {% block content %}{% endblock %}

@@ -8,11 +8,22 @@
 {% endblock %}
 
 {% block content %}
+{% if request.user.is_authenticated %}
 <h1>Temporary Profile View</h1>
 <div id="main">
     <div id="user-info-column">
+        <h2>Hi! {{ request.user.username }}</h2>     
+        {% if profile.profile_picture %}
+        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="profile-pic">
+        {% endif %} 
+        {% if profile.bio %}
+        <p><strong>Bio:</strong> {{ profile.bio }}</p>
+        {% else %}
+        <p><strong>Bio:</strong> Not provided</p>
+        {% endif %} 
     </div>
     <div id="widget-column">
     </div>
 </div>
+{% endif %}
 {% endblock %}

@@ -17,6 +17,7 @@ body {
     height: 55vh;
     background-color: #FDF9F6;
     border-radius: 11px;
+    position: relative;
 
     display: grid;
     grid-template-columns: 30vw 20vw;
@@ -70,13 +71,9 @@ body {
 
 .signup-button,
 .login-button {
-    display: block;
-    /* Ensures it takes full width available */
-    margin: 30px auto 0 auto;
-    /* Top margin + auto centering */
+    margin-left: calc(75px + 27.5%);
     width: 25%;
     height: 45px;
-    flex-shrink: 0;
     margin-top: 30px;
     border: none;
     border-radius: 50px;
@@ -91,7 +88,10 @@ body {
 }
 
 .has-account {
-    margin-top: 40px;
+    /* margin-top: 40px; */
+    position: absolute;
+    bottom: 10px;
+    margin-left: 125px;
     font-size: 15px;
     color: #975683;
     text-align: center;
@@ -143,4 +143,31 @@ body {
 
 .exclaim {
     font-style: normal;
+}
+
+.warning {
+    margin-top: 40px;
+    margin-left: 75px;
+    font-size: 15px;
+    color: #d32a2a;
+    text-align: center;
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.form-errors {
+    margin-top: 10px;
+}
+
+.text-danger {
+    margin-left: 100px;
+    font-size: 15px;
+    color: #d32a2a;
+    text-align: center;
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: normal;
 }

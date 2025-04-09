@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "user_management",
     "closet",
+    "showrooms",
 ]
 
 MIDDLEWARE = [
@@ -138,6 +139,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 TINIFY_API_KEY = os.getenv("TINIFY_API_KEY")
 
-LOGIN_REDIRECT_URL = 'user_management:profile'  # Change to your profile URL name
-LOGOUT_REDIRECT_URL = 'user_management:login'  # Update based on your project structure
+LOGIN_REDIRECT_URL = 'user_management:profile'
+LOGOUT_REDIRECT_URL = 'user_management:login'
 

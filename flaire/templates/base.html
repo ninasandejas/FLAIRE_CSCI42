@@ -21,7 +21,7 @@
                 <a href="">wishlist</a>
             </li>
             <li class="{% if active_tab == 'showrooms'%}active{% endif %}">
-                <a href="">showrooms</a>
+                <a href="{% url 'showrooms:showrooms' %}">showrooms</a>
             </li>
             <li class="{% if active_tab == 'closet'%}active{% endif %}">
                 <a href="{% url 'closet:closet' %}">closet</a>

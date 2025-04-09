@@ -32,6 +32,7 @@ urlpatterns = [
     path("closet/", include("closet.urls", namespace="closet")),
     path("", home, name="home"),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path("showrooms/", include("showrooms.urls", namespace="showrooms")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

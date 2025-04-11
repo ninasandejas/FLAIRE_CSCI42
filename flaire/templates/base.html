@@ -1,58 +1,60 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='https://fonts.googleapis.com/css?family=Playfair Display' rel='stylesheet'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Playfair Display"
+      rel="stylesheet"
+    />
     {% block styles %}{% endblock %}
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
     <title>Flaire</title>
-</head>
+  </head>
 
-<body class="for-specific">
+  <body class="for-specific">
     <nav id="header">
-        <ul class="navbar">
-            <li class="{% if active_tab == 'home'%}active{% endif %}" style="float:left">
-                <a href="{% url 'home'%}">FLAIRE</a>
-            </li>
-            <li class="{% if active_tab == 'wishlist'%}active{% endif %}">
-                <a href="">wishlist</a>
-            </li>
-            <li class="{% if active_tab == 'showrooms'%}active{% endif %}">
-                <a href="">showrooms</a>
-            </li>
-            <li class="{% if active_tab == 'closet'%}active{% endif %}">
-                <a href="{% url 'closet:closet' %}">closet</a>
-            </li>
-            {% if request.user.is_authenticated %}
-            <li class="{% if active_tab == 'closet'%}active{% endif %}">
-                <form method="POST" action="{% url 'logout' %}" class = "logout-form">
-                    {% csrf_token %}
-                    <button type="submit" class="logout-button">Logout</button>
-                </form>
-            </li>
-            <li class="{% if active_tab == 'profile'%}active{% endif %}">
-                <a href="{% url 'user_management:profile' %}">
-                    <img src="{% static 'img/user-icon.png' %}" alt="User Profile" style="height: 24px">
-                </a>
-            </li>
-            {% else %}
-            {% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'signup' %}
-            <li>
-                <a href="{% url 'user_management:login' %}">
-                    login
-                </a>
-            </li>
-            {% endif %}
-            {% endif %}
-
-           
-        </ul>
+      <ul class="navbar">
+        <li
+          class="{% if active_tab == 'home'%}active{% endif %}"
+          style="float: left"
+        >
+          <a href="{% url 'home'%}">FLAIRE</a>
+        </li>
+        <li class="{% if active_tab == 'wishlist'%}active{% endif %}">
+          <a href="{% url 'user_management:wishlist' %}">wishlist</a>
+        </li>
+        <li class="{% if active_tab == 'showrooms'%}active{% endif %}">
+          <a href="">showrooms</a>
+        </li>
+        <li class="{% if active_tab == 'closet'%}active{% endif %}">
+          <a href="{% url 'closet:closet' %}">closet</a>
+        </li>
+        {% if request.user.is_authenticated %}
+        <li class="{% if active_tab == 'closet' %}active{% endif %}">
+          <form method="POST" action="{% url 'logout' %}" class="logout-form">
+            {% csrf_token %}
+            <button type="submit" class="logout-button">Logout</button>
+          </form>
+        </li>
+        <li class="{% if active_tab == 'profile' %}active{% endif %}">
+          <a href="{% url 'user_management:profile' %}">
+            <img
+              src="{% static 'img/user-icon.png' %}"
+              alt="User Profile"
+              style="height: 24px"
+            />
+          </a>
+        </li>
+        {% elif request.resolver_match.url_name != 'login' and
+        request.resolver_match.url_name != 'signup' %}
+        <li>
+          <a href="{% url 'user_management:login' %}"> login </a>
+        </li>
+        {% endif %}
+      </ul>
     </nav>
-    {% block content %}{% endblock %}
-    {% block scripts %}{% endblock %}
-</body>
-
+    {% block content %}{% endblock %} {% block scripts %}{% endblock %}
+  </body>
 </html>

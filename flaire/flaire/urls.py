@@ -20,6 +20,8 @@ from django.contrib import admin
 from django.shortcuts import render
 from django.urls import include, path
 from django.contrib.auth import views as auth_views
+from user_management.views import LikedOutfitsView
+
 
 
 def home(request):
@@ -32,6 +34,7 @@ urlpatterns = [
     path("closet/", include("closet.urls", namespace="closet")),
     path("", home, name="home"),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('liked-outfits/', LikedOutfitsView.as_view(), name='liked_outfits'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

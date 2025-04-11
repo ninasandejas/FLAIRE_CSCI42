@@ -106,3 +106,13 @@ class ProfileView(View):
                 "user_management/profile.html", 
                 {"profile": profile, "active_tab": "profile"}
         )
+
+class LikedOutfitsView(View):
+
+    def get(self, request):
+        return render(request, "user_management/liked_outfits.html")
+    
+class WishlistView(View):
+    def get(self, request):
+        return render(request, "user_management/wishlist.html")
+

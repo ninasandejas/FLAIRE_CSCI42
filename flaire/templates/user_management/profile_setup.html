@@ -4,6 +4,7 @@
 {% block title %} Complete Your Profile {% endblock %}
 
 {% block styles %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/user_management/profile_setup.css' %}">
 {% endblock %}
 
@@ -12,14 +13,19 @@
 <h2 class="setup-heading">Complete Your Profile</h2>
 
 <div class="form-container">
-    <form method="POST" enctype="multipart/form-data">
+    <form id="profile-form" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
-        <div class="file-upload">
+        <div class="file-upload" id="upload-wrapper">
             <input type="file" id="profile_picture" name="profile_picture" accept="image/*" hidden>
-            <label for="profile_picture" class="upload-label">+</label>
+            <label for="profile_picture" class="upload-label" id="upload-label">
+                <img id="profile-preview" class="profile-preview" src="#" style="display: none;" />
+                <span id="upload-icon">+</span>
+            </label>
         </div>
-        <div class = "text">
+        
+
+        <div class="text">
             <h5>Add Profile Picture</h5>
         </div>
 
@@ -28,25 +34,30 @@
             {{ form.bio }}
         </div>
 
-        {% if form.errors %}
-            <div class="error-container">
-                <ul class="error-list">
-                    {% for field, errors in form.errors.items %}
-                        {% for error in errors %}
-                            <li class="error-message">{{ error }}</li>
-                        {% endfor %}
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
-        <div class= "redirect">
+        <div class="redirect">
             <button type="submit" class="submit-button">Save</button>
         </div>
         <div class="text">
-            <a href="{% url 'user_management:profile' %}" class="skip">skip this step</a>    
+            <a href="{% url 'user_management:profile' %}" class="skip">skip this step</a>
         </div>
     </form>
-
 </div>
 
+<div id="cropper-modal" style="display:none;">
+  <div id="cropper-container">
+    <img id="cropper-image" />
+    <div class="crop-actions">
+      <button type="button" id="crop-button">Crop</button>
+      <button type="button" id="cancel-crop">Cancel</button>
+    </div>
+  </div>
+</div>
 {% endblock %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+<script src="{% static 'js/user_management/profile-setup.js' %}"></script>
+
+    
+{% endblock %}
+    

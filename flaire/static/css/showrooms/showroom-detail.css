@@ -1,0 +1,44 @@
+#outfits-grid {
+  margin-top: 60px;
+  column-count: 4;
+  column-gap: 1.25vw;
+  padding: 1rem;
+}
+
+#outfits-grid img {
+  width: 100%;
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  display: block;
+  break-inside: avoid;
+}
+
+.showroom-header {
+  margin-left: 35px;
+}
+
+.showroom-title {
+  color: #482738;
+  font-family: "Playfair Display";
+  font-size: 40px;
+  font-style: italic;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.showroom-header p {
+  margin-top: 5px;
+  color: #7B6A73;
+  font-family: "Playfair Display";
+  font-size: 20px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.showroom-header img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+}

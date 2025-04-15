@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Showroom Title{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/showrooms/showroom-detail.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<div class="showroom-header">
+    <h3 class = "showroom-title">{{ showroom.title }}</h3>
+    <p>fits: {{ outfit_count }} <label style="margin-left: 27px;">followers: {{ follower_count }}</label></p>
+    <!-- like this for now but will also include collab pfps soon -->
+    <img class src = "{{ showroom.owner.profile_picture.url }}"/>
+    <!-- for collaborator in showroom_collaborators
+    <p>collaborators: {{collaborator}}</p> -->
+
+</div>
+
+<div id="outfits-grid" data-showroom-id ="{{ showroom.id }}">
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/showrooms/showroom-outfits.js' %}"></script>
+{% endblock %}

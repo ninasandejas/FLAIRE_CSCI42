@@ -7,10 +7,14 @@
 {% endblock %}
 
 {% block content %}
-<div id="showroom-grid" class="grid-container"></div>
-<div class="pagination-controls">
-  <button id="prev-btn" disabled>Previous</button>
-  <button id="next-btn">Next</button>
+<div id="showroom-grid" class="grid-container">
+  <div class="thumbnail pagination-arrow">
+    <button id="prev-btn" class="arrow-button" disabled>&#8592;</button>
+  </div>
+  
+  <div class="thumbnail pagination-arrow">
+    <button id="next-btn" class="arrow-button">&#8594;</button>
+  </div>
 </div>
 
 {% endblock %}

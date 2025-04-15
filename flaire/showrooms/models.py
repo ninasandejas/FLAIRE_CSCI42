@@ -67,7 +67,7 @@ class ShowroomFollower(models.Model):
             raise ValidationError("The owner cannot follow their own showroom.")
 
     def save(self, *args, **kwargs):
-        self.full_clean()  # Calls .clean() + field validations
+        self.full_clean()
         super().save(*args, **kwargs)
     
     def __str__(self):

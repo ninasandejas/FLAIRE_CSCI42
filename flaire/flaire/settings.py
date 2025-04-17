@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "user_management",
     "closet",
     "showrooms",
+    "social",
 ]
 
 MIDDLEWARE = [

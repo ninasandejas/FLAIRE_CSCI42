@@ -6,6 +6,7 @@ from .views import *
 app_name = "social"
 
 urlpatterns = [
-    path("explore/", views.ExploreView.as_view(), name="explore"),
-    path("following/", views.FollowingView.as_view(), name="following"),
+    path('explore/', views.explore, name='explore'),
+    path('following/', views.following, name='following'),
 ]
+

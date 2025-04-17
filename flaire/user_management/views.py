@@ -10,6 +10,8 @@ from django.views.generic.edit import CreateView, UpdateView, FormView
 
 from .forms import LoginForm, SignUpForm, ProfileSetupForm
 from .models import Profile
+from closet.models import Outfit
+from closet.models import ClothingItem
 
 # class UserUpdateView(LoginRequiredMixin, UpdateView):
 #     model = Profile
@@ -108,11 +110,19 @@ class ProfileView(View):
         )
 
 class LikedOutfitsView(View):
-
     def get(self, request):
-        return render(request, "user_management/liked_outfits.html")
+        outfits = Outfit.objects.filter(owner=request.user.profile).prefetch_related("items")
+        return render(request, "user_management/liked_outfits.html", {
+            "outfits": outfits,
+            "active_tab": "liked_outfits",
+        })
+
     
 class WishlistView(View):
     def get(self, request):
-        return render(request, "user_management/wishlist.html")
-
+        user_profile = request.user.profile
+        clothing_items = ClothingItem.objects.filter(owner=user_profile)
+        return render(request, "user_management/wishlist.html", {
+            "items": clothing_items,
+            "active_tab": "wishlist",
+        })

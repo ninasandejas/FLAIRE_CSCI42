@@ -8,67 +8,9 @@
 <link
   rel="stylesheet"
   type="text/css"
-  href="{% static 'css/user_management/registration.css' %}"
+  <link rel="stylesheet" href="{% static 'css/user_management/liked_outfits.css' %}">
 />
-<style>
-  body {
-    font-family: "Playfair Display", serif;
-    background-color: #fdf9f6;
-    margin: 0;
-    padding: 0;
-  }
 
-  .heart-container {
-    background-color: #482738;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    position: absolute;
-    top: 10px;
-    left: 10px;
-  }
-
-  .heart-icon {
-    color: #cba1be;
-    font-size: 24px;
-  }
-
-  .outfit-card {
-    position: relative;
-    background: white;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: fit-content;
-  }
-
-  .outfit-card img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 10px;
-  }
-
-  .header {
-    width: 100%;
-    padding: 20px;
-    text-align: center;
-  }
-
-  .container {
-    width: 100%;
-    max-width: 1280px;
-    padding: 0 40px;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-top: 20px;
-  }
-</style>
 {% endblock %} {% block content %}
 
 <div class="header">
@@ -76,19 +18,32 @@
 </div>
 
 <div class="container">
-  <!-- Outfit Cards -->
+  {% for outfit in outfits %}
   <div class="outfit-card">
     <div class="heart-container">
       <span class="heart-icon">&#10084;</span>
     </div>
-    <img src="{% static 'img/outfit1.png' %}" alt="Outfit 1" />
+    <img src="{{ outfit.image.url }}" alt="Outfit {{ forloop.counter }}" />
   </div>
-
-  <div class="outfit-card">
-    <div class="heart-container">
-      <span class="heart-icon">&#10084;</span>
-    </div>
-    <img src="{% static 'img/outfit2.png' %}" alt="Outfit 2" />
-  </div>
+  {% empty %}
+  <p>No liked outfits yet.</p>
+  {% endfor %} {% endblock %}
 </div>
+
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    for (let i = 0; i < 20; i++) {
+      setTimeout(() => {
+        const bubble = document.createElement("div");
+        bubble.classList.add("heart-bubble");
+        bubble.style.left = `${Math.random() * 100}vw`;
+        bubble.style.backgroundColor = ["#f7c1d9", "#fce4ec", "#ffc1e3", "#e5a0bb"][Math.floor(Math.random() * 4)];
+        document.body.appendChild(bubble);
+
+        bubble.addEventListener("animationend", () => bubble.remove());
+      }, i * 100); 
+    }
+  });
+</script>
 {% endblock %}

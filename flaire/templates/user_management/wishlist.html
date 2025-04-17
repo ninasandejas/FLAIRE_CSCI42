@@ -4,56 +4,39 @@
   href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap"
   rel="stylesheet"
 />
-<style>
-  body {
-    font-family: "Playfair Display", serif;
-    background-color: #fdf9f6;
-    margin: 0;
-    padding: 0;
-  }
-  .wishlist-container {
-    width: 100%;
-    max-width: 1200px;
-    margin: auto;
-    padding: 30px 40px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 30px;
-    justify-items: center;
-  }
-  .wishlist-item {
-    background: white;
-    border-radius: 15px;
-    padding: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s ease;
-  }
-  .wishlist-item img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 10px;
-  }
-</style>
-{% endblock %} {% block content %}
+<link rel="stylesheet" href="{% static 'css/user_management/wishlist.css' %}">
+{% endblock %}
+
+  
+{% block content %}
+
+
 <div class="wishlist-container">
-  <div class="wishlist-item">
-    <img src="{% static 'img/juli-bag.png' %}" alt="Item 1" />
+    {% for item in items %}
+      <div class="wishlist-item">
+        <img src="{{ item.image.url }}" alt="Clothing Item">
+      </div>
+    {% empty %}
+      <p>No items in your wishlist yet.</p>
+    {% endfor %}
   </div>
-  <div class="wishlist-item">
-    <img src="{% static 'img/charm-bracelet.png' %}" alt="Item 2" />
-  </div>
-  <div class="wishlist-item">
-    <img src="{% static 'img/cherub-locket.png' %}" alt="Item 3" />
-  </div>
-  <div class="wishlist-item">
-    <img src="{% static 'img/angel-top.png' %}" alt="Item 4" />
-  </div>
-  <div class="wishlist-item">
-    <img src="{% static 'img/pink-flower-bracelet.png' %}" alt="Item 5" />
-  </div>
-  <div class="wishlist-item">
-    <img src="{% static 'img/gold-bracelet.png' %}" alt="Item 6" />
-  </div>
-</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    for (let i = 0; i < 20; i++) {
+      setTimeout(() => {
+        const bubble = document.createElement("div");
+        bubble.classList.add("heart-bubble");
+        bubble.style.left = `${Math.random() * 100}vw`;
+        bubble.style.backgroundColor = ["#f7c1d9", "#fce4ec", "#ffc1e3", "#e5a0bb"][Math.floor(Math.random() * 4)];
+        document.body.appendChild(bubble);
+
+      
+        bubble.addEventListener("animationend", () => bubble.remove());
+      }, i * 100);
+    }
+  });
+</script>
 {% endblock %}

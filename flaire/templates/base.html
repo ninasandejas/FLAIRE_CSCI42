@@ -17,6 +17,12 @@
             <li class="{% if active_tab == 'home'%}active{% endif %}" style="float:left">
                 <a href="{% url 'home'%}">FLAIRE</a>
             </li>
+            <li class="{% if active_tab == 'explore' %}active{% endif %}">
+                <a href="{% url 'social:explore' %}">explore</a>
+            </li>
+            <li class="{% if active_tab == 'following' %}active{% endif %}">
+                <a href="{% url 'social:following' %}">following</a>
+            </li>
             <li class="{% if active_tab == 'wishlist'%}active{% endif %}">
                 <a href="">wishlist</a>
             </li>

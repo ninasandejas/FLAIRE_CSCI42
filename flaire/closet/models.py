@@ -10,6 +10,7 @@ class ClothingItem(models.Model):
     owner = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name="clothing_items", null=True
     )
+    name = models.CharField(max_length=100, null=True, blank=True)
     image = models.ImageField(upload_to="clothingitemimages/", blank=False)
     date_created = models.DateTimeField(auto_now_add=True, null=False)
     date_updated = models.DateTimeField(auto_now=True, null=False)
@@ -75,7 +76,7 @@ class Outfit(models.Model):
         Profile, on_delete=models.CASCADE, related_name="outfits", null=True
     )
     image = models.ImageField(upload_to="outfitimages/", blank=False)
-    items = models.ManyToManyField(ClothingItem, related_name="outfits", blank=True)  
+    items = models.ManyToManyField(ClothingItem, related_name="outfits", blank=True)
     date_created = models.DateTimeField(auto_now_add=True, null=False)
     date_updated = models.DateTimeField(auto_now=True, null=False)
-
+    # for the outfit post

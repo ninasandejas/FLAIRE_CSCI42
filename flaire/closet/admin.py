@@ -7,6 +7,7 @@ class ClothingItemAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "owner",
+        "name",
         "category",
         "brand",
         "color",

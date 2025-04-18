@@ -6,7 +6,7 @@ from .forms import *
 from .models import *
 
 
-@login_required(login_url='user_management:login')
+@login_required(login_url="user_management:login")
 def closet(request):
     return render(request, "closet/outfit-builder.html", {"active_tab": "closet"})
 
@@ -53,7 +53,7 @@ def save_outfit(request):
 
 def clothing_item_images(request):
     category = request.GET.get("category")
-    items = ClothingItem.objects.all()
+    items = ClothingItem.objects.filter(owner=request.user.profile)
 
     if category:
         items = items.filter(category=category.upper())

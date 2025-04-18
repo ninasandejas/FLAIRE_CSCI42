@@ -13,7 +13,7 @@ class ClothingItemAdmin(admin.ModelAdmin):
         "color",
         "image",
     )
-    list_filter = ("category", "color", "brand")
+    list_filter = ("owner", "category", "color", "brand")
     search_fields = (
         "brand",
         "owner__user__username",

@@ -9,13 +9,34 @@
 
 {% block content %}
 <div class="showroom-header">
-    <h3 class = "showroom-title">{{ showroom.title }}</h3>
-    <p>fits: {{ outfit_count }} <label style="margin-left: 27px;">followers: {{ follower_count }}</label></p>
-    <!-- like this for now but will also include collab pfps soon -->
-    <img class src = "{{ showroom.owner.profile_picture.url }}"/>
-    <!-- for collaborator in showroom_collaborators
-    <p>collaborators: {{collaborator}}</p> -->
-
+    <h3 class = "showroom-title" id = "showroom-title">{{ showroom.title }}</h3>
+    <input type="text" id="edit-title" style="display: none;" />
+    <p>
+        fits: <span id = "outfit_count">{{ outfit_count }}</span>
+        <label style="margin-left: 27px;">
+            followers:  <span id = "follower-count">{{ follower_count }}</span>
+        </label>
+    </p>
+    <div id = "user-access">
+        <div id = "user-icons">
+            <img class src = "{{ showroom.owner.profile_picture.url }}"/>
+            {% for collaborator in accepted_collaborators %}
+            <img class src = "{{ collaborator.collaborator.profile_picture.url }}"/>
+            {% endfor %}
+        </div>
+        <div id = "user-actions">
+            {% if show_follow_button %}
+            <button type="button" id = "follow-button">
+                Follow
+            {% endif %}
+            </button>
+            {% if show_edit_button %}
+            <button type="button" id = "edit-button" data-state="edit">
+                Edit
+            </button>
+            {% endif %}
+        </div>
+    </div>
 </div>
 
 <div id="outfits-grid" data-showroom-id ="{{ showroom.id }}">

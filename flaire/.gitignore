@@ -153,3 +153,7 @@ cython_debug/
 
 # media folder
 media/
+
+# heart notes
+dump.txt
+commit-message.txt

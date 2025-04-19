@@ -1,31 +1,33 @@
 .grid-container {
-    display: grid;
-    grid-template-columns: 5vw 1fr 1fr 1fr 1fr 5vw;
-    gap: 16px;
-    align-items: center;
-  }
+  display: grid;
+  grid-template-columns: 5vw 1fr 1fr 1fr 1fr 5vw;
+  gap: 16px;
+  align-items: center;
+}
   
 .thumbnail {
-  border-radius: 12px;
   overflow: hidden;
   text-align: center;
 }
 
 .thumbnail img {
-  margin-top:8vh;
+  margin-top: 8vh;
   height: 70vh;
   width: 20vw;
   border-radius: 12px;
+  object-fit: cover;
 }
 
 .thumbnail.add {
-  background: #434242;
+  border-radius: 12px;
+  background: #ECE4E4;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 3rem;
-  color: #a66b9b;
-
+  color: #a66b9b; 
+  height: 70vh;
+  width: 20vw;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }

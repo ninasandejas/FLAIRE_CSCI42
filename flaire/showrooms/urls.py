@@ -15,6 +15,8 @@ urlpatterns = [
     path("create/", views.create_showroom, name="create_showrooms"),
     path('<int:pk>/', views.showroom_detail, name='showroom_detail'),
     path('<int:pk>/outfits/', views.showroom_outfits, name='showroom_outfits'),
+    path('<int:pk>/update/', views.edit_showroom, name='edit_showroom'),
+    path('<int:pk>/follow/', views.follow_showroom, name='follow_showroom'),
 ] 
 # if settings.DEBUG:
 #     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

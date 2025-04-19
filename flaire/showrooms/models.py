@@ -53,7 +53,6 @@ class ShowroomOutfit(models.Model):
         return f"{self.outfit} in {self.showroom}"
 
 
-
 class ShowroomFollower(models.Model):
     showroom = models.ForeignKey(Showroom, on_delete=models.CASCADE)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)

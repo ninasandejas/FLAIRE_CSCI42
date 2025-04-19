@@ -1,3 +1,29 @@
+#user-access {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+#user-icons {
+  display: flex;
+}
+
+#user-icons img {
+  border-radius: 50%;
+  object-fit: cover;
+  gap: 8px;
+}
+
+#user-actions button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: #a66b9b;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
 #outfits-grid {
   margin-top: 60px;
   column-count: 4;
@@ -15,6 +41,7 @@
 
 .showroom-header {
   margin-left: 35px;
+  margin-right: 35px;
 }
 
 .showroom-title {
@@ -41,4 +68,15 @@
   height: 42px;
   border-radius: 50%;
   object-fit: cover;
+}
+
+#edit-title {
+  background: transparent;
+  border: 1px solid gray;
+  font-size: 1.5rem;
+  color: #482738;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-top: 45px;
+  width: 45%;
 }

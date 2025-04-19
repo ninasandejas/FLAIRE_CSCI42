@@ -7,7 +7,7 @@ class ShowroomCreateForm(forms.ModelForm):
     collaborators = forms.ModelMultipleChoiceField(
         queryset=Profile.objects.all(),
         required=False,
-        widget=forms.CheckboxSelectMultiple
+       widget=forms.SelectMultiple(attrs={'class': 'select2'})
     ) 
     outfits = forms.ModelMultipleChoiceField(
         queryset=Outfit.objects.none(),  # we will just override in view

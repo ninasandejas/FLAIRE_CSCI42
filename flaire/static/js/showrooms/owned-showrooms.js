@@ -1,5 +1,11 @@
+// for loading of list of showrooms
 let currentPage = 1;
 
+// for loading of create showroom and outfit-grid modal
+let showroomId = null;
+
+
+// loading of list of all showrooms the user has access to
 function loadShowrooms(page = 1) {
   fetch(`/showrooms/owned/?page=${page}`)
     .then(res => res.json())
@@ -24,6 +30,9 @@ function loadShowrooms(page = 1) {
         addDiv.innerHTML = `<div class="plus">+</div>`;
         addDiv.addEventListener('click', () => {
           window.location.href = '/showrooms/create/';
+          // currentStep = 1;
+          // nextStep(1);
+          // document.getElementById("create-modal").style.display = "flex";
         });
         grid.appendChild(addDiv);
       }
@@ -63,3 +72,41 @@ document.getElementById('next-btn').addEventListener('click', () => {
 });
 
 loadShowrooms();
+
+
+// loading of multi-step modal
+// function nextStep(step){
+//   const header = document.getElementById('modal-header');
+//   const modalContent = document.getElementById('modal-content');
+//   const nextButton = document.getElementById('modal-next-button');
+
+//   if(step == 1){
+//     header.textContent = "Create showroom";
+//     nextButton.textContent = "Next";
+
+//     fetch('/showrooms/create-form/')
+//       .then(res => res.text())
+//       .then(html => {
+//         modalContent.innerHTML = html;
+//       });
+//   } else if(step == 2){
+//     header.textContent = "Add outfits";
+//     nextButton.textContent = "Create";
+
+//     fetch(`/showrooms/${showroomId}/select-outfits/`)
+//       .then(res => res.text())
+//       .then(html => {
+//         modalContent.innerHTML = html;
+//       });
+//   }
+// }
+
+// document.getElementById('modal-next-button').addEventListener('click', () => {
+//   if (currentStep === 1) {
+//     // form validation (?)
+
+
+
+
+
+

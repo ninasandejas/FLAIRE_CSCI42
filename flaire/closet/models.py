@@ -1,8 +1,10 @@
 import os
+from tkinter import CASCADE
 
 import tinify
 from django.conf import settings
 from django.db import models
+from taggit.managers import TaggableManager
 from user_management.models import Profile
 
 
@@ -76,7 +78,29 @@ class Outfit(models.Model):
         Profile, on_delete=models.CASCADE, related_name="outfits", null=True
     )
     image = models.ImageField(upload_to="outfitimages/", blank=False)
-    items = models.ManyToManyField(ClothingItem, related_name="outfits", blank=True)
     date_created = models.DateTimeField(auto_now_add=True, null=False)
     date_updated = models.DateTimeField(auto_now=True, null=False)
     # for the outfit post
+    caption = models.CharField(max_length=2200, null=True, blank=True)
+    listed_items = models.ManyToManyField(
+        ClothingItem, related_name="outfit_items", blank=True
+    )
+    tags = TaggableManager(blank=True)
+    likes = models.ManyToManyField(Profile, related_name="liked_outfits", blank=True)
+
+
+class Comment(models.Model):
+    author = models.ForeignKey(
+        Profile,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="authored_comments",
+    )
+    outfit = models.ForeignKey(Outfit, on_delete=models.CASCADE)
+    entry = models.TextField()
+    date_created = models.DateTimeField(auto_now_add=True, null=False)
+    date_updated = models.DateTimeField(auto_now=True, null=False)
+
+    class Meta:
+        ordering = ["date_created"]
+        verbose_name_plural = "Comments"

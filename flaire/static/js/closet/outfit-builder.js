@@ -60,7 +60,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         });
 
                         img.addEventListener("click", () => {
-                            addToDropzone(img.src);
+                            addToDropzone(img.src, 130, 190);
+
                         });
 
                         square.appendChild(img);
@@ -86,71 +87,75 @@ document.addEventListener("DOMContentLoaded", function () {
             dropzone.classList.remove("drag-over");
 
             const imageUrl = e.dataTransfer.getData("text/plain");
+            x = e.offsetX;
+            y = e.offsetY;
+            addToDropzone(imageUrl, x, y);
+        });
 
-            const wrapper = document.createElement("div");
-            wrapper.classList.add("resizable-draggable");
-            Object.assign(wrapper.style, {
-                position: "absolute",
-                left: `${e.offsetX - 50}px`,
-                top: `${e.offsetY - 50}px`,
-                width: "100px",
-                height: "100px"
-            });
+    }
 
-            const img = document.createElement("img");
-            img.src = imageUrl;
-            Object.assign(img.style, {
-                width: "auto",
-                height: "auto",
-                maxWidth: "100%",
-                maxHeight: "100%",
-                objectFit: "contain"
-            });
+    function addToDropzone(imageUrl, x, y) {
+        const wrapper = document.createElement("div");
+        wrapper.classList.add("resizable-draggable");
+        Object.assign(wrapper.style, {
+            position: "absolute",
+            left: `${x - 50}px`,
+            top: `${y - 50}px`,
+            width: "100px",
+            height: "100px"
+        });
 
+        const img = document.createElement("img");
+        img.src = imageUrl;
+        Object.assign(img.style, {
+            width: "auto",
+            height: "auto",
+            maxWidth: "100%",
+            maxHeight: "100%",
+            objectFit: "contain"
+        });
+
+        document.querySelectorAll(".resizable-draggable").forEach(el => {
+            el.classList.remove("selected");
+            removeResizeHandles(el);
+        });
+
+        wrapper.appendChild(img);
+        dropzone.appendChild(wrapper);
+
+        wrapper.classList.add("selected");
+        addResizeHandles(wrapper);
+        selectedElement = wrapper;
+
+        const itemId = `item-${Date.now()}`; // unique ID for tracking
+        wrapper.dataset.itemId = itemId;
+        wrapper.style.zIndex = dropzone.children.length + 1;
+
+        // create a thumbnail for the layering panel
+        const thumbnail = document.createElement("div");
+        thumbnail.classList.add("layer-thumbnail");
+        thumbnail.dataset.itemId = itemId;
+
+        const thumbImg = document.createElement("img");
+        thumbImg.src = imageUrl;
+        thumbnail.appendChild(thumbImg);
+
+        const layeringPanel = document.getElementById("layer-thumbnails-area");
+        layeringPanel.insertBefore(thumbnail, layeringPanel.firstChild);
+
+        initInteract(wrapper);
+
+        wrapper.addEventListener("click", () => {
             document.querySelectorAll(".resizable-draggable").forEach(el => {
                 el.classList.remove("selected");
                 removeResizeHandles(el);
             });
 
-            wrapper.appendChild(img);
-            dropzone.appendChild(wrapper);
-
             wrapper.classList.add("selected");
             addResizeHandles(wrapper);
             selectedElement = wrapper;
-
-            const itemId = `item-${Date.now()}`; // unique ID for tracking
-            wrapper.dataset.itemId = itemId;
-            wrapper.style.zIndex = dropzone.children.length + 1;
-
-            // create a thumbnail for the layering panel
-            const thumbnail = document.createElement("div");
-            thumbnail.classList.add("layer-thumbnail");
-            thumbnail.dataset.itemId = itemId;
-
-            const thumbImg = document.createElement("img");
-            thumbImg.src = imageUrl;
-            thumbnail.appendChild(thumbImg);
-
-            const layeringPanel = document.getElementById("layer-thumbnails-area");
-            layeringPanel.insertBefore(thumbnail, layeringPanel.firstChild);
-
-            initInteract(wrapper);
-
-            wrapper.addEventListener("click", () => {
-                document.querySelectorAll(".resizable-draggable").forEach(el => {
-                    el.classList.remove("selected");
-                    removeResizeHandles(el);
-                });
-
-                wrapper.classList.add("selected");
-                addResizeHandles(wrapper);
-                selectedElement = wrapper;
-            });
         });
-
     }
-
 
     document.addEventListener("click", (e) => {
         if (e.target.classList.contains("resize-handle")) {
@@ -255,7 +260,7 @@ document.addEventListener("DOMContentLoaded", function () {
         wrapper.querySelectorAll(".resize-handle").forEach(handle => handle.remove());
     }
 
-    document.getElementById("save-button").addEventListener("click", function () {
+    saveButton.addEventListener("click", function () {
         document.querySelectorAll(".resizable-draggable").forEach(el => {
             el.classList.remove("selected");
             removeResizeHandles(el);
@@ -288,6 +293,8 @@ document.addEventListener("DOMContentLoaded", function () {
             }, "image/png");
         });
     });
+
+
 
     function getCSRFToken() {
         return document.cookie.split("; ").find(row => row.startsWith("csrftoken="))?.split("=")[1];

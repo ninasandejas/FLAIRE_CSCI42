@@ -46,7 +46,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         square.appendChild(plusLink);
                     } else if (images[i - 1]) {
                         const img = document.createElement("img");
-                        img.src = images[i - 1];
+                        img.src = images[i - 1].url;
+                        img.dataset.clothingItemId = images[i - 1].id;
                         img.alt = `Clothing Item ${i}`;
                         img.draggable = true;
                         img.classList.add("draggable-item");
@@ -60,11 +61,14 @@ document.addEventListener("DOMContentLoaded", function () {
                         });
 
                         img.addEventListener("dragstart", (e) => {
-                            e.dataTransfer.setData("text/plain", img.src);
+                            e.dataTransfer.setData("text/plain", JSON.stringify({
+                                src: img.src,
+                                clothingItemId: img.dataset.clothingItemId
+                            }));
                         });
 
                         img.addEventListener("click", () => {
-                            addToDropzone(img.src, 130, 190);
+                            addToDropzone(img.src, img.dataset.clothingItemId, 130, 190);
                         });
 
                         square.appendChild(img);
@@ -89,22 +93,21 @@ document.addEventListener("DOMContentLoaded", function () {
             e.preventDefault();
             dropzone.classList.remove("drag-over");
 
-            const imageUrl = e.dataTransfer.getData("text/plain");
+            const data = JSON.parse(e.dataTransfer.getData("text/plain"));
             x = e.offsetX;
             y = e.offsetY;
-            addToDropzone(imageUrl, x, y);
+            addToDropzone(data.src, data.clothingItemId, x, y);
         });
 
     }
 
-    function addToDropzone(imageUrl, x, y) {
-        if (outfitItems.has(imageUrl)) {
-            return;
-        }
+    function addToDropzone(imageUrl, clothingItemId = null, x, y) {
+        if (outfitItems.has(imageUrl)) return;
 
         outfitItems.add(imageUrl);
         const wrapper = document.createElement("div");
         wrapper.classList.add("resizable-draggable");
+        wrapper.dataset.clothingItemId = clothingItemId;
         Object.assign(wrapper.style, {
             position: "absolute",
             left: `${x - 50}px`,
@@ -283,6 +286,12 @@ document.addEventListener("DOMContentLoaded", function () {
             canvas.toBlob(function (blob) {
                 const formData = new FormData();
                 formData.append("image", blob, "outfit.png");
+
+                const listedItemIds = Array.from(document.querySelectorAll(".resizable-draggable"))
+                    .map(el => el.dataset.clothingItemId)
+                    .filter(id => id != null);
+
+                formData.append("listed_item_ids", JSON.stringify(listedItemIds));
 
                 fetch("/closet/save-outfit/", {
                     method: "POST",

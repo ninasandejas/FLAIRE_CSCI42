@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
@@ -36,16 +38,14 @@ def add_clothing_item(request):
 def save_outfit(request):
     if request.method == "POST":
         outfit_image = request.FILES.get("image")
-        item_ids = request.POST.getlist("items[]")  # Get selected item IDs
+        listed_item_ids = json.loads(
+            request.POST.get("listed_item_ids", "[]")
+        )  # get ids of items in the dropzone once the outfit collage is saved
 
         outfit = Outfit.objects.create(owner=request.user.profile, image=outfit_image)
+        outfit.listed_items.clear()
 
-        for item_id in item_ids:
-            try:
-                item = ClothingItem.objects.get(id=item_id)
-                outfit.items.add(item)
-            except ClothingItem.DoesNotExist:
-                pass
+        outfit.listed_items.set(ClothingItem.objects.filter(id__in=listed_item_ids))
 
         return JsonResponse({"success": True, "message": "Outfit saved."})
     return JsonResponse({"success": False, "message": "Invalid request."}, status=400)
@@ -58,5 +58,5 @@ def clothing_item_images(request):
     if category:
         items = items.filter(category=category.upper())
 
-    image_urls = [item.image.url for item in items]
-    return JsonResponse({"images": image_urls})
+    image_data = [{"id": item.id, "url": item.image.url} for item in items]
+    return JsonResponse({"images": image_data})

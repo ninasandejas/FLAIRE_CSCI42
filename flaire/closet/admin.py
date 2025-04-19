@@ -23,10 +23,10 @@ class ClothingItemAdmin(admin.ModelAdmin):
 
 
 class OutfitAdmin(admin.ModelAdmin):
-    list_display = ("id", "owner", "date_created", "date_updated")
+    list_display = ("id", "owner", "caption", "date_created", "date_updated")
     list_filter = ("date_created",)
     search_fields = ("owner__user__username",)
-    readonly_fields = ("date_created", "date_updated")
+    readonly_fields = ("listed_items", "date_created", "date_updated")
     ordering = ("-date_created",)
 
 

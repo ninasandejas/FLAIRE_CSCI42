@@ -94,17 +94,17 @@ document.addEventListener("DOMContentLoaded", function () {
             dropzone.classList.remove("drag-over");
 
             const data = JSON.parse(e.dataTransfer.getData("text/plain"));
-            x = e.offsetX;
-            y = e.offsetY;
+            const x = e.offsetX;
+            const y = e.offsetY;
             addToDropzone(data.src, data.clothingItemId, x, y);
         });
 
     }
 
     function addToDropzone(imageUrl, clothingItemId = null, x, y) {
-        if (outfitItems.has(imageUrl)) return;
+        if (outfitItems.has(clothingItemId)) return;
 
-        outfitItems.add(imageUrl);
+        outfitItems.add(clothingItemId);
         const wrapper = document.createElement("div");
         wrapper.classList.add("resizable-draggable");
         wrapper.dataset.clothingItemId = clothingItemId;
@@ -208,11 +208,90 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 //remove from dropzone 
                 selectedElement.remove();
-                outfitItems.delete(selectedElement.querySelector("img").src);
+                outfitItems.delete(selectedElement.dataset.clothingItemId);
                 selectedElement = null;
             }
         });
     }
+
+    const modal = document.getElementById("caption-tags-modal");
+    const modalSubmitButton = document.getElementById("modal-submit");
+    const captionInput = document.getElementById("caption-input");
+    const tagsInput = document.getElementById("tags-input");
+    const modalCloseButton = document.getElementById("modal-close");
+    modalCloseButton.addEventListener("click", closeModal);
+
+    // close the modal
+    modalCloseButton.addEventListener("click", function () {
+        modal.style.display = "none";
+    });
+
+    // submit the modal form
+    modalSubmitButton.addEventListener("click", function () {
+        const caption = captionInput.value.trim();
+        const tagsRaw = tagsInput.value.trim();
+        const tags = tagsRaw.split(",").map(t => t.trim()).filter(Boolean).slice(0, 3);
+
+        const listedItemIds = Array.from(document.querySelectorAll(".resizable-draggable"))
+            .map(el => el.dataset.clothingItemId)
+            .filter(id => id != null);
+
+        const dropzone = document.getElementById("collage-dropzone");
+
+        html2canvas(dropzone, {
+            backgroundColor: "#FFFFFF",
+            logging: false,
+        }).then(canvas => {
+            canvas.toBlob(function (blob) {
+                const formData = new FormData();
+                // send image and listed items
+                formData.append("image", blob, "outfit.png");
+                formData.append("listed_item_ids", JSON.stringify(listedItemIds));
+
+                fetch("/closet/save-outfit/", {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "X-CSRFToken": getCSRFToken(),
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            throw new Error("Failed to save outfit image and listed items.");
+                        }
+
+                        const outfitId = data.outfit_id;
+                        const metadataForm = new FormData();
+                        // send caption and tags
+                        metadataForm.append("caption", caption);
+                        tags.forEach(tag => metadataForm.append("tags", tag));
+
+                        return fetch(`/closet/save-outfit-post-metadata/${outfitId}/`, {
+                            method: "POST",
+                            body: metadataForm,
+                            headers: {
+                                "X-CSRFToken": getCSRFToken(),
+                            },
+                        });
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("Outfit saved!");
+                            closeModal();
+                            location.reload();
+                        } else {
+                            throw new Error("Failed to save caption and tags.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("An error occurred while saving the outfit. Please try again.");
+                    });
+            }, "image/png");
+        });
+    });
 
     function initInteract(element) {
         interact(element)
@@ -277,40 +356,19 @@ document.addEventListener("DOMContentLoaded", function () {
             el.classList.remove("selected");
             removeResizeHandles(el);
         });
-        const dropzone = document.getElementById("collage-dropzone");
 
-        html2canvas(dropzone, {
-            backgroundColor: "#FFFFFF",
-            logging: false,
-        }).then(canvas => {
-            canvas.toBlob(function (blob) {
-                const formData = new FormData();
-                formData.append("image", blob, "outfit.png");
-
-                const listedItemIds = Array.from(document.querySelectorAll(".resizable-draggable"))
-                    .map(el => el.dataset.clothingItemId)
-                    .filter(id => id != null);
-
-                formData.append("listed_item_ids", JSON.stringify(listedItemIds));
-
-                fetch("/closet/save-outfit/", {
-                    method: "POST",
-                    body: formData,
-                    headers: {
-                        "X-CSRFToken": getCSRFToken(),
-                    },
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        alert("Outfit saved!");
-                    })
-                    .catch(error => {
-                        console.error("Error saving outfit:", error);
-                        alert("Failed to save outfit.");
-                    });
-            }, "image/png");
-        });
+        showModal();
     });
+
+    function showModal() {
+        document.getElementById("caption-tags-modal").style.display = "block";
+        document.getElementById("modal-overlay").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("caption-tags-modal").style.display = "none";
+        document.getElementById("modal-overlay").style.display = "none";
+    }
 
     function getCSRFToken() {
         return document.cookie.split("; ").find(row => row.startsWith("csrftoken="))?.split("=")[1];

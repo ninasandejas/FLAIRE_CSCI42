@@ -2,7 +2,7 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import *
 from .models import *
@@ -35,6 +35,7 @@ def add_clothing_item(request):
     )
 
 
+# for saving outfit
 def save_outfit(request):
     if request.method == "POST":
         outfit_image = request.FILES.get("image")
@@ -47,8 +48,38 @@ def save_outfit(request):
 
         outfit.listed_items.set(ClothingItem.objects.filter(id__in=listed_item_ids))
 
-        return JsonResponse({"success": True, "message": "Outfit saved."})
+        return JsonResponse({"success": True, "outfit_id": outfit.id})
     return JsonResponse({"success": False, "message": "Invalid request."}, status=400)
+
+
+# for creating post
+def save_outfit_post_metadata(request, outfit_id):
+    outfit = get_object_or_404(Outfit, id=outfit_id, owner=request.user.profile)
+
+    caption = request.POST.get("caption", "").strip()  # remove trailing whitespaces
+    tags = request.POST.getlist("tags")[:3]  # limit to 3 tags per post
+
+    outfit.caption = caption
+    outfit.tags.set(tags)  # django-taggit accepts a list of strings
+    outfit.save()
+
+    return JsonResponse({"success": True})
+
+
+# def save_outfit(request):
+#     if request.method == "POST":
+#         outfit_image = request.FILES.get("image")
+#         listed_item_ids = json.loads(
+#             request.POST.get("listed_item_ids", "[]")
+#         )  # get ids of items in the dropzone once the outfit collage is saved
+
+#         outfit = Outfit.objects.create(owner=request.user.profile, image=outfit_image)
+#         outfit.listed_items.clear()
+
+#         outfit.listed_items.set(ClothingItem.objects.filter(id__in=listed_item_ids))
+
+#         return JsonResponse({"success": True, "message": "Outfit saved."})
+#     return JsonResponse({"success": False, "message": "Invalid request."}, status=400)
 
 
 def clothing_item_images(request):

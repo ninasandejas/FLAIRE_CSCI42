@@ -66,22 +66,6 @@ def save_outfit_post_metadata(request, outfit_id):
     return JsonResponse({"success": True})
 
 
-# def save_outfit(request):
-#     if request.method == "POST":
-#         outfit_image = request.FILES.get("image")
-#         listed_item_ids = json.loads(
-#             request.POST.get("listed_item_ids", "[]")
-#         )  # get ids of items in the dropzone once the outfit collage is saved
-
-#         outfit = Outfit.objects.create(owner=request.user.profile, image=outfit_image)
-#         outfit.listed_items.clear()
-
-#         outfit.listed_items.set(ClothingItem.objects.filter(id__in=listed_item_ids))
-
-#         return JsonResponse({"success": True, "message": "Outfit saved."})
-#     return JsonResponse({"success": False, "message": "Invalid request."}, status=400)
-
-
 def clothing_item_images(request):
     category = request.GET.get("category")
     items = ClothingItem.objects.filter(owner=request.user.profile)

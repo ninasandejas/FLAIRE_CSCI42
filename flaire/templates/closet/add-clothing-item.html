@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Add Clothing Item{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+<h2>Add New Clothing Item</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>
+<p>
+<ul>
+    <!-- temporary messages. might add background removal API later if there is time -->
+    <li>
+        please upload a PNG image of your clothing item with a transparent background.
+    </li>
+    <li>
+        if the loading takes a while, it's because your image is being compressed.
+    </li>
+</ul>
+</p>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

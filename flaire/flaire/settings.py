@@ -14,6 +14,7 @@ import os
 
 from dotenv import load_dotenv
 
+
 load_dotenv()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -115,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Manila"
 
 USE_I18N = True
 
@@ -134,3 +135,12 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+
+TINIFY_API_KEY = os.getenv("TINIFY_API_KEY")
+
+LOGIN_REDIRECT_URL = 'user_management:profile'  # Change to your profile URL name
+LOGOUT_REDIRECT_URL = 'user_management:login'  # Update based on your project structure
+LOGIN_URL = '/login/'
+
+

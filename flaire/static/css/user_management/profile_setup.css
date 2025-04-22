@@ -1,0 +1,87 @@
+html,
+body.for-specific {
+    background: #ECE4E4;
+    overflow-x: hidden;
+}
+
+body {
+    height: 100vh;
+}
+
+.setup-heading {
+    margin-top: 80px;
+    text-align: center;
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 25vw;
+    margin-top: 10px;
+    width: 50vw;
+    height: 55vh;
+    background-color: #FDF9F6;
+    border-radius: 11px;
+}
+
+.file-upload, .text, .redirect {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.upload-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #ddd;
+    color: #555;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.upload-label:hover {
+    background-color: #bbb;
+}
+
+.bio-container textarea {
+    width: 80%;
+    height: 80px;
+    border-radius: 20px;
+    background: white;
+    color: #975683;
+    padding: 10px;
+    font-size: 1rem;
+    outline: none;
+    box-shadow: none;
+    resize: none;
+    overflow: hidden;
+}
+
+.submit-button {
+    width: 25%;
+    height: 45px;
+    border: none;
+    border-radius: 50px;
+    background: #F4E6F0;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.skip {
+    color: #482738;
+    font-style: italic;
+    font-size: 12px;
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+    text-decoration-skip-ink: auto;
+    text-decoration-thickness: auto;
+    text-underline-offset: auto;
+    text-underline-position: from-font;
+}

@@ -24,6 +24,7 @@ ul.navbar {
     padding: 0;
     display: flex;
     align-items: center;
+    user-select: none;
 }
 
 ul.navbar li:first-child {
@@ -40,10 +41,42 @@ a {
     text-decoration: none;
 }
 
+.logout-form {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+.logout-button {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: inherit;
+    font-family: inherit;
+    cursor: pointer;
+    text-transform: lowercase;
+    padding: 0;
+}
+
+.logout-button:hover, .navbar li a:hover {
+    text-decoration: underline;
+}
+
 a:visited {
     color: #482738;
 }
 
 .active a {
     color: #CBA1BE;
+}
+
+.logout-button {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+    text-decoration: none;
 }

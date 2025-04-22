@@ -11,14 +11,12 @@
 #column1 {
     width: 350px;
     height: 500px;
-    border-style: solid;
-    border-color: #F4e6F0;
     text-align: center;
     display: grid;
     grid-template-columns: 90px 1fr;
     grid-template-rows: 3fr 380px 1fr 3fr;
     grid-template-areas:
-        "namefieldcontainer namefieldcontainer"
+        "outfitheader outfitheader"
         "layeringpanel collagedropzone"
         ". ."
         "buttoncontainer buttoncontainer"
@@ -26,38 +24,132 @@
     flex-shrink: 0;
 }
 
-#namefield-container {
-    grid-area: namefieldcontainer;
-    height: 100%;
-    color: #7B6A73;
-    display: flex;
+#outfit-header {
+    grid-area: outfitheader;
     justify-content: center;
     align-items: center;
-    text-align: center;
+    user-select: none;
 }
-
-#outfit-name {
-    background-color: #FDF9F6;
-    border: none;
-    outline: none;
-    width: 60%;
-    padding: 5px;
-    text-align: center;
-    font-size: 15px;
-}
-
-/* #outfit-name:focus {
-    outline: 2px solid #F4E6F0;
-} */
 
 #layering-panel {
     grid-area: layeringpanel;
     background-color: #ECE4E4;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    align-items: center;
+    gap: 10px;
+    overflow: hidden;
+    outline: 1px solid #ECE4E4;
 }
+
+#layering-panel-header {
+    background-color: #ECE4E4;
+    padding: 5px;
+    font-size: 14px;
+    font-style: italic;
+    color: #7B6A73;
+    flex-shrink: 0;
+    user-select: none;
+}
+
+#layer-thumbnails-area {
+    flex-grow: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+.layer-thumbnail {
+    width: 60px;
+    height: 60px;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    background-color: white;
+    cursor: grab;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.layer-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
+}
+
+
 
 #collage-dropzone {
     grid-area: collagedropzone;
-    background-color: #FFFFFF;
+    background-color: white;
+    position: relative;
+    overflow: hidden;
+    outline: 1px dashed #DFBCD4;
+}
+
+.dropped-item {
+    width: 100%;
+    height: auto;
+    pointer-events: none;
+    user-select: none;
+}
+
+.resizable-draggable {
+    position: absolute;
+    touch-action: none;
+    box-sizing: border-box;
+    z-index: 10;
+    user-select: none;
+}
+
+/* outline when selected */
+.resizable-draggable.selected {
+    outline: 2px dashed #CBA1BE;
+}
+
+/* corner resize handles */
+.resize-handle {
+    width: 8px;
+    height: 8px;
+    background-color: #CBA1BE;
+    position: absolute;
+    border-radius: 2px;
+    z-index: 15;
+}
+
+/* the top, left, right, and bottom properties let you manually place it relative to the nearest (absolute) positioned ancestor  */
+/* -4 px to position the centre of the handle on the edge of the outline */
+
+.resize-handle.nw {
+    top: -4px;
+    left: -4px;
+    cursor: nwse-resize;
+}
+
+.resize-handle.ne {
+    top: -4px;
+    right: -4px;
+    cursor: nesw-resize;
+}
+
+.resize-handle.sw {
+    bottom: -4px;
+    left: -4px;
+    cursor: nesw-resize;
+}
+
+.resize-handle.se {
+    bottom: -4px;
+    right: -4px;
+    cursor: nwse-resize;
 }
 
 #button-container {
@@ -68,7 +160,7 @@
     height: 100%;
 }
 
-.button {
+#save-button {
     background-color: #F4E6F0;
     border: none;
     color: #7B6A73;
@@ -80,9 +172,11 @@
     align-items: center;
     font-size: 16px;
     border-radius: 30px;
+    transition: background-color 0.3s ease-in-out;
+    user-select: none;
 }
 
-.button:hover {
+#save-button:hover {
     background-color: #DFBCD4;
     color: #ffffff;
 }
@@ -92,16 +186,38 @@
 #column2 {
     width: 700px;
     height: 500px;
-    border-style: solid;
-    border-color: #F4e6F0;
     text-align: center;
     flex-shrink: 0;
 }
 
-#drawers-container {
-    padding: 15px;
+#drawer-tabs {
     padding-top: 30px;
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+
 }
+
+.drawer-tab {
+    border: none;
+    background-color: #FDF9F6;
+    color: #482738;
+    padding: 10px 10px 5px 10px;
+    font-size: 16px;
+    transition: color 0.1s ease-in-out;
+    user-select: none;
+}
+
+.drawer-tab:hover {
+    color: #CBA1BE;
+}
+
+.drawer-tab.active {
+    border-bottom: solid;
+    border-color: #CBA1BE;
+}
+
 
 #grid-container {
     display: grid;
@@ -117,7 +233,6 @@
 
 .grid-item {
     background-color: white;
-    /* border: 1px solid #F4e6F0; */
     border-radius: 8px;
     aspect-ratio: 1;
     overflow: hidden;
@@ -127,4 +242,25 @@
     border-top: 2px solid #CBA1BE;
     padding: 15px;
     text-align: center;
+}
+
+.add-item-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #CBA1BE;
+    text-decoration: none;
+    width: 100%;
+    height: 100%;
+    transition: background-color 0.2s;
+    user-select: none;
+}
+
+.add-item-link:hover {
+    background-color: #F4E6F0;
+    border: none;
+    color: #7B6A73;
+    cursor: pointer;
 }

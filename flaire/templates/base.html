@@ -24,7 +24,7 @@
                 <a href="{% url 'social:following' %}">following</a>
             </li>
             <li class="{% if active_tab == 'wishlist'%}active{% endif %}">
-                <a href="">wishlist</a>
+                <a href="{% url 'user_management:wishlist' %}">wishlist</a>
             </li>
             <li class="{% if active_tab == 'showrooms'%}active{% endif %}">
                 <a href="{% url 'showrooms:showrooms' %}">showrooms</a>

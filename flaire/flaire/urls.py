@@ -34,6 +34,8 @@ urlpatterns = [
     path("closet/", include("closet.urls", namespace="closet")),
     path("", home, name="home"),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path("showrooms/", include("showrooms.urls", namespace="showrooms")),
+    path("social/", include("social.urls", namespace="social")),
     path('liked-outfits/', LikedOutfitsView.as_view(), name='liked_outfits'),
 ]
 

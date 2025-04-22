@@ -1,0 +1,38 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  
+  .thumbnail {
+    border-radius: 12px;
+    overflow: hidden;
+    text-align: center;
+  }
+  
+  .thumbnail img {
+    width: 100%;
+    border-radius: 8px;
+  }
+  
+  .thumbnail.add {
+    background: #f7f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    color: #a66b9b;
+  }
+  
+  .plus {
+    font-size: 3rem;
+    font-weight: bold;
+  }
+  
+  .pagination-controls {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+  }
+  

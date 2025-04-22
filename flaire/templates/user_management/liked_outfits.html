@@ -1,0 +1,49 @@
+{% extends 'base.html' %} {% load static %} {% block title %} Liked Outfits
+{%endblock %} {% block styles %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap"
+/>
+<link
+  rel="stylesheet"
+  type="text/css"
+  <link rel="stylesheet" href="{% static 'css/user_management/liked_outfits.css' %}">
+/>
+
+{% endblock %} {% block content %}
+
+<div class="header">
+  <h1 class="text-2xl font-bold italic text-gray-700">Liked Outfits</h1>
+</div>
+
+<div class="container">
+  {% for outfit in outfits %}
+  <div class="outfit-card">
+    <div class="heart-container">
+      <span class="heart-icon">&#10084;</span>
+    </div>
+    <img src="{{ outfit.image.url }}" alt="Outfit {{ forloop.counter }}" />
+  </div>
+  {% empty %}
+  <p>No liked outfits yet.</p>
+  {% endfor %} {% endblock %}
+</div>
+
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    for (let i = 0; i < 20; i++) {
+      setTimeout(() => {
+        const bubble = document.createElement("div");
+        bubble.classList.add("heart-bubble");
+        bubble.style.left = `${Math.random() * 100}vw`;
+        bubble.style.backgroundColor = ["#f7c1d9", "#fce4ec", "#ffc1e3", "#e5a0bb"][Math.floor(Math.random() * 4)];
+        document.body.appendChild(bubble);
+
+        bubble.addEventListener("animationend", () => bubble.remove());
+      }, i * 100); 
+    }
+  });
+</script>
+{% endblock %}

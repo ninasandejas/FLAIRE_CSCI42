@@ -14,6 +14,7 @@ import os
 
 from dotenv import load_dotenv
 
+
 load_dotenv()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     "user_management",
     "closet",
     "showrooms",
+    "social",
     "taggit",
 ]
 
@@ -141,6 +143,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 TINIFY_API_KEY = os.getenv("TINIFY_API_KEY")
 
-LOGIN_REDIRECT_URL = 'user_management:profile'
-LOGOUT_REDIRECT_URL = 'user_management:login'
 
+LOGIN_REDIRECT_URL = 'user_management:profile'  # Change to your profile URL name
+LOGOUT_REDIRECT_URL = 'user_management:login'  # Update based on your project structure
+LOGIN_URL = '/login/'

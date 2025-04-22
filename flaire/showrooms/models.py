@@ -2,6 +2,7 @@ from django.db import models
 from user_management.models import Profile
 from closet.models import Outfit
 from django.core.exceptions import ValidationError
+from taggit.managers import TaggableManager
 from django.utils import timezone
 
 
@@ -14,6 +15,7 @@ class Showroom(models.Model):
     is_public = models.BooleanField(default=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
+    tags = TaggableManager(blank=True)
 
     collaborators = models.ManyToManyField(
         Profile,
@@ -53,7 +55,6 @@ class ShowroomOutfit(models.Model):
         return f"{self.outfit} in {self.showroom}"
 
 
-
 class ShowroomFollower(models.Model):
     showroom = models.ForeignKey(Showroom, on_delete=models.CASCADE)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -67,7 +68,7 @@ class ShowroomFollower(models.Model):
             raise ValidationError("The owner cannot follow their own showroom.")
 
     def save(self, *args, **kwargs):
-        self.full_clean()  # Calls .clean() + field validations
+        self.full_clean()
         super().save(*args, **kwargs)
     
     def __str__(self):

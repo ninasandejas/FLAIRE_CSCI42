@@ -1,38 +1,83 @@
 .grid-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-  }
+  display: grid;
+  grid-template-columns: 5vw 1fr 1fr 1fr 1fr 5vw;
+  gap: 16px;
+  align-items: center;
+}
   
-  .thumbnail {
-    border-radius: 12px;
-    overflow: hidden;
-    text-align: center;
-  }
+.thumbnail {
+  overflow: hidden;
+  text-align: center;
+}
+
+.thumbnail img {
+  margin-top: 8vh;
+  height: 70vh;
+  width: 20vw;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.thumbnail.add {
+  border-radius: 12px;
+  background: #ECE4E4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  color: #a66b9b; 
+  height: 70vh;
+  width: 20vw;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.thumbnail.add:hover {
+  background-color: #ebdce6;
+}
+
+.plus {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.arrow-button {
+  font-size: 2rem;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #a66b9b;
+  padding: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.arrow-button:hover {
+  transform: scale(1.2);
+}
+
+.arrow-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
   
-  .thumbnail img {
-    width: 100%;
-    border-radius: 8px;
-  }
-  
-  .thumbnail.add {
-    background: #f7f2f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 3rem;
-    color: #a66b9b;
-  }
-  
-  .plus {
-    font-size: 3rem;
-    font-weight: bold;
-  }
-  
-  .pagination-controls {
-    margin-top: 16px;
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-  }
-  
+
+.thumbnail.pagination-arrow:first-child {
+  grid-column: 1;
+}
+
+.thumbnail.pagination-arrow:last-child {
+  grid-column: 6;
+}
+
+.grid-container .thumbnail:not(.pagination-arrow):nth-of-type(2) {
+  grid-column: 2;
+}
+.grid-container .thumbnail:not(.pagination-arrow):nth-of-type(3) {
+  grid-column: 3;
+}
+.grid-container .thumbnail:not(.pagination-arrow):nth-of-type(4) {
+  grid-column: 4;
+}
+.grid-container .thumbnail:not(.pagination-arrow):nth-of-type(5) {
+  grid-column: 5;
+}

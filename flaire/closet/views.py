@@ -56,7 +56,9 @@ def save_outfit(request):
 def save_outfit_post_metadata(request, outfit_id):
     outfit = get_object_or_404(Outfit, id=outfit_id, owner=request.user.profile)
 
-    caption = request.POST.get("caption", "").strip()  # remove trailing whitespaces
+    caption = request.POST.get(
+        "caption", ""
+    ).strip()  # remove leading and trailing whitespaces
     tags = request.POST.getlist("tags")[:3]  # limit to 3 tags per post
 
     outfit.caption = caption

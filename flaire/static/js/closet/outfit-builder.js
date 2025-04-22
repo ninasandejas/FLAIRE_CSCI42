@@ -221,12 +221,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const modalCloseButton = document.getElementById("modal-close");
     modalCloseButton.addEventListener("click", closeModal);
 
-    // close the modal
     modalCloseButton.addEventListener("click", function () {
         modal.style.display = "none";
     });
 
-    // submit the modal form
     modalSubmitButton.addEventListener("click", function () {
         const caption = captionInput.value.trim();
         const tagsRaw = tagsInput.value.trim();

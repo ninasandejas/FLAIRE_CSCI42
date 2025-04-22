@@ -16,4 +16,4 @@ class ShowroomCreateForm(forms.ModelForm):
     )
     class Meta:
         model = Showroom
-        fields = ['title', 'cover_image', 'is_public', 'collaborators', 'outfits']
+        fields = ['title', 'cover_image', 'tags', 'is_public', 'collaborators', 'outfits']

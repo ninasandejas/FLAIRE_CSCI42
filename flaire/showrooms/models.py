@@ -2,6 +2,7 @@ from django.db import models
 from user_management.models import Profile
 from closet.models import Outfit
 from django.core.exceptions import ValidationError
+from taggit.managers import TaggableManager
 from django.utils import timezone
 
 
@@ -14,6 +15,7 @@ class Showroom(models.Model):
     is_public = models.BooleanField(default=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
+    tags = TaggableManager(blank=True)
 
     collaborators = models.ManyToManyField(
         Profile,

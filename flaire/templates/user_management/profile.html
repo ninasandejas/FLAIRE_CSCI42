@@ -10,15 +10,16 @@
 {% block content %}
 
 {% if request.user.is_authenticated %}
-<h1>Temporary Profile View</h1>
 
 <div id="main">
+
+  <section class="profile-content">
 
     <div id="user-info-column">
       
       <div class="profile-pic-container">
       
-        <img src="{% static 'img/user-icon.png' %}" alt="Profile Picture" class="profile-pic-large">
+        <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" class="profile-pic-large">
       
         <div class="edit-icon">
           <img src="{% static 'img/edit.png' %}" alt="Edit" class="edit-img">
@@ -35,14 +36,15 @@
 
       </div>
     
-    <h2 class="username">@username</h2>
+    <h2 class="username">@{{ user.username }}</h2>
       <div class="user-stats">
-        <span>followers: x</span>
-        <span>following: x</span>
+        <span>followers: {{ user.profile.followers.count }}</span>
+        <span>following: {{ user.profile.followers.count }}</span>
       </div>
     
-    <p class="bio">"bio here"</p>
+    <blockquote class="bio">{{ user.profile.bio }}</blockquote>
     </div>
+  </section>
     
     <div id="ootd-column">
       <div class="content-section">

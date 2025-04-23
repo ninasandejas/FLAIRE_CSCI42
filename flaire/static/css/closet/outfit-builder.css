@@ -152,6 +152,10 @@
     cursor: nwse-resize;
 }
 
+.drag-over {
+    border: 2px solid #F4E6F0;
+}
+
 #button-container {
     grid-area: buttoncontainer;
     padding-top: 10px;

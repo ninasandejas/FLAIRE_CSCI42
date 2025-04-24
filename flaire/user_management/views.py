@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models.base import Model
 from django.db.models.query import QuerySet
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
@@ -101,7 +102,7 @@ class ProfileSetupView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class ProfileView(View):
+class ProfileView(LoginRequiredMixin, View):
     def get(self, request):
         profile = Profile.objects.get(user=request.user)
         return render(
@@ -138,3 +139,12 @@ class WishlistView(LoginRequiredMixin, View):
                 "active_tab": "wishlist",
             },
         )
+
+
+class OutfitGridImagesView(View):
+    def get(self, request):
+        outfits = Outfit.objects.filter(owner=request.user.profile).order_by(
+            "date_created"
+        )
+        image_data = [{"id": outfit.id, "url": outfit.image.url} for outfit in outfits]
+        return JsonResponse({"images": image_data})

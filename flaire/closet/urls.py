@@ -10,4 +10,9 @@ urlpatterns = [
     path("", closet, name="closet"),
     path("add-clothing-item/", views.add_clothing_item, name="add_clothing_item"),
     path("save-outfit/", views.save_outfit, name="save_outfit"),
+    path(
+        "save-outfit-post-metadata/<int:outfit_id>/",
+        views.save_outfit_post_metadata,
+        name="save_outfit_post_metadata",
+    ),
 ]

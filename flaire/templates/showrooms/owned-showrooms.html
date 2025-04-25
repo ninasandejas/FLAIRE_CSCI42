@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Showrooms{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/showrooms/owned-showrooms.css' %}">
+{% endblock %}
+
+{% block content %}
+<div id="showroom-grid" class="grid-container">
+  <div class="thumbnail pagination-arrow">
+    <button id="prev-btn" class="arrow-button" disabled>&#8592;</button>
+  </div>
+  
+  <div class="thumbnail pagination-arrow">
+    <button id="next-btn" class="arrow-button">&#8594;</button>
+  </div>
+</div>
+
+<!-- preparing for create-showroom modal BUT will complete this next iteration
+<div id = "create-modal" class = "create-showroom">
+  <h3 id = "modal-header">
+    Create showroom OR Add outfits
+  </h3>
+  <div id ="modal-content">
+    either form for creating showroom goes here thru js or the loading of outfits
+  </div>
+  <button type="button" id="modal-next-button">
+    Next or Create
+  </button>
+  <button type="button" id="cancel-crop">Cancel</button>
+</div> -->
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/showrooms/owned-showrooms.js' %}"></script>
+{% endblock %}

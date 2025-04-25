@@ -1,3 +1,4 @@
+from closet.models import ClothingItem, Outfit
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -6,12 +7,10 @@ from django.db.models.query import QuerySet
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic.edit import CreateView, UpdateView, FormView
+from django.views.generic.edit import CreateView, FormView, UpdateView
 
-from .forms import LoginForm, SignUpForm, ProfileSetupForm
+from .forms import LoginForm, ProfileSetupForm, SignUpForm
 from .models import Profile
-from closet.models import Outfit
-from closet.models import ClothingItem
 
 # class UserUpdateView(LoginRequiredMixin, UpdateView):
 #     model = Profile
@@ -26,6 +25,7 @@ from closet.models import ClothingItem
 #         form.save()
 #         return super().form_valid(form)
 
+
 class UserLoginView(FormView):
     model = User
     template_name = "user_management/login.html"
@@ -37,7 +37,7 @@ class UserLoginView(FormView):
         if request.user.is_authenticated:
             return redirect(self.get_success_url())
         return super().dispatch(request, *args, **kwargs)
-    
+
     def form_valid(self, form):
         username = form.cleaned_data["username"]
         password = form.cleaned_data["password"]
@@ -48,11 +48,13 @@ class UserLoginView(FormView):
             return redirect(self.get_success_url())
         else:
             return self.form_invalid(form)
-        
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if 'next' in self.request.GET:
-            context['warning_message'] = "*you need to be logged in to access this page."
+        if "next" in self.request.GET:
+            context["warning_message"] = (
+                "*you need to be logged in to access this page."
+            )
         return context
 
 
@@ -84,11 +86,10 @@ class ProfileSetupView(LoginRequiredMixin, UpdateView):
     form_class = ProfileSetupForm
     template_name = "user_management/profile_setup.html"
     success_url = reverse_lazy("user_management:profile")
-    
+
     def get_object(self, queryset=None):
         return self.request.user.profile
 
-    
     def form_valid(self, form):
         bio = form.cleaned_data.get("bio", "").strip()
         profile_picture = form.cleaned_data.get("profile_picture")
@@ -104,25 +105,36 @@ class ProfileView(View):
     def get(self, request):
         profile = Profile.objects.get(user=request.user)
         return render(
-                request, 
-                "user_management/profile.html", 
-                {"profile": profile, "active_tab": "profile"}
+            request,
+            "user_management/profile.html",
+            {"profile": profile, "active_tab": "profile"},
         )
+
 
 class LikedOutfitsView(View):
     def get(self, request):
-        outfits = Outfit.objects.filter(owner=request.user.profile).prefetch_related("items")
-        return render(request, "user_management/liked_outfits.html", {
-            "outfits": outfits,
-            "active_tab": "liked_outfits",
-        })
+        outfits = Outfit.objects.filter(owner=request.user.profile).prefetch_related(
+            "items"
+        )
+        return render(
+            request,
+            "user_management/liked_outfits.html",
+            {
+                "outfits": outfits,
+                "active_tab": "liked_outfits",
+            },
+        )
 
-    
-class WishlistView(View):
+
+class WishlistView(LoginRequiredMixin, View):
     def get(self, request):
         user_profile = request.user.profile
         clothing_items = ClothingItem.objects.filter(owner=user_profile)
-        return render(request, "user_management/wishlist.html", {
-            "items": clothing_items,
-            "active_tab": "wishlist",
-        })
+        return render(
+            request,
+            "user_management/wishlist.html",
+            {
+                "items": clothing_items,
+                "active_tab": "wishlist",
+            },
+        )

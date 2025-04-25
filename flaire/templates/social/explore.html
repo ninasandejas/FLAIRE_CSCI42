@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .tab-content {
+        display: none;
+    }
+    .tab-content.active {
+        display: block;
+    }
+</style>
+
+<div class="tab-navigation">
+    <button onclick="showTab('outfits')">Outfits</button> |
+    <button onclick="showTab('showrooms')">Showrooms</button>
+</div>
+
+<div id="outfits" class="tab-content active">
+    <h2>Explore Outfits</h2>
+    {% for outfit in outfits %}
+        <img src="{{ outfit.image.url }}" alt="Outfit" />
+    {% empty %}
+        <p>No outfits to explore.</p>
+    {% endfor %}
+</div>
+
+<div id="showrooms" class="tab-content">
+    <h2>Explore Showrooms</h2>
+    {% for showroom in showrooms %}
+        <div>{{ showroom.name }}</div>
+    {% empty %}
+        <p>No showrooms to explore.</p>
+    {% endfor %}
+</div>
+
+<script>
+    function showTab(tabId) {
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach(c => c.classList.remove('active'));
+
+        document.getElementById(tabId).classList.add('active');
+    }
+</script>
+{% endblock %}
+

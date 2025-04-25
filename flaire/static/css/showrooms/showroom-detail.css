@@ -1,0 +1,82 @@
+#user-access {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+#user-icons {
+  display: flex;
+}
+
+#user-icons img {
+  border-radius: 50%;
+  object-fit: cover;
+  gap: 8px;
+}
+
+#user-actions button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: #a66b9b;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+#outfits-grid {
+  margin-top: 60px;
+  column-count: 4;
+  column-gap: 1.25vw;
+  padding: 1rem;
+}
+
+#outfits-grid img {
+  width: 100%;
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  display: block;
+  break-inside: avoid;
+}
+
+.showroom-header {
+  margin-left: 35px;
+  margin-right: 35px;
+}
+
+.showroom-title {
+  color: #482738;
+  font-family: "Playfair Display";
+  font-size: 40px;
+  font-style: italic;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.showroom-header p {
+  margin-top: 5px;
+  color: #7B6A73;
+  font-family: "Playfair Display";
+  font-size: 20px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.showroom-header img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+#edit-title {
+  background: transparent;
+  border: 1px solid gray;
+  font-size: 1.5rem;
+  color: #482738;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-top: 45px;
+  width: 45%;
+}

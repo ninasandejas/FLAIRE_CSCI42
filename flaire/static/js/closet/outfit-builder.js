@@ -1,11 +1,15 @@
+//itemID = UI-only ID to track items as visual assets
+//clothingItemId = real database clothingItem ID for outfit_items
+
 document.addEventListener("DOMContentLoaded", function () {
     const gridContainer = document.getElementById("grid-container");
     const dropzone = document.getElementById("collage-dropzone");
     const saveButton = document.getElementById("save-button");
     const totalSquares = 15;
+    const outfitItems = new Set();  //sets prevent duplicates
     let selectedElement = null;
 
-    loadClothingImages("TOP"); //default
+    loadClothingImages("TOP"); //default drawer or category
 
     setupDropzoneEvents();
     setupKeyboardEvents();
@@ -42,7 +46,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         square.appendChild(plusLink);
                     } else if (images[i - 1]) {
                         const img = document.createElement("img");
-                        img.src = images[i - 1];
+                        img.src = images[i - 1].url;
+                        img.dataset.clothingItemId = images[i - 1].id;
                         img.alt = `Clothing Item ${i}`;
                         img.draggable = true;
                         img.classList.add("draggable-item");
@@ -56,11 +61,14 @@ document.addEventListener("DOMContentLoaded", function () {
                         });
 
                         img.addEventListener("dragstart", (e) => {
-                            e.dataTransfer.setData("text/plain", img.src);
+                            e.dataTransfer.setData("text/plain", JSON.stringify({
+                                src: img.src,
+                                clothingItemId: img.dataset.clothingItemId
+                            }));
                         });
 
                         img.addEventListener("click", () => {
-                            addToDropzone(img.src);
+                            addToDropzone(img.src, img.dataset.clothingItemId, 130, 190);
                         });
 
                         square.appendChild(img);
@@ -85,72 +93,80 @@ document.addEventListener("DOMContentLoaded", function () {
             e.preventDefault();
             dropzone.classList.remove("drag-over");
 
-            const imageUrl = e.dataTransfer.getData("text/plain");
+            const data = JSON.parse(e.dataTransfer.getData("text/plain"));
+            const x = e.offsetX;
+            const y = e.offsetY;
+            addToDropzone(data.src, data.clothingItemId, x, y);
+        });
 
-            const wrapper = document.createElement("div");
-            wrapper.classList.add("resizable-draggable");
-            Object.assign(wrapper.style, {
-                position: "absolute",
-                left: `${e.offsetX - 50}px`,
-                top: `${e.offsetY - 50}px`,
-                width: "100px",
-                height: "100px"
-            });
+    }
 
-            const img = document.createElement("img");
-            img.src = imageUrl;
-            Object.assign(img.style, {
-                width: "auto",
-                height: "auto",
-                maxWidth: "100%",
-                maxHeight: "100%",
-                objectFit: "contain"
-            });
+    function addToDropzone(imageUrl, clothingItemId = null, x, y) {
+        if (outfitItems.has(clothingItemId)) return;
 
+        outfitItems.add(clothingItemId);
+        const wrapper = document.createElement("div");
+        wrapper.classList.add("resizable-draggable");
+        wrapper.dataset.clothingItemId = clothingItemId;
+        Object.assign(wrapper.style, {
+            position: "absolute",
+            left: `${x - 50}px`,
+            top: `${y - 50}px`,
+            width: "100px",
+            height: "100px"
+        });
+
+        const img = document.createElement("img");
+        img.src = imageUrl;
+        Object.assign(img.style, {
+            width: "auto",
+            height: "auto",
+            maxWidth: "100%",
+            maxHeight: "100%",
+            objectFit: "contain"
+        });
+
+        document.querySelectorAll(".resizable-draggable").forEach(el => {
+            el.classList.remove("selected");
+            removeResizeHandles(el);
+        });
+
+        wrapper.appendChild(img);
+        dropzone.appendChild(wrapper);
+
+        wrapper.classList.add("selected");
+        addResizeHandles(wrapper);
+        selectedElement = wrapper;
+
+        const itemId = `item-${Date.now()}`; // unique ID for tracking
+        wrapper.dataset.itemId = itemId;
+        wrapper.style.zIndex = dropzone.children.length + 1;
+
+        // create a thumbnail for the layering panel
+        const thumbnail = document.createElement("div");
+        thumbnail.classList.add("layer-thumbnail");
+        thumbnail.dataset.itemId = itemId;
+
+        const thumbImg = document.createElement("img");
+        thumbImg.src = imageUrl;
+        thumbnail.appendChild(thumbImg);
+
+        const layeringPanel = document.getElementById("layer-thumbnails-area");
+        layeringPanel.insertBefore(thumbnail, layeringPanel.firstChild);
+
+        initInteract(wrapper);
+
+        wrapper.addEventListener("click", () => {
             document.querySelectorAll(".resizable-draggable").forEach(el => {
                 el.classList.remove("selected");
                 removeResizeHandles(el);
             });
 
-            wrapper.appendChild(img);
-            dropzone.appendChild(wrapper);
-
             wrapper.classList.add("selected");
             addResizeHandles(wrapper);
             selectedElement = wrapper;
-
-            const itemId = `item-${Date.now()}`; // unique ID for tracking
-            wrapper.dataset.itemId = itemId;
-            wrapper.style.zIndex = dropzone.children.length + 1;
-
-            // create a thumbnail for the layering panel
-            const thumbnail = document.createElement("div");
-            thumbnail.classList.add("layer-thumbnail");
-            thumbnail.dataset.itemId = itemId;
-
-            const thumbImg = document.createElement("img");
-            thumbImg.src = imageUrl;
-            thumbnail.appendChild(thumbImg);
-
-            const layeringPanel = document.getElementById("layer-thumbnails-area");
-            layeringPanel.insertBefore(thumbnail, layeringPanel.firstChild);
-
-            initInteract(wrapper);
-
-            wrapper.addEventListener("click", () => {
-                document.querySelectorAll(".resizable-draggable").forEach(el => {
-                    el.classList.remove("selected");
-                    removeResizeHandles(el);
-                });
-
-                wrapper.classList.add("selected");
-                addResizeHandles(wrapper);
-                selectedElement = wrapper;
-            });
         });
-
     }
-
 
     document.addEventListener("click", (e) => {
         if (e.target.classList.contains("resize-handle")) {
@@ -192,10 +208,88 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 //remove from dropzone 
                 selectedElement.remove();
+                outfitItems.delete(selectedElement.dataset.clothingItemId);
                 selectedElement = null;
             }
         });
     }
+
+    const modal = document.getElementById("caption-tags-modal");
+    const modalSubmitButton = document.getElementById("modal-submit");
+    const captionInput = document.getElementById("caption-input");
+    const tagsInput = document.getElementById("tags-input");
+    const modalCloseButton = document.getElementById("modal-close");
+    modalCloseButton.addEventListener("click", closeModal);
+
+    modalCloseButton.addEventListener("click", function () {
+        modal.style.display = "none";
+    });
+
+    modalSubmitButton.addEventListener("click", function () {
+        const caption = captionInput.value.trim();
+        const tagsRaw = tagsInput.value.trim();
+        const tags = tagsRaw.split(",").map(t => t.trim()).filter(Boolean).slice(0, 3);
+
+        const listedItemIds = Array.from(document.querySelectorAll(".resizable-draggable"))
+            .map(el => el.dataset.clothingItemId)
+            .filter(id => id != null);
+
+        const dropzone = document.getElementById("collage-dropzone");
+
+        html2canvas(dropzone, {
+            backgroundColor: "#FFFFFF",
+            logging: false,
+        }).then(canvas => {
+            canvas.toBlob(function (blob) {
+                const formData = new FormData();
+                // send image and listed items
+                formData.append("image", blob, "outfit.png");
+                formData.append("listed_item_ids", JSON.stringify(listedItemIds));
+
+                fetch("/closet/save-outfit/", {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "X-CSRFToken": getCSRFToken(),
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            throw new Error("Failed to save outfit image and listed items.");
+                        }
+
+                        const outfitId = data.outfit_id;
+                        const metadataForm = new FormData();
+                        // send caption and tags
+                        metadataForm.append("caption", caption);
+                        tags.forEach(tag => metadataForm.append("tags", tag));
+
+                        return fetch(`/closet/save-outfit-post-metadata/${outfitId}/`, {
+                            method: "POST",
+                            body: metadataForm,
+                            headers: {
+                                "X-CSRFToken": getCSRFToken(),
+                            },
+                        });
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("Outfit saved!");
+                            closeModal();
+                            location.reload();
+                        } else {
+                            throw new Error("Failed to save caption and tags.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("An error occurred while saving the outfit. Please try again.");
+                    });
+            }, "image/png");
+        });
+    });
 
     function initInteract(element) {
         interact(element)
@@ -255,39 +349,24 @@ document.addEventListener("DOMContentLoaded", function () {
         wrapper.querySelectorAll(".resize-handle").forEach(handle => handle.remove());
     }
 
-    document.getElementById("save-button").addEventListener("click", function () {
+    saveButton.addEventListener("click", function () {
         document.querySelectorAll(".resizable-draggable").forEach(el => {
             el.classList.remove("selected");
             removeResizeHandles(el);
         });
-        const dropzone = document.getElementById("collage-dropzone");
 
-        html2canvas(dropzone, {
-            backgroundColor: "#FFFFFF",
-            logging: false,
-        }).then(canvas => {
-            canvas.toBlob(function (blob) {
-                const formData = new FormData();
-                formData.append("image", blob, "outfit.png");
-
-                fetch("/closet/save-outfit/", {
-                    method: "POST",
-                    body: formData,
-                    headers: {
-                        "X-CSRFToken": getCSRFToken(),
-                    },
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        alert("Outfit saved!");
-                    })
-                    .catch(error => {
-                        console.error("Error saving outfit:", error);
-                        alert("Failed to save outfit.");
-                    });
-            }, "image/png");
-        });
+        showModal();
     });
+
+    function showModal() {
+        document.getElementById("caption-tags-modal").style.display = "block";
+        document.getElementById("modal-overlay").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("caption-tags-modal").style.display = "none";
+        document.getElementById("modal-overlay").style.display = "none";
+    }
 
     function getCSRFToken() {
         return document.cookie.split("; ").find(row => row.startsWith("csrftoken="))?.split("=")[1];

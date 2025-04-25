@@ -152,8 +152,13 @@
     cursor: nwse-resize;
 }
 
+.drag-over {
+    border: 2px solid #F4E6F0;
+}
+
 #button-container {
     grid-area: buttoncontainer;
+    padding-top: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -263,4 +268,97 @@
     border: none;
     color: #7B6A73;
     cursor: pointer;
+}
+
+#caption-tags-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FDF9F6;
+    border: 1px solid #DFBCD4;
+    padding: 20px;
+    z-index: 9999;
+    width: 400px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+#caption-tags-modal h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.25em;
+    text-align: center;
+}
+
+#caption-tags-modal label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#caption-tags-modal input,
+#caption-tags-modal textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #c9bec5;
+    border-radius: 4px;
+    font-size: 1em;
+    width: 95%;
+}
+
+#caption-tags-modal input::placeholder,
+#caption-tags-modal textarea::placeholder {
+    color: #c9bec5;
+}
+
+#modal-submit {
+    background-color: #F4E6F0;
+    border: none;
+    color: #7B6A73;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    margin: 0 auto 0;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    border-radius: 30px;
+    transition: background-color 0.1s ease-in-out;
+    user-select: none;
+}
+
+#modal-submit:hover {
+    background-color: #DFBCD4;
+    color: #ffffff;
+}
+
+#modal-close {
+    background-color: #ECE4E4;
+    color: #482738;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 30px;
+}
+
+#modal-close:hover {
+    background-color: #482738;
+    color: #ffffff;
+}
+
+#modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* translucent */
+    z-index: 9900;
 }

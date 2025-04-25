@@ -16,12 +16,14 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
-    
+
+      
+# class ProfileFollower(models.Model):
+#     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+#     date_followed = models.DateTimeField(auto_now_add=True)
 
 
 class WishlistItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     item = models.ForeignKey(
         "closet.ClothingItem", on_delete=models.CASCADE)  
-
-   

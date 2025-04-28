@@ -54,9 +54,10 @@
   <section class="ootd-section">
     <h3 class="widget-title">ootd</h3>
     <div class="ootd-widget">
-        <img src="{{ profile.ootd.image.url }}" alt="OOTD Image" class="ootd-image">
+        <a href="#" id="manage-ootd-btn">
+          <img src="{{ profile.ootd.image.url }}" alt="OOTD Image" class="ootd-image">
+        </a>
         <p>{{ profile.ootd.caption }}</p>
-        <button id="manage-ootd-btn" class="select-ootd-btn">Manage OOTD</button>
     </div>
   </section>
   {% else %}
@@ -124,7 +125,7 @@
 <div id="ootd-modal" class="modal">
   <div class="modal-content">
     <span class="close-modal">&times;</span>
-    <h4>{% if profile.ootd %}Manage{% else %}Add{% endif %} Outfit of the Day</h4>
+    <h2>{% if profile.ootd %}Manage{% else %}Add{% endif %} Outfit of the Day</h2>
     <div class="ootd-grid">
       {% for outfit in user.profile.outfits.all %}
       <div class="ootd-item">
@@ -147,14 +148,13 @@
 
     if (addOotdBtn) {
       addOotdBtn.addEventListener('click', () => {
-        console.log('Add OOTD button clicked'); // Debugging log
         ootdModal.style.display = 'block';
       });
     }
 
     if (manageOotdBtn) {
-      manageOotdBtn.addEventListener('click', () => {
-        console.log('Manage OOTD button clicked'); // Debugging log
+      manageOotdBtn.addEventListener('click', (e) => {
+        e.preventDefault();
         ootdModal.style.display = 'block';
       });
     }

@@ -1,7 +1,9 @@
 /* Main layout */
 #main {
   display: flex;
-  gap: 40px;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: flex-start;
   max-width: 1400px;
   margin: 0 auto;
   padding: 40px 20px;
@@ -10,7 +12,8 @@
 
 /* User info column */
 #user-info-column {
-  flex: 4;
+  flex: 1;
+  max-width: 25%;
   height: 500px;
   border: solid #F4e6F0;
   flex-direction: column;
@@ -132,7 +135,8 @@
 }
 
 .ootd-section {
-  width: 30%;
+  flex: 2;
+  max-width: 50%;
 }
 
 .widget-title {
@@ -146,12 +150,14 @@
 }
 
 .ootd-widget {
+  height: calc(2 * var(--wishlist-showroom-height)); /* Twice the height of wishlist/showroom */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
   border-radius: 11px;
   background-color: #ece4e4;
-  display: flex;
-  padding: 91px 46px 26px;
-  flex-direction: column;
-  align-items: center;
 }
 
 .ootd-image-1,
@@ -172,18 +178,21 @@
 }
 
 .ootd-widget img {
-  width: 100%;
+  width: 80%; /* Smaller image size */
   height: auto;
   object-fit: contain;
   border-radius: 10px;
 }
 
 .wishlist-section {
+  flex: 1;
+  max-width: 25%;
   width: 25%;
   min-width: 320px; 
 }
 
 .wishlist-widget {
+  height: var(--wishlist-showroom-height);
   border-radius: 11px;
   background-color: #ece4e4;
   display: flex;
@@ -219,6 +228,7 @@
 }
 
 .showrooms-section {
+  height: var(--wishlist-showroom-height);
   aspect-ratio: 1.3;
   object-fit: contain;
   width: 100%;
@@ -321,16 +331,16 @@
 .select-ootd-btn {
   display: inline-block;
   margin-top: 10px;
-  padding: 5px 10px;
-  background-color: #4CAF50;
+  padding: 10px 20px;
+  background-color: #db8bb5;
   color: white;
   text-decoration: none;
   border-radius: 5px;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .select-ootd-btn:hover {
-  background-color: #45a049;
+  background-color: #482738;
 }
 
 @media (max-width: 991px) {
@@ -355,4 +365,9 @@
   .ootd-widget {
     padding: 91px 20px 26px;
   }
+}
+
+/* Wishlist and showroom combined height */
+:root {
+  --wishlist-showroom-height: 300px;
 }

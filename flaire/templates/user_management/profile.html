@@ -13,93 +13,92 @@
 
 <div id="main">
 
-  <section class="profile-content">
+  <section class="profile-grid">
 
-    <div id="user-info-column">
+    <div class="profile-content">
       
       <div class="profile-pic-container">
       
-        <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" class="profile-pic-large">
+        {% if user.profile.profile_picture %}
+          <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" class="profile-pic-large">
+        {% else %}
+          <img src="{% static 'img/user-icon.png' %}" alt="Default Profile Picture" class="profile-pic-large">
+        {% endif %}
       
-        <div class="edit-icon">
+        <a href="#" class="edit-icon" aria-label="Edit Profile">
           <img src="{% static 'img/edit.png' %}" alt="Edit" class="edit-img">
-        </div>
+        </a>
 
         <div class="action-buttons">
-          <div class="action-btn heart-btn">
+          <a href="#" class="action-btn heart-btn" aria-label="Saved Items">
             <img src="{% static 'img/heart.png' %}" alt="Heart" class="heart-img">
-          </div>
-          <div class="action-btn dressing-room-btn">
+          </a>
+          <a href="#" class="action-btn dressing-room-btn" aria-label="Dressing Room">
             <img src="{% static 'img/dressing-room.png' %}" alt="Dressing Room" class="dressing-room-img">
-          </div>
+          </a>
         </div>
 
       </div>
     
-    <h2 class="username">@{{ user.username }}</h2>
-      <div class="user-stats">
-        <span>followers: {{ user.profile.followers.count }}</span>
-        <span>following: {{ user.profile.followers.count }}</span>
+    <h2 class="profile-username">@{{ user.username }}</h2>
+      <div class="profile-stats">
+        <p class="stat-item">followers: {{ user.profile.followers.count }}</p>
+        <p class="stat-item">following: {{ user.profile.following.count }}</p>
       </div>
     
-    <blockquote class="bio">{{ user.profile.bio }}</blockquote>
+    <blockquote class="profile-bio">{{ user.profile.bio }}</blockquote>
     </div>
   </section>
     
-    <div id="ootd-column">
-      <div class="content-section">
-        <h3 class="section-title">ootd</h3>
-        <div class="items-container">
-            <div class="item-card outfit">
-                <img src="{% static 'images/dress.jpg' %}" alt="Pink floral dress" class="item-img">
-                <img src="{% static 'images/shoes.jpg' %}" alt="Green shoes" class="item-img" style="max-height: 100px;">
-            </div>
-        </div>
-      </div>
+  <section class="ootd-section">
+    <h3 class="widget-title">ootd</h3>
+    <div class="ootd-widget">
+        <img
+        src="{% static 'img/temp-clothes/dress.png' %}"
+        alt="OOTD Image 1"
+        class="ootd-image-1"
+        />
+        <img
+        src="{% static 'img/temp-clothes/shoes.png' %}"
+        alt="OOTD Image 2"
+        class="ootd-image-2"
+        />
     </div>
-    
-    <div id="widgets-column">
-      <div class="content-section">
-        <h3 class="section-title">wishlist</h3>
-        <div class="items-container">
-            <div class="nav-arrow nav-left">
-              <img src="{% static 'img/nav-left.png' %}" alt="Nav-left" class="nav-left-img">
-            </div>
-            <div class="item-card">
-                <img src="{% static 'images/bag.jpg' %}" alt="Pink Juicy Couture bag" class="item-img">
-            </div>
-            <div class="nav-arrow nav-right">
-              <img src="{% static 'img/nav-right.png' %}" alt="Nav-right" class="nav-right-img">
-            </div>
-        </div>
-    </div>
-    
-    <div class="content-section">
-        <h3 class="section-title">top showrooms</h3>
-        <div class="top-showrooms">
-            <div class="showroom-card">
-                <img src="{% static 'images/dress1.jpg' %}" alt="White dress" class="showroom-img">
-            </div>
-            <div class="showroom-card">
-                <img src="{% static 'images/dress2.jpg' %}" alt="Pink outfit" class="showroom-img">
-            </div>
-            <div class="showroom-card">
-                <img src="{% static 'images/dress3.jpg' %}" alt="Beach dress" class="showroom-img">
-            </div>
-        </div>
+  </section>
 
-<!--         <h2>Hi! {{ request.user.username }}</h2>     
-        {% if profile.profile_picture %}
-        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="profile-pic">
-        {% endif %} 
-        {% if profile.bio %}
-        <p><strong>Bio:</strong> {{ profile.bio }}</p>
-        {% else %}
-        <p><strong>Bio:</strong> Not provided</p>
-        {% endif %}  -->
+  <section class="wishlist-section">
+    <h3 class="widget-title">wishlist</h3>
+    <div class="wishlist-widget">
+      <button class="wishlist-nav-prev" aria-label="Previous wishlist item">
+        <img
+          src="{% static 'img/nav-left.png' %}"
+          alt="previous"
+        />
+      </button>
+      <img
+        src="{% static 'img/temp-clothes/wishlistdisplay.png' %}"
+        alt="Wishlist Item"
+        class="wishlist-main-image"
+      />
+      <button class="wishlist-nav-next" aria-label="Next wishlist item">
+        <img
+          src="{% static 'img/nav-right.png' %}"
+          alt="next"
+        />
+      </button>
+    </div>
 
+    <h3 class="widget-title">top showrooms</h3>
+    <div class="wishlist-widget">
+
+      <img
+        src=""
+        class="showrooms-section"
+      />
     </div>
-    </div>
+  </section>
 </div>
+
+
 {% endif %}
 {% endblock %}

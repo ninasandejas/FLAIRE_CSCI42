@@ -8,9 +8,11 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic.edit import CreateView, FormView, UpdateView
+from django.shortcuts import render, redirect
 
 from .forms import LoginForm, ProfileSetupForm, SignUpForm
 from .models import Profile
+from django.contrib.auth.decorators import login_required
 
 # class UserUpdateView(LoginRequiredMixin, UpdateView):
 #     model = Profile
@@ -109,6 +111,19 @@ class ProfileView(View):
             "user_management/profile.html",
             {"profile": profile, "active_tab": "profile"},
         )
+
+@login_required
+def edit_profile(request):
+    profile = request.user.profile 
+    if request.method == "POST":
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect("profile") 
+        
+        form = ProfileForm(instance=profile)
+
+    return render(request, "edit_profile.html", {"form": form})
 
 
 class LikedOutfitsView(View):

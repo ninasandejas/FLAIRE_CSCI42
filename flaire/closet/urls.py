@@ -15,4 +15,6 @@ urlpatterns = [
         views.save_outfit_post_metadata,
         name="save_outfit_post_metadata",
     ),
+    path("select-ootd/<int:outfit_id>/", views.select_ootd, name="select_ootd"),
+    path("delete-ootd/", views.delete_ootd, name="delete_ootd"),
 ]

@@ -3,6 +3,7 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 
 from .forms import *
 from .models import *
@@ -77,3 +78,26 @@ def clothing_item_images(request):
 
     image_data = [{"id": item.id, "url": item.image.url} for item in items]
     return JsonResponse({"images": image_data})
+
+
+@login_required
+def select_ootd(request, outfit_id):
+    profile = request.user.profile
+    outfit = get_object_or_404(Outfit, id=outfit_id, owner=profile)
+
+    profile.ootd = outfit
+    profile.save()
+
+    return redirect("user_management:profile")
+
+
+@login_required
+def delete_ootd(request):
+    profile = request.user.profile
+    if profile.ootd:
+        profile.ootd = None
+        profile.save()
+
+    # Render the updated modal content
+    modal_content = render_to_string("user_management/partials/ootd_modal_content.html", {"profile": profile})
+    return JsonResponse({"modal_content": modal_content})

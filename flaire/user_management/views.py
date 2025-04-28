@@ -121,7 +121,7 @@ def edit_profile(request):
             form.save()
             return redirect("user_management:profile")  # Redirect to the profile page
     else:
-        form = ProfileSetupForm(instance=profile)
+        form = ProfileForm(instance=profile)
 
     return render(request, "user_management/profile.html", {"form": form, "profile": profile, "active_tab": "profile"})
 

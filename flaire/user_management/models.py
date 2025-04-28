@@ -11,6 +11,7 @@ class Profile(models.Model):
     email_address = models.EmailField()
     bio = models.TextField(blank=True)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)  # Stores profile images
+    ootd = models.OneToOneField("closet.Outfit", on_delete=models.SET_NULL, null=True, blank=True, related_name="ootd_profile")
 
     followers = models.ManyToManyField(User, symmetrical=False, related_name="following", blank=True)
 
@@ -26,4 +27,4 @@ class Profile(models.Model):
 class WishlistItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     item = models.ForeignKey(
-        "closet.ClothingItem", on_delete=models.CASCADE)  
+        "closet.ClothingItem", on_delete=models.CASCADE)

@@ -50,21 +50,24 @@
     </div>
   </section>
     
+  {% if profile.ootd %}
   <section class="ootd-section">
     <h3 class="widget-title">ootd</h3>
     <div class="ootd-widget">
-        <img
-        src="{% static 'img/temp-clothes/dress.png' %}"
-        alt="OOTD Image 1"
-        class="ootd-image-1"
-        />
-        <img
-        src="{% static 'img/temp-clothes/shoes.png' %}"
-        alt="OOTD Image 2"
-        class="ootd-image-2"
-        />
+        <img src="{{ profile.ootd.image.url }}" alt="OOTD Image" class="ootd-image">
+        <p>{{ profile.ootd.caption }}</p>
+        <button id="manage-ootd-btn" class="select-ootd-btn">Manage OOTD</button>
     </div>
   </section>
+  {% else %}
+  <section class="ootd-section">
+    <h3 class="widget-title">ootd</h3>
+    <div class="ootd-widget">
+        <p>No OOTD selected yet.</p>
+        <button id="add-ootd-btn" class="select-ootd-btn">Add OOTD</button>
+    </div>
+  </section>
+  {% endif %}
 
   <section class="wishlist-section">
     <h3 class="widget-title">wishlist</h3>
@@ -118,24 +121,53 @@
   </div>
 </div>
 
+<div id="ootd-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal">&times;</span>
+    <h4>{% if profile.ootd %}Manage{% else %}Add{% endif %} Outfit of the Day</h4>
+    <div class="ootd-grid">
+      {% for outfit in user.profile.outfits.all %}
+      <div class="ootd-item">
+        <img src="{{ outfit.image.url }}" alt="Outfit Image" class="outfit-thumbnail">
+        <a href="{% url 'closet:select_ootd' outfit.id %}" class="select-ootd-btn">Select as OOTD</a>
+      </div>
+      {% empty %}
+      <p>No outfits available to select.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
 <script>
-  const modal = document.getElementById('edit-profile-modal');
-  const editIcon = document.querySelector('.edit-icon');
-  const closeModal = document.querySelector('.close-modal');
+  document.addEventListener('DOMContentLoaded', () => {
+    const ootdModal = document.getElementById('ootd-modal');
+    const addOotdBtn = document.getElementById('add-ootd-btn');
+    const manageOotdBtn = document.getElementById('manage-ootd-btn');
+    const closeModal = ootdModal.querySelector('.close-modal');
 
-  editIcon.addEventListener('click', (e) => {
-    e.preventDefault();
-    modal.style.display = 'block';
-  });
-
-  closeModal.addEventListener('click', () => {
-    modal.style.display = 'none';
-  });
-
-  window.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      modal.style.display = 'none';
+    if (addOotdBtn) {
+      addOotdBtn.addEventListener('click', () => {
+        console.log('Add OOTD button clicked'); // Debugging log
+        ootdModal.style.display = 'block';
+      });
     }
+
+    if (manageOotdBtn) {
+      manageOotdBtn.addEventListener('click', () => {
+        console.log('Manage OOTD button clicked'); // Debugging log
+        ootdModal.style.display = 'block';
+      });
+    }
+
+    closeModal.addEventListener('click', () => {
+      ootdModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target === ootdModal) {
+        ootdModal.style.display = 'none';
+      }
+    });
   });
 </script>
 

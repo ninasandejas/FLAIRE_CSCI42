@@ -171,6 +171,13 @@
   margin-top: 28px;
 }
 
+.ootd-widget img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
 .wishlist-section {
   width: 25%;
   min-width: 320px; 
@@ -290,6 +297,40 @@
 
 .save-btn:hover {
   background-color: #482738;
+}
+
+/* Modal grid layout for OOTD */
+.ootd-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  padding: 10px;
+}
+
+.ootd-item {
+  text-align: center;
+}
+
+.ootd-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.select-ootd-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #4CAF50;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.select-ootd-btn:hover {
+  background-color: #45a049;
 }
 
 @media (max-width: 991px) {

@@ -30,7 +30,7 @@
         </a>
 
         <div class="action-buttons">
-          <a href="#" class="action-btn heart-btn" aria-label="Saved Items">
+          <a href="liked-outfits/" class="action-btn heart-btn" aria-label="Saved Items">
             <img src="{% static 'img/heart.png' %}" alt="Heart" class="heart-img">
           </a>
           <a href="#" class="action-btn dressing-room-btn" aria-label="Dressing Room">
@@ -102,7 +102,7 @@
 <div id="edit-profile-modal" class="modal">
   <div class="modal-content">
     <span class="close-modal">&times;</span>
-    <h2>Edit Profile</h2>
+    <h2>Edit your profile</h2>
     <form method="POST" enctype="multipart/form-data" action="{% url 'user_management:edit_profile' %}">
       {% csrf_token %}
       <div class="form-group">

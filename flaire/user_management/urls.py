@@ -13,5 +13,4 @@ urlpatterns = [
     path("profile-setup/", ProfileSetupView.as_view(), name="profile_setup"),
     path("liked-outfits/", LikedOutfitsView.as_view(), name="liked_outfits"),
     path("wishlist/", WishlistView.as_view(), name="wishlist"),
-    path("edit-profile/", edit_profile, name="edit_profile"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

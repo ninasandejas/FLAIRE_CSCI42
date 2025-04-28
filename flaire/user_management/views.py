@@ -114,16 +114,16 @@ class ProfileView(View):
 
 @login_required
 def edit_profile(request):
-    profile = request.user.profile 
+    profile = request.user.profile
     if request.method == "POST":
-        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        form = ProfileSetupForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect("profile") 
-        
-        form = ProfileForm(instance=profile)
+            return redirect("user_management:profile")  # Redirect to the profile page
+    else:
+        form = ProfileSetupForm(instance=profile)
 
-    return render(request, "edit_profile.html", {"form": form})
+    return render(request, "user_management/profile.html", {"form": form, "profile": profile, "active_tab": "profile"})
 
 
 class LikedOutfitsView(View):

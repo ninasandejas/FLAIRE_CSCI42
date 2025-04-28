@@ -41,7 +41,7 @@
             </li>
             <li class="{% if active_tab == 'profile'%}active{% endif %}">
                 <a href="{% url 'user_management:profile' %}">
-                    <img src="{% static 'img/user-icon.png' %}" alt="User Profile" style="height: 24px">
+                    <img src="{{ user.profile.profile_picture.url }}" alt="User Profile" style="height: 24px">
                 </a>
             </li>
             {% else %}

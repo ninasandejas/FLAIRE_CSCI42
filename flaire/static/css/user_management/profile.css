@@ -279,7 +279,7 @@
 }
 
 .save-btn {
-  background-color: #4CAF50;
+  background-color: #db8bb5;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -289,7 +289,7 @@
 }
 
 .save-btn:hover {
-  background-color: #45a049;
+  background-color: #482738;
 }
 
 @media (max-width: 991px) {

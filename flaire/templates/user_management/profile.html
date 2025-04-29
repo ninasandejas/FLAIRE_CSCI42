@@ -95,15 +95,14 @@
     <h3 class="widget-title">top showrooms</h3>
     <div class="showroom-widget">
       <div class="showroom-grid">
-        {% for showroom in showrooms|slice:":3" %}
-        <div class="showroom-item">
-          <img
-            src="{{ showroom.image.url }}"
-            alt="{{ showroom.name }}"
-            class="showroom-image"
-          />
-          <p>{{ showroom.name }}</p>
-        </div>
+        {% for showroom in showrooms %}
+          <a href="{% url 'showrooms:showroom_detail' showroom.id %}">
+            <img
+              src="{{ showroom.cover_image.url }}"
+              alt="{{ showroom.name }}"
+              class="showroom-image"
+            />
+          </a>
         {% endfor %}
       </div>
     </div>

@@ -200,6 +200,7 @@
   object-fit: contain; 
   width: 10px;
   height: auto; 
+  cursor: pointer;
 }
 
 .wishlist-main-image {
@@ -210,8 +211,10 @@
 
 .showroom-grid {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: flex-start;
   gap: 10px;
+  width: 100%;
 }
 
 .showroom-item {
@@ -364,4 +367,32 @@
 /* Wishlist and showroom combined height */
 :root {
   --wishlist-showroom-height: 300px;
+}
+
+.showroom-widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.showroom-grid {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 10px;
+  width: 100%;
+}
+
+.showroom-image {
+  width: 100px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.showroom-item p {
+  margin-top: 8px;
+  font-size: 16px;
+  color: #482738;
 }

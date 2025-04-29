@@ -1,3 +1,5 @@
+import logging
+
 from closet.models import ClothingItem, Outfit
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -13,6 +15,9 @@ from django.shortcuts import render, redirect
 from .forms import LoginForm, ProfileSetupForm, SignUpForm, ProfileForm
 from .models import Profile
 from django.contrib.auth.decorators import login_required
+from showrooms.models import Showroom
+
+logger = logging.getLogger(__name__)
 
 # class UserUpdateView(LoginRequiredMixin, UpdateView):
 #     model = Profile
@@ -110,10 +115,20 @@ class ProfileView(View):
 
         profile, created = Profile.objects.get_or_create(user=request.user)
         clothing_items = ClothingItem.objects.filter(owner=profile) if profile else []
+        showrooms = Showroom.objects.all()[:3]  # Fetch the top 3 showrooms
+
+        # Debugging log
+        logger.debug(f"Showrooms passed to template: {showrooms}")
+
         return render(
             request,
             "user_management/profile.html",
-            {"profile": profile, "items": clothing_items, "active_tab": "profile"},
+            {
+                "profile": profile,
+                "items": clothing_items,
+                "showrooms": showrooms,
+                "active_tab": "profile",
+            },
         )
 
 @login_required

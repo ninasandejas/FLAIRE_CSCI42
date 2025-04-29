@@ -57,7 +57,6 @@
         <a href="#" id="manage-ootd-btn">
           <img src="{{ profile.ootd.image.url }}" alt="OOTD Image" class="ootd-image">
         </a>
-        <p>{{ profile.ootd.caption }}</p>
     </div>
   </section>
   {% else %}
@@ -70,7 +69,7 @@
   </section>
   {% endif %}
 
-  <section class="wishlist-section">
+  <section class="wishlist-showroom-section">
     <h3 class="widget-title">wishlist</h3>
     <div class="wishlist-widget">
       <button class="wishlist-nav-prev" aria-label="Previous wishlist item">
@@ -80,7 +79,8 @@
         />
       </button>
       <img
-        src="{% static 'img/temp-clothes/wishlistdisplay.png' %}"
+        id="wishlist-main-image"
+        src="{% if items %}{{ items.0.image.url }}{% else %}{% static 'img/temp-clothes/wishlistdisplay.png' %}{% endif %}"
         alt="Wishlist Item"
         class="wishlist-main-image"
       />
@@ -93,15 +93,21 @@
     </div>
 
     <h3 class="widget-title">top showrooms</h3>
-    <div class="wishlist-widget">
-
-      <img
-        src=""
-        class="showrooms-section"
-      />
+    <div class="showroom-widget">
+      <div class="showroom-grid">
+        {% for showroom in showrooms|slice:":3" %}
+        <div class="showroom-item">
+          <img
+            src="{{ showroom.image.url }}"
+            alt="{{ showroom.name }}"
+            class="showroom-image"
+          />
+          <p>{{ showroom.name }}</p>
+        </div>
+        {% endfor %}
+      </div>
     </div>
   </section>
-</div>
 
 <div id="edit-profile-modal" class="modal">
   <div class="modal-content">
@@ -168,6 +174,45 @@
         ootdModal.style.display = 'none';
       }
     });
+
+    const wishlistItems = [
+      {% for item in items %}
+        {
+          image: "{{ item.image.url }}",
+          name: "{{ item.name }}"
+        },
+      {% endfor %}
+    ];
+
+    console.log('Wishlist Items:', wishlistItems); // Debugging log
+
+    const wishlistImage = document.getElementById('wishlist-main-image');
+    const prevButton = document.querySelector('.wishlist-nav-prev');
+    const nextButton = document.querySelector('.wishlist-nav-next');
+
+    let currentIndex = 0;
+
+    const updateWishlistImage = () => {
+      if (wishlistItems.length > 0) {
+        console.log('Updating image to:', wishlistItems[currentIndex]); // Debugging log
+        wishlistImage.src = wishlistItems[currentIndex].image;
+        wishlistImage.alt = wishlistItems[currentIndex].name;
+      }
+    };
+
+    prevButton.addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + wishlistItems.length) % wishlistItems.length;
+      console.log('Previous button clicked. Current index:', currentIndex); // Debugging log
+      updateWishlistImage();
+    });
+
+    nextButton.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % wishlistItems.length;
+      console.log('Next button clicked. Current index:', currentIndex); // Debugging log
+      updateWishlistImage();
+    });
+
+    updateWishlistImage();
   });
 </script>
 

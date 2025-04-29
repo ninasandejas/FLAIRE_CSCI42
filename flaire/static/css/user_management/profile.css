@@ -79,7 +79,7 @@
 }
 
 #widget-column {
-  flex: 7;
+  flex: 1;
   height: 500px;
   border: solid #F4e6F0;
   text-align: center;
@@ -135,8 +135,8 @@
 }
 
 .ootd-section {
-  flex: 2;
-  max-width: 50%;
+  flex:1;
+  max-width: 30%;
 }
 
 .widget-title {
@@ -150,45 +150,25 @@
 }
 
 .ootd-widget {
-  height: calc(2 * var(--wishlist-showroom-height)); /* Twice the height of wishlist/showroom */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  display: block !important; /* Force block display */
+  height: calc(2 * var(--wishlist-showroom-height));
   padding: 20px;
   border-radius: 11px;
   background-color: #ece4e4;
 }
 
-.ootd-image-1,
-.ootd-image-2 {
-  object-fit: contain;
-}
-
-.ootd-image-1 {
-  aspect-ratio: 0.36;
-  width: 128px;
-}
-
-.ootd-image-2 {
-  aspect-ratio: 0.79;
-  width: 83px;
-  align-self: center;
-  margin-top: 28px;
-}
-
 .ootd-widget img {
-  width: 80%; /* Smaller image size */
+  width: 100%;
   height: auto;
   object-fit: contain;
   border-radius: 10px;
 }
 
+/* Adjust layout for wishlist and top showrooms */
 .wishlist-section {
-  flex: 1;
-  max-width: 25%;
-  width: 25%;
-  min-width: 320px; 
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .wishlist-widget {
@@ -200,6 +180,7 @@
   align-items: center;
   gap: 20px;
   justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .wishlist-nav-prev,
@@ -227,12 +208,21 @@
   width: 100%;
 }
 
+.showroom-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.showroom-item {
+  text-align: center;
+}
+
 .showrooms-section {
-  height: var(--wishlist-showroom-height);
-  aspect-ratio: 1.3;
-  object-fit: contain;
   width: 100%;
-  border-radius: 11px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 10px;
   background-color: #f4e6f0;
   margin-top: 36px;
 }
@@ -341,6 +331,10 @@
 
 .select-ootd-btn:hover {
   background-color: #482738;
+}
+
+.select-ootd-btn:visited {
+  color: white;
 }
 
 @media (max-width: 991px) {

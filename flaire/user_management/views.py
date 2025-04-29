@@ -10,7 +10,7 @@ from django.views import View
 from django.views.generic.edit import CreateView, FormView, UpdateView
 from django.shortcuts import render, redirect
 
-from .forms import LoginForm, ProfileSetupForm, SignUpForm
+from .forms import LoginForm, ProfileSetupForm, SignUpForm, ProfileForm
 from .models import Profile
 from django.contrib.auth.decorators import login_required
 
@@ -105,18 +105,26 @@ class ProfileSetupView(LoginRequiredMixin, UpdateView):
 
 class ProfileView(View):
     def get(self, request):
-        profile = Profile.objects.get(user=request.user)
+        if not request.user.is_authenticated:
+            return redirect('user_management:login')
+
+        profile, created = Profile.objects.get_or_create(user=request.user)
+        clothing_items = ClothingItem.objects.filter(owner=profile) if profile else []
         return render(
             request,
             "user_management/profile.html",
-            {"profile": profile, "active_tab": "profile"},
+            {"profile": profile, "items": clothing_items, "active_tab": "profile"},
         )
 
 @login_required
 def edit_profile(request):
-    profile = request.user.profile
+    try:
+        profile = request.user.profile
+    except Profile.DoesNotExist:
+        profile = Profile.objects.create(user=request.user)
+
     if request.method == "POST":
-        form = ProfileSetupForm(request.POST, request.FILES, instance=profile)
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
             return redirect("user_management:profile")  # Redirect to the profile page

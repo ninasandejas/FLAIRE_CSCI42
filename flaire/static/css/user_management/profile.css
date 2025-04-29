@@ -1,10 +1,10 @@
 /* Main layout */
 #main {
   display: flex;
+  flex-direction: row;
+  justify-content: center;
   gap: 20px;
-  justify-content: space-between;
-  align-items: flex-start;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
   font-family: 'Playfair Display', serif;
@@ -25,6 +25,8 @@
 .profile-pic-container {
   position: relative;
   margin-bottom: 20px;
+  flex-shrink: 0;
+  margin-left: 10px; /* Move the container slightly to the right */
 }
 
 .profile-pic-large {
@@ -38,7 +40,7 @@
 
 .edit-icon {
   position: absolute;
-  right: 10px;
+  right: 5px;
   top: 10px;
   background-color: #333;
   width: 30px;
@@ -57,8 +59,8 @@
 .action-buttons {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 5px;
+  margin-top: 10px;
 }
 
 .action-btn {
@@ -78,19 +80,6 @@
   height: 20px;
 }
 
-#widget-column {
-  flex: 1;
-  height: 500px;
-  border: solid #F4e6F0;
-  text-align: center;
-  flex-shrink: 0;
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-
 .profile-content {
   margin-top: 47px;
   width: 100%;
@@ -108,7 +97,7 @@
   font-family: 'Playfair Display SC', -apple-system, Roboto, Helvetica, sans-serif;
   font-weight: 700;
   text-align: center;
-  margin-top: 19px;
+  margin-top: 20px;
 }
 
 .profile-stats {
@@ -150,18 +139,25 @@
 }
 
 .ootd-widget {
-  display: block !important; /* Force block display */
-  height: calc(2 * var(--wishlist-showroom-height));
+  width: 300px;
+  height: 530px;
+  text-align: center;
+  display: block;
   padding: 20px;
-  border-radius: 11px;
+  border-radius: 10px;
   background-color: #ece4e4;
 }
 
 .ootd-widget img {
   width: 100%;
   height: auto;
-  object-fit: contain;
   border-radius: 10px;
+margin-top: auto;
+  margin-bottom: auto;
+  display: block;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 /* Adjust layout for wishlist and top showrooms */
@@ -172,8 +168,8 @@
 }
 
 .wishlist-widget {
-  height: var(--wishlist-showroom-height);
-  border-radius: 11px;
+  height: 200px;
+  border-radius: 10px;
   background-color: #ece4e4;
   display: flex;
   padding: 33px 10px 21px;
@@ -204,30 +200,45 @@
 }
 
 .wishlist-main-image {
-  aspect-ratio: 1.05;
+  aspect-ratio: 1.5;
   object-fit: contain;
   width: 100%;
+}
+
+.showroom-widget {
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  border-radius: 10px;
+  padding: 33px 10px 21px;
+  align-items: center;
+  gap: 20px;
+  justify-content: space-between;
+  background-color: #ece4e4;
 }
 
 .showroom-grid {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  gap: 10px;
+   gap: 5px;
   width: 100%;
 }
 
-.showroom-item {
-  text-align: center;
-}
-
-.showrooms-section {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
+.showroom-image {
+  width: 100px;
+  height: 150px;
+  object-fit: cover;
   border-radius: 10px;
-  background-color: #f4e6f0;
-  margin-top: 36px;
+}
+
+.showroom-widget img {
+  margin-top: auto;
+  margin-bottom: auto;
+  display: block;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 /* Modal styles */
@@ -340,59 +351,7 @@
   color: white;
 }
 
-@media (max-width: 991px) {
-  .profile-content {
-    max-width: 100%;
-    margin-top: 40px;
-  }
-
-  .profile-grid {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-  }
-
-  .profile-info,
-  .ootd-section,
-  .wishlist-section {
-    width: 100%;
-    margin-top: 40px;
-  }
-
-  .ootd-widget {
-    padding: 91px 20px 26px;
-  }
-}
-
 /* Wishlist and showroom combined height */
 :root {
   --wishlist-showroom-height: 300px;
-}
-
-.showroom-widget {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.showroom-grid {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  gap: 10px;
-  width: 100%;
-}
-
-.showroom-image {
-  width: 100px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 10px;
-}
-
-.showroom-item p {
-  margin-top: 8px;
-  font-size: 16px;
-  color: #482738;
 }

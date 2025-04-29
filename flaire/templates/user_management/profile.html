@@ -42,8 +42,8 @@
     
     <h2 class="profile-username">@{{ user.username }}</h2>
       <div class="profile-stats">
-        <p class="stat-item">followers: {{ user.profile.followers.count }}</p>
-        <p class="stat-item">following: {{ user.profile.following.count }}</p>
+        <p class="stat-item">{{ user.profile.followers.count }} followers</p>
+        <p class="stat-item">{{ user.profile.following.count }} following</p>
       </div>
     
     <blockquote class="profile-bio">{{ user.profile.bio }}</blockquote>
@@ -72,24 +72,28 @@
   <section class="wishlist-showroom-section">
     <h3 class="widget-title">wishlist</h3>
     <div class="wishlist-widget">
-      <button class="wishlist-nav-prev" aria-label="Previous wishlist item">
+      {% if items %}
+        <button class="wishlist-nav-prev" aria-label="Previous wishlist item">
+          <img
+            src="{% static 'img/nav-left.png' %}"
+            alt="previous"
+          />
+        </button>
         <img
-          src="{% static 'img/nav-left.png' %}"
-          alt="previous"
+          id="wishlist-main-image"
+          src="{{ items.0.image.url }}"
+          alt="Wishlist Item"
+          class="wishlist-main-image"
         />
-      </button>
-      <img
-        id="wishlist-main-image"
-        src="{% if items %}{{ items.0.image.url }}{% else %}{% static 'img/temp-clothes/wishlistdisplay.png' %}{% endif %}"
-        alt="Wishlist Item"
-        class="wishlist-main-image"
-      />
-      <button class="wishlist-nav-next" aria-label="Next wishlist item">
-        <img
-          src="{% static 'img/nav-right.png' %}"
-          alt="next"
-        />
-      </button>
+        <button class="wishlist-nav-next" aria-label="Next wishlist item">
+          <img
+            src="{% static 'img/nav-right.png' %}"
+            alt="next"
+          />
+        </button>
+      {% else %}
+        <p>No items in wishlist</p>
+      {% endif %}
     </div>
 
     <h3 class="widget-title">top showrooms</h3>

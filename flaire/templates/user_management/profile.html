@@ -19,34 +19,45 @@
       
       <div class="profile-pic-container">
       
-        {% if user.profile.profile_picture %}
-          <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" class="profile-pic-large">
+        {% if profile.profile_picture %}
+          <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="profile-pic-large">
         {% else %}
           <img src="{% static 'img/user-icon.png' %}" alt="Default Profile Picture" class="profile-pic-large">
         {% endif %}
       
-        <a href="#" class="edit-icon" aria-label="Edit Profile">
-          <img src="{% static 'img/edit.png' %}" alt="Edit" class="edit-img">
-        </a>
+        {% if is_own_profile %}
+          <a href="#" class="edit-icon" aria-label="Edit Profile">
+            <img src="{% static 'img/edit.png' %}" alt="Edit" class="edit-img">
+          </a>
+        {% else %}
+          <form method="POST" action="{% url 'user_management:other_user_profile' profile.user.username %}">
+            {% csrf_token %}
+            <button type="submit" class="follow-btn">
+              {% if is_following %}Unfollow{% else %}Follow{% endif %}
+            </button>
+          </form>
+        {% endif %}
 
-        <div class="action-buttons">
-          <a href="liked-outfits/" class="action-btn heart-btn" aria-label="Saved Items">
-            <img src="{% static 'img/heart.png' %}" alt="Heart" class="heart-img">
-          </a>
-          <a href="#" class="action-btn dressing-room-btn" aria-label="Dressing Room">
-            <img src="{% static 'img/dressing-room.png' %}" alt="Dressing Room" class="dressing-room-img">
-          </a>
-        </div>
+        {% if is_own_profile %}
+          <div class="action-buttons">
+            <a href="liked-outfits/" class="action-btn heart-btn" aria-label="Saved Items">
+              <img src="{% static 'img/heart.png' %}" alt="Heart" class="heart-img">
+            </a>
+            <a href="#" class="action-btn dressing-room-btn" aria-label="Dressing Room">
+              <img src="{% static 'img/dressing-room.png' %}" alt="Dressing Room" class="dressing-room-img">
+            </a>
+          </div>
+        {% endif %}
 
       </div>
     
-    <h2 class="profile-username">@{{ user.username }}</h2>
+    <h2 class="profile-username">@{{ profile.user.username }}</h2>
       <div class="profile-stats">
-        <p class="stat-item">{{ user.profile.followers.count }} followers</p>
-        <p class="stat-item">{{ user.following.count }} following</p>
+        <p class="stat-item">{{ profile.followers.count }} followers</p>
+        <p class="stat-item">{{ profile.user.following.count }} following</p>
       </div>
     
-    <blockquote class="profile-bio">{{ user.profile.bio }}</blockquote>
+    <blockquote class="profile-bio">{{ profile.bio }}</blockquote>
     </div>
   </section>
     
@@ -54,17 +65,34 @@
   <section class="ootd-section">
     <h3 class="widget-title">ootd</h3>
     <div class="ootd-widget">
-        <a href="#" id="manage-ootd-btn">
+      {% if is_own_profile %}
+        {% if profile.ootd %}
+          <a href="#" id="manage-ootd-btn">
+            <img src="{{ profile.ootd.image.url }}" alt="OOTD Image" class="ootd-image">
+          </a>
+        {% else %}
+          <p>No OOTD selected.</p>
+          <button id="add-ootd-btn" class="select-ootd-btn">Add OOTD</button>
+        {% endif %}
+      {% else %}
+        {% if profile.ootd %}
           <img src="{{ profile.ootd.image.url }}" alt="OOTD Image" class="ootd-image">
-        </a>
+        {% else %}
+          <p>No OOTD selected.</p>
+        {% endif %}
+      {% endif %}
     </div>
   </section>
   {% else %}
   <section class="ootd-section">
     <h3 class="widget-title">ootd</h3>
     <div class="ootd-widget">
-        <p>No OOTD selected yet.</p>
+      {% if is_own_profile %}
+        <p>No OOTD selected.</p>
         <button id="add-ootd-btn" class="select-ootd-btn">Add OOTD</button>
+      {% else %}
+        <p>No OOTD selected.</p>
+      {% endif %}
     </div>
   </section>
   {% endif %}
@@ -73,7 +101,11 @@
     <h3 class="widget-title">wishlist</h3>
     <div class="wishlist-widget">
       {% if not items %}
-        <p>No items in wishlist. <a href="{% url 'user_management:wishlist' %}">Go to wishlist</a></p>
+        {% if is_own_profile %}
+          <p>No items in wishlist. <a href="{% url 'user_management:wishlist' %}">Go to wishlist</a></p>
+        {% else %}
+          <p>No items in wishlist.</p>
+        {% endif %}
       {% else %}
         <button class="wishlist-nav-prev" aria-label="Previous wishlist item">
           <img
@@ -99,7 +131,11 @@
     <h3 class="widget-title">top showrooms</h3>
     <div class="showroom-widget">
       {% if not showrooms %}
-        <p>No showrooms. <a href="{% url 'showrooms:showrooms' %}">Go to showrooms</a></p>
+        {% if is_own_profile %}
+          <p>No showrooms. <a href="{% url 'showrooms:showrooms' %}">Go to showrooms</a></p>
+        {% else %}
+          <p>No showrooms.</p>
+        {% endif %}
       {% else %}
         <div class="showroom-grid">
           {% for showroom in showrooms %}

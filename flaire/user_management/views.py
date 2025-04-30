@@ -132,6 +132,7 @@ class ProfileView(View):
                 "showrooms": showrooms,
                 "form": form,
                 "active_tab": "profile",
+                "is_own_profile": True,
             },
         )
 
@@ -188,3 +189,49 @@ class WishlistView(LoginRequiredMixin, View):
                 "active_tab": "wishlist",
             },
         )
+
+
+class OtherUserProfileView(View):
+    def get(self, request, username):
+        try:
+            user = User.objects.get(username=username)
+            profile = user.profile
+        except User.DoesNotExist:
+            return redirect("user_management:profile")
+
+        clothing_items = ClothingItem.objects.filter(owner=profile) if profile else []
+        showrooms = Showroom.objects.filter(
+            Q(owner=profile) |
+            Q(showroomcollaborator__collaborator=profile, showroomcollaborator__status='ACCEPTED')
+        ).annotate(follower_count=Count('followers')).order_by('-follower_count').distinct()[:3]
+
+        is_following = request.user.following.filter(id=profile.user.id).exists()
+
+        return render(
+            request,
+            "user_management/profile.html",
+            {
+                "profile": profile,
+                "items": clothing_items,
+                "showrooms": showrooms,
+                "is_following": is_following,
+                "is_own_profile": False,
+                "active_tab": "profile",
+            },
+        )
+
+    def post(self, request, username):
+        try:
+            user = User.objects.get(username=username)
+            profile = user.profile
+        except User.DoesNotExist:
+            return redirect("user_management:profile")
+
+        user_profile = request.user
+
+        if profile.user in user_profile.following.all():
+            user_profile.following.remove(profile.user)
+        else:
+            user_profile.following.add(profile.user)
+
+        return redirect("user_management:other_user_profile", username=username)

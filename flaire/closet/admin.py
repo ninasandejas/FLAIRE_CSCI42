@@ -6,17 +6,17 @@ from .models import ClothingItem, Comment, Outfit
 class ClothingItemAdmin(admin.ModelAdmin):
     list_display = (
         "id",
-        "uploader",
+        "owner",
         "name",
         "category",
         "brand",
         "color",
         "image",
     )
-    list_filter = ("uploader", "category", "color", "brand")
+    list_filter = ("owner", "category", "color", "brand")
     search_fields = (
         "brand",
-        "uploader__user__username",
+        "owner__user__username",
     )
     readonly_fields = ("date_created", "date_updated")
     ordering = ("-date_created",)

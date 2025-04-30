@@ -20,7 +20,7 @@ def add_clothing_item(request):
         form = AddClothingItemForm(request.POST, request.FILES)
         if form.is_valid():
             clothing_item = form.save(commit=False)
-            clothing_item.uploader = request.user.profile
+            clothing_item.owner = request.user.profile
             clothing_item.save()
             return redirect("closet:closet")
     else:  # displays/renders the form
@@ -70,7 +70,7 @@ def save_outfit_post_metadata(request, outfit_id):
 
 def clothing_item_images(request):
     category = request.GET.get("category")
-    items = ClothingItem.objects.filter(uploader=request.user.profile)
+    items = ClothingItem.objects.filter(owner=request.user.profile)
 
     if category:
         items = items.filter(category=category.upper())

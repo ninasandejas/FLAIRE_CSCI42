@@ -8,7 +8,7 @@ from user_management.models import Profile
 
 
 class ClothingItem(models.Model):
-    owner = models.ForeignKey(
+    uploader = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name="clothing_items", null=True
     )
     name = models.CharField(max_length=100, null=True, blank=True)

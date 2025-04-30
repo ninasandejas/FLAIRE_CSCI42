@@ -61,6 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="listed-item-details">
               <div><strong>${item.name}</strong></div>
               <div>${item.brand}</div>
+              <div style= "font-size: 0.7rem; color: #7B6A73;">uploaded by @${item.owner}</div>
               <div class="hover-buttons">
               <button class="closet-btn">Add to Closet</button>
               <button class="wishlist-btn">Add to Wishlist</button>

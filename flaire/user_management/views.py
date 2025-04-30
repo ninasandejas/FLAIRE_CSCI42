@@ -176,6 +176,7 @@ class OutfitDetailView(View):
                     "url": item.image.url,
                     "name": item.name,
                     "brand": item.brand,
+                    "owner": item.owner.user.username,
                 }
                 for item in outfit.listed_items.all()
             ]

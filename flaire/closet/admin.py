@@ -16,7 +16,7 @@ class ClothingItemAdmin(admin.ModelAdmin):
     list_filter = ("uploader", "category", "color", "brand")
     search_fields = (
         "brand",
-        "owner__user__username",
+        "uploader__user__username",
     )
     readonly_fields = ("date_created", "date_updated")
     ordering = ("-date_created",)

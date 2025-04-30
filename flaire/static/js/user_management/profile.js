@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     const wrapper = document.createElement("div");
                     wrapper.classList.add("post-wrapper");
                     wrapper.appendChild(img);
-                    gridContainer.appendChild(wrapper);
+                    gridContainer.append(wrapper);
                 });
             })
             .catch(err => console.error("Error loading outfits:", err));
@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     return res.json();
                 })
                 .then(newC => {
-                    // Prepend the new comment
+                    // prepend the new comment
                     const div = document.createElement("div");
                     div.classList.add("comment");
                     div.innerHTML = `<strong>@${newC.author}</strong> ${newC.entry}`;

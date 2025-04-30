@@ -34,7 +34,7 @@
     grid-template-columns: repeat(4, 1fr);
     justify-content: center;
     gap: 25px;
-    direction: rtl;
+    /* direction: rtl; */
     padding: 25px 50px;
 }
 

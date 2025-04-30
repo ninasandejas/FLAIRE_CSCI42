@@ -146,7 +146,7 @@ class WishlistView(LoginRequiredMixin, View):
 class OutfitGridImagesView(View):
     def get(self, request):
         outfits = Outfit.objects.filter(owner=request.user.profile).order_by(
-            "date_created"
+            "-date_created"
         )
         image_data = [{"id": outfit.id, "url": outfit.image.url} for outfit in outfits]
         return JsonResponse({"images": image_data})

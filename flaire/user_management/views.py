@@ -227,11 +227,10 @@ class OtherUserProfileView(View):
         except User.DoesNotExist:
             return redirect("user_management:profile")
 
-        user_profile = request.user
-
-        if profile.user in user_profile.following.all():
-            user_profile.following.remove(profile.user)
+        # Correct the follow/unfollow logic
+        if profile.followers.filter(id=request.user.id).exists():
+            profile.followers.remove(request.user)
         else:
-            user_profile.following.add(profile.user)
+            profile.followers.add(request.user)
 
         return redirect("user_management:other_user_profile", username=username)

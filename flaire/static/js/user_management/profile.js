@@ -58,9 +58,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 div.classList.add("listed-item");
                 div.innerHTML = `
             <img src="${item.url}" />
-            <div>
+            <div class="listed-item-details">
               <div><strong>${item.name}</strong></div>
               <div>${item.brand}</div>
+              <div class="hover-buttons">
+              <button class="closet-btn">Add to Closet</button>
+              <button class="wishlist-btn">Add to Wishlist</button>
+              </div>
             </div>
           `;
                 listItemsSection.appendChild(div);

@@ -179,6 +179,7 @@
     border-radius: 30px;
     transition: background-color 0.3s ease-in-out;
     user-select: none;
+    cursor: pointer;
 }
 
 #save-button:hover {
@@ -241,6 +242,7 @@
     border-radius: 8px;
     aspect-ratio: 1;
     overflow: hidden;
+    cursor: grab;
 }
 
 #footer {

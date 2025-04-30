@@ -23,6 +23,45 @@
   <div id="posts-grid-container"></div>
 </div>
 
+<div id="modal-overlay"></div>
+
+<div id="outfit-modal" class="outfit-modal hidden">
+  <div class="modal-content">
+    <div class="close-btn">&times;</div>
+    <img id="modal-image" />
+
+    <div id="modal-text-content">
+      <p id="modal-owner" class="username">@username</p>
+      <p id="modal-caption" class="caption"></p>
+      <p id="modal-tags" class="tags">#tag1 #tag2 #tag3</p>
+      <div id="like-button" class="like-circle"></div>
+
+      <div id="mini-navbar">
+        <button class="mini-tab active" data-tab="likes">likes</button>
+        <button class="mini-tab" data-tab="comments">comments</button>
+        <button class="mini-tab" data-tab="list">list items</button>
+      </div>
+
+      <div id="modal-tab-content">
+        <div id="modal-comments" class="hidden">
+          {% if request.user.is_authenticated %}
+          <form id="comment-form">
+            <textarea id="comment-input" rows="2" placeholder="Add a comment..."></textarea>
+            <button type="submit">Post</button>
+          </form>
+          {% endif %}
+          <div id="modal-comments-list"></div>
+        </div>
+
+
+        <!-- listed items section -->
+        <div id="modal-listed-items" class="hidden"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
 {% endif %}
 {% endblock %}
 

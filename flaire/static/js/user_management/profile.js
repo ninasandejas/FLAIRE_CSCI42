@@ -1,35 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const ootdModal = document.getElementById('ootd-modal');
-    const addOotdBtn = document.getElementById('add-ootd-btn');
-    const manageOotdBtn = document.getElementById('manage-ootd-btn');
-    const closeModal = ootdModal.querySelector('.close-modal');
+    const wishlistItems = JSON.parse(document.getElementById('wishlist-data').textContent);
 
-    if (addOotdBtn) {
-      addOotdBtn.addEventListener('click', () => {
-        ootdModal.style.display = 'block';
-      });
-    }
-
-    if (manageOotdBtn) {
-      manageOotdBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        ootdModal.style.display = 'block';
-      });
-    }
-
-    closeModal.addEventListener('click', () => {
-      ootdModal.style.display = 'none';
-    });
-
-    window.addEventListener('click', (e) => {
-      if (e.target === ootdModal) {
-        ootdModal.style.display = 'none';
-      }
-    });
-
-    const wishlistItems = [
-      ...JSON.parse(document.getElementById('wishlist-data').textContent)
-    ];
+    console.log('Wishlist Items:', wishlistItems); // Debugging log
 
     const wishlistImage = document.getElementById('wishlist-main-image');
     const prevButton = document.querySelector('.wishlist-nav-prev');
@@ -39,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const updateWishlistImage = () => {
       if (wishlistItems.length > 0) {
+        console.log('Updating image to:', wishlistItems[currentIndex]); // Debugging log
         wishlistImage.src = wishlistItems[currentIndex].image;
         wishlistImage.alt = wishlistItems[currentIndex].name;
       }
@@ -46,11 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     prevButton.addEventListener('click', () => {
       currentIndex = (currentIndex - 1 + wishlistItems.length) % wishlistItems.length;
+      console.log('Previous button clicked. Current index:', currentIndex); // Debugging log
       updateWishlistImage();
     });
 
     nextButton.addEventListener('click', () => {
       currentIndex = (currentIndex + 1) % wishlistItems.length;
+      console.log('Next button clicked. Current index:', currentIndex); // Debugging log
       updateWishlistImage();
     });
 

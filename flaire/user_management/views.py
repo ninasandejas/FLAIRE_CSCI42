@@ -16,6 +16,7 @@ from .forms import LoginForm, ProfileSetupForm, SignUpForm, ProfileForm
 from .models import Profile
 from django.contrib.auth.decorators import login_required
 from showrooms.models import Showroom
+from django.db.models import Q, Count
 
 logger = logging.getLogger(__name__)
 
@@ -115,10 +116,12 @@ class ProfileView(View):
 
         profile, created = Profile.objects.get_or_create(user=request.user)
         clothing_items = ClothingItem.objects.filter(owner=profile) if profile else []
-        showrooms = Showroom.objects.all()[:3]  # Fetch the top 3 showrooms
+        showrooms = Showroom.objects.filter(
+            Q(owner=profile) |
+            Q(showroomcollaborator__collaborator=profile, showroomcollaborator__status='ACCEPTED')
+        ).annotate(follower_count=Count('followers')).order_by('-follower_count').distinct()[:3]
 
-        # Debugging log
-        logger.debug(f"Showrooms passed to template: {showrooms}")
+        form = ProfileForm(instance=profile)
 
         return render(
             request,
@@ -127,26 +130,35 @@ class ProfileView(View):
                 "profile": profile,
                 "items": clothing_items,
                 "showrooms": showrooms,
+                "form": form,
                 "active_tab": "profile",
             },
         )
 
-@login_required
-def edit_profile(request):
-    try:
+    def post(self, request):
         profile = request.user.profile
-    except Profile.DoesNotExist:
-        profile = Profile.objects.create(user=request.user)
-
-    if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect("user_management:profile")  # Redirect to the profile page
-    else:
-        form = ProfileForm(instance=profile)
+            return redirect("user_management:profile")
 
-    return render(request, "user_management/profile.html", {"form": form, "profile": profile, "active_tab": "profile"})
+        clothing_items = ClothingItem.objects.filter(owner=profile) if profile else []
+        showrooms = Showroom.objects.filter(
+            Q(owner=profile) |
+            Q(showroomcollaborator__collaborator=profile, showroomcollaborator__status='ACCEPTED')
+        ).annotate(follower_count=Count('followers')).order_by('-follower_count').distinct()[:3]
+
+        return render(
+            request,
+            "user_management/profile.html",
+            {
+                "profile": profile,
+                "items": clothing_items,
+                "showrooms": showrooms,
+                "form": form,
+                "active_tab": "profile",
+            },
+        )
 
 
 class LikedOutfitsView(View):

@@ -10,7 +10,6 @@
   font-family: 'Playfair Display', serif;
 }
 
-/* User info column */
 #user-info-column {
   flex: 1;
   max-width: 25%;
@@ -116,6 +115,7 @@
 .stat-item {
   flex: 1;
   margin: 0;
+  cursor: pointer;
 }
 
 .profile-bio {
@@ -163,7 +163,6 @@ margin-top: auto;
   transform: translateY(-50%);
 }
 
-/* Adjust layout for wishlist and top showrooms */
 .wishlist-section {
   display: flex;
   flex-direction: column;
@@ -244,7 +243,6 @@ margin-top: auto;
   transform: translateY(-50%);
 }
 
-/* Modal styles */
 .modal {
   display: none;
   position: fixed;
@@ -316,7 +314,6 @@ margin-top: auto;
   background-color: #482738;
 }
 
-/* Modal grid layout for OOTD */
 .ootd-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -354,12 +351,10 @@ margin-top: auto;
   color: white;
 }
 
-/* Wishlist and showroom combined height */
 :root {
   --wishlist-showroom-height: 300px;
 }
 
-/* Follow button styling */
 .follow-btn {
   display: block;
   margin: 20px auto;
@@ -375,5 +370,50 @@ margin-top: auto;
 }
 
 .follow-btn:hover {
+  background-color: #482738;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.profile-pic-small {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #db8bb5;
+}
+
+.username {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #482738;
+  flex-grow: 1;
+  text-align: left;
+  margin-left: 10px; 
+}
+
+.follow-unfollow-btn {
+  padding: 5px 10px;
+  background-color: #db8bb5; 
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: 'Playfair Display', serif;
+  margin-left: auto; 
+  margin-right: 10px;
+  text-align: center;
+}
+
+.follow-unfollow-btn:hover {
   background-color: #482738;
 }

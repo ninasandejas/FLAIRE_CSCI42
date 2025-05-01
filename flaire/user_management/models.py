@@ -2,10 +2,25 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Model
 from django.apps import apps
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
+class UserProfileManager:
+    @staticmethod
+    def get_profile(user):
+        return Profile.objects.get(user=user)
 
+    @staticmethod
+    @receiver(post_save, sender=User)
+    def create_or_update_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Profile.objects.create(user=instance)
+        else:
+            instance.profile.save()
 
-# will fix following/followers issue later
+# Add the profile property to the User model
+User.add_to_class('profile', property(UserProfileManager.get_profile))
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     email_address = models.EmailField()
@@ -18,11 +33,9 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
-      
 # class ProfileFollower(models.Model):
 #     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 #     date_followed = models.DateTimeField(auto_now_add=True)
-
 
 class WishlistItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

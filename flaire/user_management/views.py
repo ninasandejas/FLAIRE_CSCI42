@@ -11,6 +11,9 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic.edit import CreateView, FormView, UpdateView
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
 
 from .forms import LoginForm, ProfileSetupForm, SignUpForm, ProfileForm
 from .models import Profile
@@ -19,19 +22,6 @@ from showrooms.models import Showroom
 from django.db.models import Q, Count
 
 logger = logging.getLogger(__name__)
-
-# class UserUpdateView(LoginRequiredMixin, UpdateView):
-#     model = Profile
-#     form_class = ProfileForm
-#     template_name = 'user_detail.html'
-#     success_url = reverse_lazy('homepage:homepage')
-
-#     def get_object(self, queryset=None):
-#         return self.request.user.profile
-
-#     def form_valid(self, form):
-#         form.save()
-#         return super().form_valid(form)
 
 
 class UserLoginView(FormView):
@@ -193,6 +183,10 @@ class WishlistView(LoginRequiredMixin, View):
 
 class OtherUserProfileView(View):
     def get(self, request, username):
+        # Check if the username matches the logged-in user's username
+        if username == request.user.username:
+            return redirect("user_management:profile")
+
         try:
             user = User.objects.get(username=username)
             profile = user.profile
@@ -205,7 +199,7 @@ class OtherUserProfileView(View):
             Q(showroomcollaborator__collaborator=profile, showroomcollaborator__status='ACCEPTED')
         ).annotate(follower_count=Count('followers')).order_by('-follower_count').distinct()[:3]
 
-        is_following = request.user.following.filter(id=profile.user.id).exists()
+        is_following = profile.followers.filter(id=request.user.id).exists()
 
         return render(
             request,
@@ -227,6 +221,10 @@ class OtherUserProfileView(View):
         except User.DoesNotExist:
             return redirect("user_management:profile")
 
+        # Prevent users from following themselves
+        if user == request.user:
+            return redirect("user_management:other_user_profile", username=username)
+
         # Correct the follow/unfollow logic
         if profile.followers.filter(id=request.user.id).exists():
             profile.followers.remove(request.user)
@@ -234,3 +232,59 @@ class OtherUserProfileView(View):
             profile.followers.add(request.user)
 
         return redirect("user_management:other_user_profile", username=username)
+
+
+class UserFollowView(View):
+    @method_decorator(login_required)
+    def get_followers(self, request, username):
+        profile = get_object_or_404(Profile, user__username=username)
+        followers = profile.followers.all()
+        followers_data = [
+            {
+                "username": follower.username,
+                "profile_picture_url": follower.profile.profile_picture.url if follower.profile.profile_picture else "",
+                "follow_status": "Unfollow" if follower.profile.followers.filter(id=request.user.id).exists() else "Follow",
+            }
+            for follower in followers
+        ]
+        if not followers_data:
+            return JsonResponse([], safe=False)
+        return JsonResponse(followers_data, safe=False)
+
+    @method_decorator(login_required)
+    def get_following(self, request, username):
+        user = get_object_or_404(User, username=username)
+        try:
+            following_profiles = Profile.objects.filter(followers=user)
+            following_data = [
+                {
+                    "username": profile.user.username,
+                    "profile_picture_url": profile.profile_picture.url if profile.profile_picture else "",
+                    "follow_status": "Unfollow" if profile.followers.filter(id=request.user.id).exists() else "Follow",
+                }
+                for profile in following_profiles
+            ]
+            if not following_data:
+                return JsonResponse([], safe=False)
+            return JsonResponse(following_data, safe=False)
+        except Exception as e:
+            logger.error(f"Error in get_following: {e}")
+            return JsonResponse({'error': 'An error occurred while fetching following data.'}, status=500)
+
+    @method_decorator(login_required)
+    def toggle_follow(self, request, username):
+        try:
+            user_to_follow = get_object_or_404(User, username=username)
+            profile_to_follow = user_to_follow.profile
+
+            if profile_to_follow.followers.filter(id=request.user.id).exists():
+                profile_to_follow.followers.remove(request.user)
+                new_status = "Follow"
+            else:
+                profile_to_follow.followers.add(request.user)
+                new_status = "Unfollow"
+
+            return JsonResponse({"new_status": new_status})
+        except Exception as e:
+            logger.error(f"Error in toggle_follow: {e}")
+            return JsonResponse({"error": "An error occurred while toggling follow status."}, status=500)

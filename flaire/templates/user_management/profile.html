@@ -52,9 +52,9 @@
       </div>
     
     <h2 class="profile-username">@{{ profile.user.username }}</h2>
-      <div class="profile-stats">
-        <p class="stat-item">{{ profile.followers.count }} followers</p>
-        <p class="stat-item">{{ profile.user.following.count }} following</p>
+      <div class="profile-stats" data-username="{{ profile.user.username }}">
+        <p class="stat-item" data-type="followers" data-count="{{ profile.followers.count }}">{{ profile.followers.count }} followers</p>
+        <p class="stat-item" data-type="following" data-count="{{ profile.user.following.count }}">{{ profile.user.following.count }} following</p>
       </div>
     
     <blockquote class="profile-bio">{{ profile.bio }}</blockquote>
@@ -188,6 +188,27 @@
   </div>
 </div>
 
+<!-- Modal for Followers and Following -->
+<div id="followers-following-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal">&times;</span>
+    <h2 id="modal-title">Followers</h2>
+    <ul id="modal-user-list">
+      {% if modal_user_list|length == 0 %}
+        <p>no users</p>
+      {% else %}
+        {% for user in modal_user_list %}
+        <li class="user-item">
+          <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}'s profile picture" class="profile-pic-small">
+          <span class="username">{{ user.username }}</span>
+          <button class="follow-unfollow-btn">{{ user.follow_status }}</button>
+        </li>
+        {% endfor %}
+      {% endif %}
+    </ul>
+  </div>
+</div>
+
 <script id="wishlist-data" type="application/json">[
   {% for item in items %}
     {
@@ -198,6 +219,8 @@
 ]</script>
 
 <script src="{% static 'js/user_management/profile.js' %}"></script>
+<script src="{% static 'js/user_management/followers_and_following.js' %}"></script>
+<meta name="username" content="{{ request.user.username }}">
 
 {% endif %}
 {% endblock %}

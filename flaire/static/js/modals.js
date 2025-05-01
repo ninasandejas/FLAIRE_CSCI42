@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM fully loaded and parsed'); // Debugging log
 
     const modals = document.querySelectorAll('.modal');
     const editProfileModal = document.getElementById('edit-profile-modal');
@@ -14,28 +13,24 @@ document.addEventListener('DOMContentLoaded', () => {
     if (editIcon) {
       editIcon.addEventListener('click', (e) => {
         e.preventDefault();
-        console.log('Edit Profile button clicked'); // Debugging log
         editProfileModal.style.display = 'block';
       });
     }
 
     if (addOotdBtn) {
       addOotdBtn.addEventListener('click', () => {
-        console.log('Add OOTD button clicked'); // Debugging log
         ootdModal.style.display = 'block';
       });
     }
 
     if (manageOotdBtn) {
       manageOotdBtn.addEventListener('click', () => {
-        console.log('Manage OOTD button clicked'); // Debugging log
         ootdModal.style.display = 'block';
       });
     }
 
     closeModalButtons.forEach((button) => {
       button.addEventListener('click', () => {
-        console.log('Close button clicked'); // Debugging log
         modals.forEach((modal) => {
           modal.style.display = 'none';
         });
@@ -45,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('click', (e) => {
       modals.forEach((modal) => {
         if (e.target === modal) {
-          console.log('Clicked outside modal'); // Debugging log
           modal.style.display = 'none';
         }
       });

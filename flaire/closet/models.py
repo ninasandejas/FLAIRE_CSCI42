@@ -93,9 +93,11 @@ class Comment(models.Model):
         Profile,
         on_delete=models.SET_NULL,
         null=True,
-        related_name="authored_comments",
+        related_name="comments",
     )
-    outfit = models.ForeignKey(Outfit, on_delete=models.CASCADE)
+    outfit = models.ForeignKey(
+        Outfit, on_delete=models.CASCADE, related_name="comments"
+    )
     entry = models.TextField()
     date_created = models.DateTimeField(auto_now_add=True, null=False)
     date_updated = models.DateTimeField(auto_now=True, null=False)

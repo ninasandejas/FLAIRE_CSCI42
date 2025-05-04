@@ -5,11 +5,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const gridContainer = document.getElementById("grid-container");
     const dropzone = document.getElementById("collage-dropzone");
     const saveButton = document.getElementById("save-button");
-    const totalSquares = 15;
     const outfitItems = new Set();  //sets prevent duplicates
     let selectedElement = null;
 
-    loadClothingImages("TOP"); //default drawer or category
+    let allItems = [];
+    let currentPage = 1;
+    const itemsPerPage = 15;
+
+    const prevBtn = document.getElementById("prev-page");
+    const nextBtn = document.getElementById("next-page");
+    const pageIndicator = document.getElementById("page-indicator");
+
+    loadClothingImages("TOP");
 
     setupDropzoneEvents();
     setupKeyboardEvents();
@@ -32,52 +39,68 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch(`/closet/images/?category=${category}`)
             .then((response) => response.json())
             .then((data) => {
-                const images = data.images;
-
-                for (let i = 0; i < totalSquares; i++) {
-                    const square = document.createElement("div");
-                    square.classList.add("grid-item");
-
-                    if (i === 0) {
-                        const plusLink = document.createElement("a");
-                        plusLink.href = `/closet/add-clothing-item/?category=${category}`;
-                        plusLink.classList.add("add-item-link");
-                        plusLink.innerHTML = "+";
-                        square.appendChild(plusLink);
-                    } else if (images[i - 1]) {
-                        const img = document.createElement("img");
-                        img.src = images[i - 1].url;
-                        img.dataset.clothingItemId = images[i - 1].id;
-                        img.alt = `Clothing Item ${i}`;
-                        img.draggable = true;
-                        img.classList.add("draggable-item");
-
-                        Object.assign(img.style, {
-                            width: "auto",
-                            height: "auto",
-                            maxWidth: "100%",
-                            maxHeight: "100%",
-                            objectFit: "contain"
-                        });
-
-                        img.addEventListener("dragstart", (e) => {
-                            e.dataTransfer.setData("text/plain", JSON.stringify({
-                                src: img.src,
-                                clothingItemId: img.dataset.clothingItemId
-                            }));
-                        });
-
-                        img.addEventListener("click", () => {
-                            addToDropzone(img.src, img.dataset.clothingItemId, 130, 190);
-                        });
-
-                        square.appendChild(img);
-                    }
-
-                    gridContainer.appendChild(square);
-                }
+                allItems = data.images;
+                currentPage = 1;
+                renderPage();
             });
     }
+
+    function renderPage() {
+        gridContainer.innerHTML = "";
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const pageItems = allItems.slice(start, end);
+
+        for (let i = 0; i < itemsPerPage; i++) {
+            const square = document.createElement("div");
+            square.classList.add("grid-item");
+
+            if (i === 0) {
+                const plusLink = document.createElement("a");
+                plusLink.href = `/closet/add-clothing-item/`;
+                plusLink.classList.add("add-item-link");
+                plusLink.innerHTML = "+";
+                square.appendChild(plusLink);
+            } else if (pageItems[i - 1]) {
+                const item = pageItems[i - 1];
+                const img = document.createElement("img");
+                img.src = item.url;
+                img.dataset.clothingItemId = item.id;
+                img.alt = `Clothing Item ${i}`;
+                img.draggable = true;
+                img.classList.add("draggable-item");
+
+                Object.assign(img.style, {
+                    width: "auto",
+                    height: "auto",
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    objectFit: "contain"
+                });
+
+                img.addEventListener("dragstart", (e) => {
+                    e.dataTransfer.setData("text/plain", JSON.stringify({
+                        src: img.src,
+                        clothingItemId: img.dataset.clothingItemId
+                    }));
+                });
+
+                img.addEventListener("click", () => {
+                    addToDropzone(img.src, img.dataset.clothingItemId, 130, 190);
+                });
+
+                square.appendChild(img);
+            }
+
+            gridContainer.appendChild(square);
+        }
+
+        // update pagination controls
+        pageIndicator.textContent = `Page ${currentPage}`;
+        prevBtn.disabled = currentPage === 1;
+        nextBtn.disabled = end >= allItems.length;
+    }
+
 
     function setupDropzoneEvents() {
         dropzone.addEventListener("dragover", (e) => {
@@ -371,5 +394,21 @@ document.addEventListener("DOMContentLoaded", function () {
     function getCSRFToken() {
         return document.cookie.split("; ").find(row => row.startsWith("csrftoken="))?.split("=")[1];
     }
+
+    prevBtn.addEventListener("click", () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderPage();
+        }
+    });
+
+    nextBtn.addEventListener("click", () => {
+        const maxPage = Math.ceil(allItems.length / itemsPerPage);
+        if (currentPage < maxPage) {
+            currentPage++;
+            renderPage();
+        }
+    });
+
 
 });

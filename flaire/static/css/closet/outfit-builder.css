@@ -179,6 +179,7 @@
     border-radius: 30px;
     transition: background-color 0.3s ease-in-out;
     user-select: none;
+    cursor: pointer;
 }
 
 #save-button:hover {
@@ -241,6 +242,48 @@
     border-radius: 8px;
     aspect-ratio: 1;
     overflow: hidden;
+    cursor: grab;
+}
+
+#pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/* https://www.w3schools.com/howto/howto_css_arrows.asp */
+
+.left-page-btn,
+.right-page-btn {
+    border: solid #DFBCD4;
+    background-color: #FDF9F6;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 2px;
+    padding: 4px;
+}
+
+.left-page-btn {
+    transform: rotate(135deg);
+}
+
+.right-page-btn {
+    transform: rotate(-45deg);
+}
+
+.left-page-btn:hover {
+    border-color: #CBA1BE;
+}
+
+.right-page-btn:hover {
+    border-color: #CBA1BE;
+}
+
+#page-indicator {
+    font-size: 1rem;
+    color: #7B6A73;
 }
 
 #footer {

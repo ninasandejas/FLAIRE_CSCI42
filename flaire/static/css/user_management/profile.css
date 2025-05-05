@@ -1,3 +1,15 @@
+/* Main layout */
+#main {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: 'Playfair Display', serif;
+}
+
 .container {
     display: flex;
 }
@@ -9,6 +21,14 @@
 }
 
 #user-info-column {
+  flex: 1;
+  max-width: 25%;
+  height: 500px;
+  border: solid #F4e6F0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
     flex: 3;
     height: 500px;
     min-width: 300px;
@@ -17,6 +37,15 @@
     flex-shrink: 0;
     border: solid;
     border-color: #F4E6F0;
+}
+
+.profile-pic-container {
+  position: relative;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 #widgets-column {
@@ -37,6 +66,40 @@
     padding: 25px 50px;
 }
 
+.profile-pic-large {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+}
+
+.edit-icon {
+  position: absolute;
+  right: 5px;
+  top: 10px;
+  background-color: #333;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-img {
+  width: 16px;
+  height: 16px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 10px;
+}
 
 .post-wrapper {
     width: 100%;
@@ -109,6 +172,23 @@
     margin-bottom: 20px;
 }
 
+.action-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 10px;
+}
+
+.heart-img,
+.dressing-room-img {
+  width: 20px;
+  height: 20px;
+}
+
 #modal-caption {
     grid-area: captiontagsarea;
     height: auto;
@@ -143,10 +223,69 @@
     padding-right: 40px;
 }
 
+.profile-content {
+  margin-top: 47px;
+  width: 100%;
+  max-width: 1097px;
+}
+
 .username {
     font-weight: bold;
     font-size: 1.1rem;
     margin-bottom: 10px;
+}
+
+.profile-grid {
+  display: flex;
+  gap: 20px;
+}
+
+.profile-username {
+  color: #482738;
+  font-size: 32px;
+  font-family: 'Playfair Display SC', -apple-system, Roboto, Helvetica, sans-serif;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.profile-stats {
+  display: flex;
+  margin: 17px auto 0;
+  width: 241px;
+  gap: 31px;
+  font-family: 'Playfair Display', -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 20px;
+  color: #cba1be;
+}
+
+.stat-item {
+  flex: 1;
+  margin: 0;
+  cursor: pointer;
+}
+
+.profile-bio {
+  color: #482738;
+  font-size: 18px;
+  font-family: 'Playfair Display', -apple-system, Roboto, Helvetica, sans-serif;
+  text-align: center;
+  margin: 19px auto 0;
+}
+
+.ootd-section {
+  flex:1;
+  max-width: 30%;
+}
+
+.widget-title {
+  color: #482738;
+  font-size: 25px;
+  font-family: 'Playfair Display', -apple-system, Roboto, Helvetica, sans-serif;
+  font-weight: 700;
+  text-align: center;
+  z-index: 10;
+  margin: 0;
 }
 
 .caption {
@@ -193,6 +332,57 @@
     color: #482738;
 }
 
+.ootd-widget {
+  width: 300px;
+  height: 530px;
+  text-align: center;
+  display: block;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #ece4e4;
+}
+
+.ootd-widget img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+margin-top: auto;
+  margin-bottom: auto;
+  display: block;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.wishlist-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.wishlist-widget {
+  height: 200px;
+  border-radius: 10px;
+  background-color: #ece4e4;
+  display: flex;
+  padding: 33px 10px 21px;
+  align-items: center;
+  gap: 20px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.wishlist-nav-prev,
+.wishlist-nav-next {
+  background: none;        
+  border: none;  
+  padding: 0;  
+  outline: none; 
+  display: flex;  
+  justify-content: center;
+  align-items: center
+}
+
 .mini-tab.active {
     border-bottom: 2px solid #482738;
 }
@@ -210,6 +400,21 @@
     margin-bottom: 10px;
 }
 
+.wishlist-nav-prev img,
+.wishlist-nav-next img {
+  aspect-ratio: 0.52;
+  object-fit: contain; 
+  width: 10px;
+  height: auto; 
+  cursor: pointer;
+}
+
+.wishlist-main-image {
+  aspect-ratio: 1.5;
+  object-fit: contain;
+  width: 100%;
+}
+
 .listed-item img {
     width: 40px;
     height: 40px;
@@ -220,6 +425,188 @@
 .comment {
     font-size: 0.9rem;
     margin-bottom: 8px;
+}
+
+.showroom-widget {
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  border-radius: 10px;
+  padding: 33px 10px 21px;
+  align-items: center;
+  gap: 20px;
+  justify-content: space-between;
+  background-color: #ece4e4;
+}
+
+.showroom-grid {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+   gap: 5px;
+  width: 100%;
+}
+
+.showroom-image {
+  width: 100px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.showroom-widget img {
+  margin-top: auto;
+  margin-bottom: auto;
+  display: block;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.close-modal {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.save-btn {
+  background-color: #db8bb5;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.save-btn:hover {
+  background-color: #482738;
+}
+
+.ootd-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  padding: 10px;
+}
+
+.ootd-item {
+  text-align: center;
+}
+
+.ootd-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.select-ootd-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #db8bb5;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.select-ootd-btn:hover {
+  background-color: #482738;
+}
+
+.select-ootd-btn:visited {
+  color: white;
+}
+
+:root {
+  --wishlist-showroom-height: 300px;
+}
+
+.follow-btn {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #db8bb5;
+  color: white;
+  font-size: 16px;
+  font-family: 'Playfair Display', serif;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.follow-btn:hover {
+  background-color: #482738;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.profile-pic-small {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #db8bb5;
 }
 
 #modal-overlay {
@@ -265,6 +652,35 @@
     color: #482738;
     cursor: pointer;
     transition: background-color 0.1s ease;
+}
+
+.username {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #482738;
+  flex-grow: 1;
+  text-align: left;
+  margin-left: 10px; 
+}
+
+.follow-unfollow-btn {
+  padding: 5px 10px;
+  background-color: #db8bb5; 
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: 'Playfair Display', serif;
+  margin-left: auto; 
+  margin-right: 10px;
+  text-align: center;
+}
+
+.follow-unfollow-btn:hover {
+  background-color: #482738;
 }
 
 .hover-buttons button:hover {

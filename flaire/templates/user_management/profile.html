@@ -10,6 +10,43 @@
 
 {% if request.user.is_authenticated %}
 
+<div id="main">
+
+  <section class="profile-grid">
+
+    <div class="profile-content">
+      
+      <div class="profile-pic-container">
+      
+        {% if profile.profile_picture %}
+          <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="profile-pic-large">
+        {% else %}
+          <img src="{% static 'img/user-icon.png' %}" alt="Default Profile Picture" class="profile-pic-large">
+        {% endif %}
+      
+        {% if is_own_profile %}
+          <a href="#" class="edit-icon" aria-label="Edit Profile">
+            <img src="{% static 'img/edit.png' %}" alt="Edit" class="edit-img">
+          </a>
+        {% else %}
+          <form method="POST" action="{% url 'user_management:other_user_profile' profile.user.username %}">
+            {% csrf_token %}
+            <button type="submit" class="follow-btn">
+              {% if is_following %}Unfollow{% else %}Follow{% endif %}
+            </button>
+          </form>
+        {% endif %}
+
+        {% if is_own_profile %}
+          <div class="action-buttons">
+            <a href="liked-outfits/" class="action-btn heart-btn" aria-label="Saved Items">
+              <img src="{% static 'img/heart.png' %}" alt="Heart" class="heart-img">
+            </a>
+            <a href="#" class="action-btn dressing-room-btn" aria-label="Dressing Room">
+              <img src="{% static 'img/dressing-room.png' %}" alt="Dressing Room" class="dressing-room-img">
+            </a>
+          </div>
+        {% endif %}
 <div id="top">
   <div id="user-info-column">
     <p>hi</p>
@@ -19,6 +56,12 @@
   </div>
 </div>
 
+      </div>
+    
+    <h2 class="profile-username">@{{ profile.user.username }}</h2>
+      <div class="profile-stats" data-username="{{ profile.user.username }}">
+        <p class="stat-item" data-type="followers" data-count="{{ profile.followers.count }}">{{ profile.followers.count }} followers</p>
+        <p class="stat-item" data-type="following" data-count="{{ profile.user.following.count }}">{{ profile.user.following.count }} following</p>
 <div>
   <div id="posts-grid-container"></div>
 </div>
@@ -37,6 +80,76 @@
       <div id="like-button">
         <img src="{% static 'img/unliked.png' %}" alt="Heart Icon">
       </div>
+    
+    <blockquote class="profile-bio">{{ profile.bio }}</blockquote>
+    </div>
+  </section>
+    
+  {% if profile.ootd %}
+  <section class="ootd-section">
+    <h3 class="widget-title">ootd</h3>
+    <div class="ootd-widget">
+      {% if is_own_profile %}
+        {% if profile.ootd %}
+          <a href="#" id="manage-ootd-btn">
+            <img src="{{ profile.ootd.image.url }}" alt="OOTD Image" class="ootd-image">
+          </a>
+        {% else %}
+          <p>No OOTD selected.</p>
+          <button id="add-ootd-btn" class="select-ootd-btn">Add OOTD</button>
+        {% endif %}
+      {% else %}
+        {% if profile.ootd %}
+          <img src="{{ profile.ootd.image.url }}" alt="OOTD Image" class="ootd-image">
+        {% else %}
+          <p>No OOTD selected.</p>
+        {% endif %}
+      {% endif %}
+    </div>
+  </section>
+  {% else %}
+  <section class="ootd-section">
+    <h3 class="widget-title">ootd</h3>
+    <div class="ootd-widget">
+      {% if is_own_profile %}
+        <p>No OOTD selected.</p>
+        <button id="add-ootd-btn" class="select-ootd-btn">Add OOTD</button>
+      {% else %}
+        <p>No OOTD selected.</p>
+      {% endif %}
+    </div>
+  </section>
+  {% endif %}
+
+  <section class="wishlist-showroom-section">
+    <h3 class="widget-title">wishlist</h3>
+    <div class="wishlist-widget">
+      {% if not items %}
+        {% if is_own_profile %}
+          <p>No items in wishlist. <a href="{% url 'user_management:wishlist' %}">Go to wishlist</a></p>
+        {% else %}
+          <p>No items in wishlist.</p>
+        {% endif %}
+      {% else %}
+        <button class="wishlist-nav-prev" aria-label="Previous wishlist item">
+          <img
+            src="{% static 'img/nav-left.png' %}"
+            alt="previous"
+          />
+        </button>
+        <img
+          id="wishlist-main-image"
+          src="{{ items.0.image.url }}"
+          alt="Wishlist Item"
+          class="wishlist-main-image"
+        />
+        <button class="wishlist-nav-next" aria-label="Next wishlist item">
+          <img
+            src="{% static 'img/nav-right.png' %}"
+            alt="next"
+          />
+        </button>
+      {% endif %}
 
       <div id="mini-navbar">
         <button class="mini-tab active" data-tab="likes">likes</button>
@@ -60,6 +173,101 @@
         <div id="modal-listed-items" class="hidden"></div>
       </div>
     </div>
+
+    <h3 class="widget-title">top showrooms</h3>
+    <div class="showroom-widget">
+      {% if not showrooms %}
+        {% if is_own_profile %}
+          <p>No showrooms. <a href="{% url 'showrooms:showrooms' %}">Go to showrooms</a></p>
+        {% else %}
+          <p>No showrooms.</p>
+        {% endif %}
+      {% else %}
+        <div class="showroom-grid">
+          {% for showroom in showrooms %}
+            <a href="{% url 'showrooms:showroom_detail' showroom.id %}">
+              <img
+                src="{{ showroom.cover_image.url }}"
+                alt="{{ showroom.name }}"
+                class="showroom-image"
+              />
+            </a>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+<div id="edit-profile-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal">&times;</span>
+    <h2>Edit your profile</h2>
+    <form method="POST" enctype="multipart/form-data" action="{% url 'user_management:profile' %}">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="profile-picture">Profile Picture</label>
+        <input type="file" id="profile-picture" name="profile_picture">
+      </div>
+      <div class="form-group">
+        <label for="bio">Bio</label>
+        <textarea id="bio" name="bio">{{ user.profile.bio }}</textarea>
+      </div>
+      <button type="submit" class="save-btn">Save Changes</button>
+    </form>
+  </div>
+</div>
+
+<div id="ootd-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal">&times;</span>
+    <h2>{% if profile.ootd %}Manage{% else %}Add{% endif %} Outfit of the Day</h2>
+    <div class="ootd-grid">
+      {% for outfit in user.profile.outfits.all %}
+      <div class="ootd-item">
+        <img src="{{ outfit.image.url }}" alt="Outfit Image" class="outfit-thumbnail">
+        <a href="{% url 'closet:select_ootd' outfit.id %}" class="select-ootd-btn">Select as OOTD</a>
+      </div>
+      {% empty %}
+      <p>No outfits available. <a href="{% url 'closet:closet' %}">Please create outfits in your closet.</a></p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Followers and Following -->
+<div id="followers-following-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal">&times;</span>
+    <h2 id="modal-title">Followers</h2>
+    <ul id="modal-user-list">
+      {% if modal_user_list|length == 0 %}
+        <p>no users</p>
+      {% else %}
+        {% for user in modal_user_list %}
+        <li class="user-item">
+          <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}'s profile picture" class="profile-pic-small">
+          <span class="username">{{ user.username }}</span>
+          <button class="follow-unfollow-btn">{{ user.follow_status }}</button>
+        </li>
+        {% endfor %}
+      {% endif %}
+    </ul>
+  </div>
+</div>
+
+<script id="wishlist-data" type="application/json">[
+  {% for item in items %}
+    {
+      "image": "{{ item.image.url }}",
+      "name": "{{ item.name }}"
+    }{% if not forloop.last %},{% endif %}
+  {% endfor %}
+]</script>
+
+<script src="{% static 'js/user_management/profile.js' %}"></script>
+<script src="{% static 'js/user_management/followers_and_following.js' %}"></script>
+<meta name="username" content="{{ request.user.username }}">
+
   </div>
 </div>
 </div>

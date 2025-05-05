@@ -11,18 +11,26 @@
     <title>Flaire</title>
 </head>
 
-<body class="for-specific">
-    <nav id="header">
-        <ul class="navbar">
-            <li class="{% if active_tab == 'home'%}active{% endif %}" style="float:left">
-                <a href="{% url 'home'%}">FLAIRE</a>
+<body>
+    <div class="sidebar">
+        <ul>
+            <li id="sidebar-toggle">
+                <img src="{% static 'img/menu.png' %}" alt="Menu" style="height: 24px">
+                <a href="#">FLAIRE</a>
             </li>
-            <li class="{% if active_tab == 'explore' %}active{% endif %}">
-                <a href="{% url 'social:explore' %}">explore</a>
+            <li>
+                <img src="{% static 'img/explore.png' %}" alt="Menu" style="height: 24px">
+                <a href="{% url 'social:explore'%}">Explore</a>
             </li>
-            <li class="{% if active_tab == 'following' %}active{% endif %}">
-                <a href="{% url 'social:following' %}">following</a>
+            <li>
+                <img src="{% static 'img/following.png' %}" alt="Menu" style="height: 24px">
+                <a href="{% url 'social:following'%}">Following</a>
             </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <nav class="navbar">
             <li class="{% if active_tab == 'wishlist'%}active{% endif %}">
                 <a href="{% url 'user_management:wishlist' %}">wishlist</a>
             </li>
@@ -33,8 +41,8 @@
                 <a href="{% url 'closet:closet' %}">closet</a>
             </li>
             {% if request.user.is_authenticated %}
-            <li class="{% if active_tab == 'closet'%}active{% endif %}">
-                <form method="POST" action="{% url 'logout' %}" class = "logout-form">
+            <li>
+                <form method="POST" action="{% url 'logout' %}" class="logout-form">
                     {% csrf_token %}
                     <button type="submit" class="logout-button">Logout</button>
                 </form>
@@ -47,18 +55,30 @@
             {% else %}
             {% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'signup' %}
             <li>
-                <a href="{% url 'user_management:login' %}">
-                    login
-                </a>
+                <a href="{% url 'user_management:login' %}">login</a>
             </li>
             {% endif %}
             {% endif %}
+        </nav>
 
-           
-        </ul>
-    </nav>
-    {% block content %}{% endblock %}
+        <div class="page-content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
     {% block scripts %}{% endblock %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggle = document.getElementById('sidebar-toggle');
+            const body = document.body;
+
+            toggle.addEventListener('click', function (e) {
+                e.preventDefault();  // prevent jump from href="#"
+                body.classList.toggle('sidebar-hidden');
+            });
+        });
+    </script>
 </body>
+
 
 </html>

@@ -144,3 +144,4 @@ TINIFY_API_KEY = os.getenv("TINIFY_API_KEY")
 LOGIN_REDIRECT_URL = 'user_management:profile'
 LOGOUT_REDIRECT_URL = 'user_management:login'
 
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000

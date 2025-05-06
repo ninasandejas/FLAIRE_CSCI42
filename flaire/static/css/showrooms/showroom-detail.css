@@ -53,12 +53,21 @@
   margin-bottom: 5px;
 }
 
-.showroom-header p {
+.showroom-header .fit-n-followers {
   margin-top: 5px;
   color: #7B6A73;
   font-family: "Playfair Display";
   font-size: 20px;
   font-style: italic;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.showroom-header .tags {
+  margin-top: 5px;
+  color: #7B6A73;
+  font-family: "Playfair Display";
+  font-size: 20px;
   font-weight: 400;
   line-height: normal;
 }

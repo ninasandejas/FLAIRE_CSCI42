@@ -11,11 +11,19 @@
 <div class="showroom-header">
     <h3 class = "showroom-title" id = "showroom-title">{{ showroom.title }}</h3>
     <input type="text" id="edit-title" style="display: none;" />
-    <p>
+    <p class = "fit-n-followers">
         fits: <span id = "outfit_count">{{ outfit_count }}</span>
         <label style="margin-left: 27px;">
             followers:  <span id = "follower-count">{{ follower_count }}</span>
         </label>
+        {% if showroom.tags.all %}
+        <p class = "tags">
+            <span class = > </span>Tags:
+            {% for tag in showroom.tags.all %}
+            {{ tag.name }}
+            {% endfor %}
+        </p>
+        {% endif %}
     </p>
     <div id = "user-access">
         <div id = "user-icons">
@@ -33,6 +41,11 @@
             {% if show_edit_button %}
             <button type="button" id = "edit-button" data-state="edit">
                 Edit
+            </button>
+            {% endif %}
+            {% if if_following %}
+            <button type="button" id = "unfollow-button" data-state="edit">
+                Unfollow
             </button>
             {% endif %}
         </div>

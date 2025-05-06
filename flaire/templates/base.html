@@ -27,16 +27,26 @@
                 <a href="{% url 'closet:closet' %}">closet</a>
             </li>
             {% if request.user.is_authenticated %}
-            <li class="{% if active_tab == 'closet'%}active{% endif %}">
+            <!-- <li class="{% if active_tab == 'closet'%}active{% endif %}">
                 <form method="POST" action="{% url 'logout' %}" class = "logout-form">
                     {% csrf_token %}
                     <button type="submit" class="logout-button">Logout</button>
                 </form>
-            </li>
+            </li> -->
             <li class="{% if active_tab == 'profile'%}active{% endif %}">
-                <a href="{% url 'user_management:profile' %}">
+                <div class = "profile-dropdown">
+                    <button class = "profbtn"><img src="{{ request.user.profile.profile_picture.url }}" alt="User Profile" style="height: 35px; width: 35px; border-radius: 50%; object-fit: cover"></button>                    
+                    <div class = "dropdown-content">
+                        <a href="{% url 'user_management:profile' %}">profile</a>
+                        <form method="POST" action="{% url 'logout' %}" class = "logout-form">
+                            {% csrf_token %}
+                            <button type="submit" class="logout-button">Logout</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- <a href="{% url 'user_management:profile' %}">
                     <img src="{% static 'img/user-icon.png' %}" alt="User Profile" style="height: 24px">
-                </a>
+                </a> -->
             </li>
             {% else %}
             {% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'signup' %}

@@ -3,6 +3,7 @@
 {% block title %}Showrooms{% endblock %}
 
 {% block styles %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="{% static 'css/showrooms/owned-showrooms.css' %}">
 {% endblock %}
 
@@ -17,22 +18,16 @@
   </div>
 </div>
 
-<!-- preparing for create-showroom modal BUT will complete this next iteration
-<div id = "create-modal" class = "create-showroom">
-  <h3 id = "modal-header">
-    Create showroom OR Add outfits
-  </h3>
-  <div id ="modal-content">
-    either form for creating showroom goes here thru js or the loading of outfits
-  </div>
-  <button type="button" id="modal-next-button">
-    Next or Create
-  </button>
-  <button type="button" id="cancel-crop">Cancel</button>
-</div> -->
+<div id="create-modal" class="modal fade">
+  <div id="dialog" class="modal-dialog modal-dialog-centered" hx-target="this" hx-swap="outerHTML"></div>
+</div>
 
 {% endblock %}
 
 {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/htmx.org@1.6.1/dist/htmx.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="{% static 'js/showrooms/owned-showrooms.js' %}"></script>
 {% endblock %}

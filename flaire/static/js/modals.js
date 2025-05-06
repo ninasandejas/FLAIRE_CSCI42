@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    const modals = document.querySelectorAll('.modal');
+    const modals = document.querySelectorAll('.profile-modal');
     const editProfileModal = document.getElementById('edit-profile-modal');
     const ootdModal = document.getElementById('ootd-modal');
 
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ootdModal.style.display = 'block';
       });
     }
-
+  
     closeModalButtons.forEach((button) => {
       button.addEventListener('click', () => {
         modals.forEach((modal) => {

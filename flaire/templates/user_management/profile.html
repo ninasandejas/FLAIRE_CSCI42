@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block title %}Profile{% endblock %}
 
 {% block styles %}
@@ -47,14 +48,6 @@
             </a>
           </div>
         {% endif %}
-<div id="top">
-  <div id="user-info-column">
-    <p>hi</p>
-  </div>
-  <div id="widgets-column">
-    <p>hi</p>
-  </div>
-</div>
 
       </div>
     
@@ -62,23 +55,6 @@
       <div class="profile-stats" data-username="{{ profile.user.username }}">
         <p class="stat-item" data-type="followers" data-count="{{ profile.followers.count }}">{{ profile.followers.count }} followers</p>
         <p class="stat-item" data-type="following" data-count="{{ profile.user.following.count }}">{{ profile.user.following.count }} following</p>
-<div>
-  <div id="posts-grid-container"></div>
-</div>
-
-<div id="modal-overlay"></div>
-
-<div id="outfit-modal" class="outfit-modal hidden">
-  <div class="modal-content">
-    <div class="close-btn">&times;</div>
-    <img id="modal-image" />
-
-    <div id="modal-text-content">
-      <p id="modal-owner" class="username">@username</p>
-      <p id="modal-caption" class="caption"></p>
-      <p id="modal-tags" class="tags">#tag1 #tag2 #tag3</p>
-      <div id="like-button">
-        <img src="{% static 'img/unliked.png' %}" alt="Heart Icon">
       </div>
     
     <blockquote class="profile-bio">{{ profile.bio }}</blockquote>
@@ -150,28 +126,6 @@
           />
         </button>
       {% endif %}
-
-      <div id="mini-navbar">
-        <button class="mini-tab active" data-tab="likes">likes</button>
-        <button class="mini-tab" data-tab="comments">comments</button>
-        <button class="mini-tab" data-tab="list">list items</button>
-      </div>
-
-      <div id="modal-tab-content">
-        <div id="modal-comments" class="hidden">
-          {% if request.user.is_authenticated %}
-          <form id="comment-form">
-            <textarea id="comment-input" rows="2" placeholder="Add a comment..."></textarea>
-            <button type="submit">Post</button>
-          </form>
-          {% endif %}
-          <div id="modal-comments-list"></div>
-        </div>
-
-
-        <!-- listed items section -->
-        <div id="modal-listed-items" class="hidden"></div>
-      </div>
     </div>
 
     <h3 class="widget-title">top showrooms</h3>
@@ -197,9 +151,10 @@
       {% endif %}
     </div>
   </section>
+</div>
 
-<div id="edit-profile-modal" class="modal">
-  <div class="modal-content">
+<div id="edit-profile-modal" class="profile-modal">
+  <div class="profile-modal-content">
     <span class="close-modal">&times;</span>
     <h2>Edit your profile</h2>
     <form method="POST" enctype="multipart/form-data" action="{% url 'user_management:profile' %}">
@@ -217,8 +172,8 @@
   </div>
 </div>
 
-<div id="ootd-modal" class="modal">
-  <div class="modal-content">
+<div id="ootd-modal" class="profile-modal">
+  <div class="profile-modal-content">
     <span class="close-modal">&times;</span>
     <h2>{% if profile.ootd %}Manage{% else %}Add{% endif %} Outfit of the Day</h2>
     <div class="ootd-grid">
@@ -235,8 +190,8 @@
 </div>
 
 <!-- Modal for Followers and Following -->
-<div id="followers-following-modal" class="modal">
-  <div class="modal-content">
+<div id="followers-following-modal" class="profile-modal">
+  <div class="profile-modal-content">
     <span class="close-modal">&times;</span>
     <h2 id="modal-title">Followers</h2>
     <ul id="modal-user-list">
@@ -246,13 +201,58 @@
         {% for user in modal_user_list %}
         <li class="user-item">
           <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}'s profile picture" class="profile-pic-small">
-          <span class="username">{{ user.username }}</span>
+          <span class="follower-username">{{ user.username }}</span>
           <button class="follow-unfollow-btn">{{ user.follow_status }}</button>
         </li>
         {% endfor %}
       {% endif %}
     </ul>
   </div>
+</div>
+
+<div>
+  <div id="posts-grid-container"></div>
+</div>
+
+<div id="modal-overlay"></div>
+
+<div id="outfit-modal" class="outfit-modal hidden">
+  <div class="modal-content">
+    <div class="close-btn">&times;</div>
+    <img id="modal-image" />
+
+    <div id="modal-text-content">
+      <p id="modal-owner" class="username">@username</p>
+      <p id="modal-caption" class="caption"></p>
+      <p id="modal-tags" class="tags">#tag1 #tag2 #tag3</p>
+      <div id="like-button">
+        <img src="{% static 'img/unliked.png' %}" alt="Heart Icon">
+      </div>
+
+      <div id="mini-navbar">
+        <button class="mini-tab active" data-tab="likes">likes</button>
+        <button class="mini-tab" data-tab="comments">comments</button>
+        <button class="mini-tab" data-tab="list">list items</button>
+      </div>
+
+      <div id="modal-tab-content">
+        <div id="modal-comments" class="hidden">
+          {% if request.user.is_authenticated %}
+          <form id="comment-form">
+            <textarea id="comment-input" rows="2" placeholder="Add a comment..."></textarea>
+            <button type="submit">Post</button>
+          </form>
+          {% endif %}
+          <div id="modal-comments-list"></div>
+        </div>
+
+
+        <!-- listed items section -->
+        <div id="modal-listed-items" class="hidden"></div>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 
 <script id="wishlist-data" type="application/json">[
@@ -268,13 +268,5 @@
 <script src="{% static 'js/user_management/followers_and_following.js' %}"></script>
 <meta name="username" content="{{ request.user.username }}">
 
-  </div>
-</div>
-</div>
-
 {% endif %}
-{% endblock %}
-
-{% block scripts %}
-<script src="{% static 'js/user_management/profile.js'%}"> </script>
 {% endblock %}

@@ -1,18 +1,92 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Home - Flaire{% endblock %}
+{% block title %}Profile{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/user_management/profile.css' %}">
 {% endblock %}
 
 {% block content %}
+
 {% if request.user.is_authenticated %}
 <h1>Temporary Profile View</h1>
+
 <div id="main">
+
     <div id="user-info-column">
-        <h2>Hi! {{ request.user.username }}</h2>     
+      
+      <div class="profile-pic-container">
+      
+        <img src="{% static 'img/user-icon.png' %}" alt="Profile Picture" class="profile-pic-large">
+      
+        <div class="edit-icon">
+          <img src="{% static 'img/edit.png' %}" alt="Edit" class="edit-img">
+        </div>
+
+        <div class="action-buttons">
+          <div class="action-btn heart-btn">
+            <img src="{% static 'img/heart.png' %}" alt="Heart" class="heart-img">
+          </div>
+          <div class="action-btn dressing-room-btn">
+            <img src="{% static 'img/dressing-room.png' %}" alt="Dressing Room" class="dressing-room-img">
+          </div>
+        </div>
+
+      </div>
+    
+    <h2 class="username">@username</h2>
+      <div class="user-stats">
+        <span>followers: x</span>
+        <span>following: x</span>
+      </div>
+    
+    <p class="bio">"bio here"</p>
+    </div>
+    
+    <div id="ootd-column">
+      <div class="content-section">
+        <h3 class="section-title">ootd</h3>
+        <div class="items-container">
+            <div class="item-card outfit">
+                <img src="{% static 'images/dress.jpg' %}" alt="Pink floral dress" class="item-img">
+                <img src="{% static 'images/shoes.jpg' %}" alt="Green shoes" class="item-img" style="max-height: 100px;">
+            </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="widgets-column">
+      <div class="content-section">
+        <h3 class="section-title">wishlist</h3>
+        <div class="items-container">
+            <div class="nav-arrow nav-left">
+              <img src="{% static 'img/nav-left.png' %}" alt="Nav-left" class="nav-left-img">
+            </div>
+            <div class="item-card">
+                <img src="{% static 'images/bag.jpg' %}" alt="Pink Juicy Couture bag" class="item-img">
+            </div>
+            <div class="nav-arrow nav-right">
+              <img src="{% static 'img/nav-right.png' %}" alt="Nav-right" class="nav-right-img">
+            </div>
+        </div>
+    </div>
+    
+    <div class="content-section">
+        <h3 class="section-title">top showrooms</h3>
+        <div class="top-showrooms">
+            <div class="showroom-card">
+                <img src="{% static 'images/dress1.jpg' %}" alt="White dress" class="showroom-img">
+            </div>
+            <div class="showroom-card">
+                <img src="{% static 'images/dress2.jpg' %}" alt="Pink outfit" class="showroom-img">
+            </div>
+            <div class="showroom-card">
+                <img src="{% static 'images/dress3.jpg' %}" alt="Beach dress" class="showroom-img">
+            </div>
+        </div>
+
+<!--         <h2>Hi! {{ request.user.username }}</h2>     
         {% if profile.profile_picture %}
         <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="profile-pic">
         {% endif %} 
@@ -20,9 +94,9 @@
         <p><strong>Bio:</strong> {{ profile.bio }}</p>
         {% else %}
         <p><strong>Bio:</strong> Not provided</p>
-        {% endif %} 
+        {% endif %}  -->
+
     </div>
-    <div id="widget-column">
     </div>
 </div>
 {% endif %}

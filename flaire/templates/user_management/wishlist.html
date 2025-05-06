@@ -1,0 +1,42 @@
+{% extends 'base.html' %} {% load static %} {% block title %}Wishlist
+{%endblock%} {% block styles %}
+<link
+  href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap"
+  rel="stylesheet"
+/>
+<link rel="stylesheet" href="{% static 'css/user_management/wishlist.css' %}">
+{% endblock %}
+
+  
+{% block content %}
+
+
+<div class="wishlist-container">
+    {% for item in items %}
+      <div class="wishlist-item">
+        <img src="{{ item.image.url }}" alt="Clothing Item">
+      </div>
+    {% empty %}
+      <p>No items in your wishlist yet.</p>
+    {% endfor %}
+  </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    for (let i = 0; i < 20; i++) {
+      setTimeout(() => {
+        const bubble = document.createElement("div");
+        bubble.classList.add("heart-bubble");
+        bubble.style.left = `${Math.random() * 100}vw`;
+        bubble.style.backgroundColor = ["#f7c1d9", "#fce4ec", "#ffc1e3", "#e5a0bb"][Math.floor(Math.random() * 4)];
+        document.body.appendChild(bubble);
+
+      
+        bubble.addEventListener("animationend", () => bubble.remove());
+      }, i * 100);
+    }
+  });
+</script>
+{% endblock %}

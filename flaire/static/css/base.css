@@ -12,10 +12,18 @@ li {
     font-size: 18px;
 }
 
-
 #header {
     border-bottom: 2px solid #CBA1BE;
     padding: 15px;
+}
+
+.navbar {
+    list-style-type: none; /* Remove bullets */
+    margin: 0;
+    padding: 0;
+    display: flex; /* Ensure horizontal layout */
+    align-items: center; /* Center items vertically */
+    justify-content: space-between; /* Push nav-left to left and nav-right to right */
 }
 
 ul.navbar {

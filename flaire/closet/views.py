@@ -34,10 +34,20 @@ def add_clothing_item(request):
 
 
 def save_outfit(request):
-    if request.method == "POST" and request.FILES.get("image"):
-        outfit_image = request.FILES["image"]
+    if request.method == "POST":
+        outfit_image = request.FILES.get("image")
+        item_ids = request.POST.getlist("items[]")  # Get selected item IDs
+
         outfit = Outfit.objects.create(owner=request.user.profile, image=outfit_image)
-        return JsonResponse({"success": True, "message": "Outfit saved successfully."})
+
+        for item_id in item_ids:
+            try:
+                item = ClothingItem.objects.get(id=item_id)
+                outfit.items.add(item)
+            except ClothingItem.DoesNotExist:
+                pass
+
+        return JsonResponse({"success": True, "message": "Outfit saved."})
     return JsonResponse({"success": False, "message": "Invalid request."}, status=400)
 
 

@@ -7,6 +7,7 @@ from django.urls import reverse
 
 from .forms import *
 from .models import *
+from social.models import Notification
 
 import json
 
@@ -122,7 +123,6 @@ def create_showroom(request):
             showroom.owner = user_profile
             showroom.save()
 
-            # Save collaborators
             collaborators = form.cleaned_data.get('collaborators', [])
             for collab in collaborators:
                 ShowroomCollaborator.objects.create(
@@ -131,21 +131,21 @@ def create_showroom(request):
                     invited_by=user_profile,
                     status='PENDING'
                 )
+                Notification.objects.create(
+                    sender=user_profile,
+                    recipient=collab,
+                    message=f"You've been invited to collaborate on '{showroom.title}'",
+                    link=reverse('showrooms:showroom_detail', kwargs={
+                        'pk': showroom.id,
+                        'slug': showroom.slug
+                    }),
+                    is_read=False
+                )
 
-            # Handle tags
             tags = request.POST.get("tags", "").split(",")
             showroom.tags.set(tags[:3])
 
             return redirect('showrooms:showroom_detail', pk=showroom.id, slug=showroom.slug)
-            # Return redirect header for HTMX
-            # detail_url = reverse('showrooms:showroom_detail', kwargs={
-            #     'pk': showroom.id,
-            #     'slug': showroom.slug
-            # }) + "?just_created=1"
-            # return HttpResponse(
-            #     "", 
-            #     headers={"HX-Redirect": detail_url}
-            # )
 
     else:
         form = ShowroomCreateForm()
@@ -174,6 +174,7 @@ def create_showroom_outfit_modal(request, pk):
     return JsonResponse({'outfits': data})
 
 
+@login_required(login_url='user_management:login')
 def add_outfit_to_showroom(request, pk):
     if request.method == 'POST':
         user_profile = request.user.profile
@@ -193,6 +194,7 @@ def add_outfit_to_showroom(request, pk):
         return JsonResponse({'success': False}, status=400)
 
 
+@login_required(login_url='user_management:login')
 def edit_showroom(request, pk):
     if request.method == 'POST':
         try:
@@ -213,18 +215,44 @@ def edit_showroom(request, pk):
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
 
+@login_required(login_url='user_management:login')
 def follow_showroom(request, pk):
     if request.method == 'POST':
         showroom = Showroom.objects.get(pk=pk)
         user_profile = request.user.profile
 
         ShowroomFollower.objects.create(showroom=showroom, profile=user_profile)
+        Notification.objects.create(
+            sender=user_profile,
+            recipient=showroom.owner,
+            message=f"'{user_profile}' followed your showroom, '{showroom.title}'",
+            link=reverse('showrooms:showroom_detail', kwargs={
+                'pk': showroom.id,
+                'slug': showroom.slug
+            }),
+            is_read=False
+        )
+
         return JsonResponse({
             'success': True,
-            'new_follower_count': showroom.followers.count(),
         })
     
+def unfollow_showroom(request, pk):
+    if request.method == 'POST':
+        showroom = Showroom.objects.get(pk=pk)
+        user_profile = request.user.profile
 
+        showroom_follow = ShowroomFollower.objects.get(
+            showroom=showroom, 
+            profile=user_profile)
+        showroom_follow.delete()
+        
+        return JsonResponse({
+            'success': True,
+        }) 
+    
+
+@login_required(login_url='user_management:login')
 def accept_showroom_invite(request, pk):
     if request.method == 'POST':
         showroom = Showroom.objects.get(pk=pk)
@@ -234,19 +262,27 @@ def accept_showroom_invite(request, pk):
             showroom=showroom, 
             collaborator=user_profile, 
             status='PENDING')
+        
+        remove_notif = Notification.objects.get(
+            sender=showroom.owner,
+            recipient=user_profile,
+            message=f"You've been invited to collaborate on '{showroom.title}'",
+            link=reverse('showrooms:showroom_detail', kwargs={'pk': showroom.id, 'slug': showroom.slug}),
+        )
+        remove_notif.delete()
+        
         collaborator.status = 'ACCEPTED'
         collaborator.save()
+        
         return JsonResponse({
             'success': True,
-            # 'new_follower_count': showroom.followers.count(),
         })
 
+# @login_required
+# def user_outfits_paginated(request):
+#     outfits = request.user.profile.outfits.all()
+#     paginator = Paginator(outfits, 20)  # 20 per page
+#     page = request.GET.get('page')
+#     outfits_page = paginator.get_page(page)
 
-@login_required
-def user_outfits_paginated(request):
-    outfits = request.user.profile.outfits.all()
-    paginator = Paginator(outfits, 20)  # 20 per page
-    page = request.GET.get('page')
-    outfits_page = paginator.get_page(page)
-
-    return render(request, 'showrooms/outfit-items.html', {'outfits': outfits_page})
+#     return render(request, 'showrooms/outfit-items.html', {'outfits': outfits_page})

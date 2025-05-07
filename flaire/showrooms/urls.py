@@ -17,6 +17,7 @@ urlpatterns = [
     path('<int:pk>/outfits/', views.showroom_outfits, name='showroom_outfits'),
     path('<int:pk>/update/', views.edit_showroom, name='edit_showroom'),
     path('<int:pk>/follow/', views.follow_showroom, name='follow_showroom'),
+    path('<int:pk>/unfollow/', views.unfollow_showroom, name='unfollow_showroom'),
     path('<int:pk>/add-outfits/', views.create_showroom_outfit_modal, name='add_outfits'),
     path('<int:pk>/accept/', views.accept_showroom_invite, name='follow_showroom'),
     path('<int:pk>/add-outfit/', views.add_outfit_to_showroom, name='add_outfit_to_sr'),

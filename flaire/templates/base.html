@@ -86,7 +86,31 @@
       openBtn.addEventListener('click', function(e) {
         e.preventDefault();
         sidebar.classList.add('show');
-      });
+
+        // fetch user's notifications
+        fetch('/social/notifications/')
+        .then(res => res.json())
+        .then(data => {
+            const container = document.getElementById('notifications-list');
+            container.innerHTML = '';
+
+            if (data.notifications.length === 0) {
+            container.innerHTML = '<p>No notifications.</p>';
+            } else {
+            data.notifications.forEach(notif => {
+                const div = document.createElement('div');
+                div.className = 'notif-item';
+                div.innerHTML = `
+                <a href = "${notif.link}">${notif.message}</a>
+                <small>${new Date(notif.created_at).toLocaleString()}</small>`;
+                container.appendChild(div);
+            });
+            }
+        })
+        .catch(err => {
+            console.error('Error fetching notifications:', err);
+        });
+        });
     
       closeBtn.addEventListener('click', function() {
         sidebar.classList.remove('show');

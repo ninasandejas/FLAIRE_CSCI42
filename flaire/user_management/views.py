@@ -13,19 +13,6 @@ from .models import Profile
 from closet.models import Outfit
 from closet.models import ClothingItem
 
-# class UserUpdateView(LoginRequiredMixin, UpdateView):
-#     model = Profile
-#     form_class = ProfileForm
-#     template_name = 'user_detail.html'
-#     success_url = reverse_lazy('homepage:homepage')
-
-#     def get_object(self, queryset=None):
-#         return self.request.user.profile
-
-#     def form_valid(self, form):
-#         form.save()
-#         return super().form_valid(form)
-
 class UserLoginView(FormView):
     model = User
     template_name = "user_management/login.html"

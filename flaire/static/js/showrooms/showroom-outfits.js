@@ -89,10 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(res => res.json())
     .then(data => {
       if (data.success) {
-        document.getElementById('follower-count').textContent = data.new_follower_count;
-  
-        document.getElementById('follow-button').textContent = "Following";
-        document.getElementById('follow-button').disabled = true;
+        window.location.reload();
       } else {
         alert("Something went wrong.");
       }
@@ -101,6 +98,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
+// unfollow button:
+document.addEventListener('DOMContentLoaded', () => {
+  const unfollowButton = document.getElementById('unfollow-button');
+
+  if (!unfollowButton) return; 
+
+  unfollowButton.addEventListener('click', () => {
+    fetch(`/showrooms/${showroomId}/unfollow/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken'),
+      },
+      body: JSON.stringify({})
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        window.location.reload();
+      } else {
+        alert("Something went wrong.");
+      }
+    });
+  });
+
+});
 
 // accept incoming invite for showroom collaborator
 document.addEventListener('DOMContentLoaded', () => {

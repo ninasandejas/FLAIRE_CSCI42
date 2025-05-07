@@ -39,7 +39,7 @@ def following(request):
 
 @login_required
 def fetch_notifications(request):
-    notifications = request.user.notifications.order_by('-created_at')[:10]
+    notifications = request.user.profile.receive_notifications.order_by('-created_at')[:10]
     data = [{
         'message': n.message,
         'link': n.link,

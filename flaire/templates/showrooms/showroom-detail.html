@@ -27,9 +27,17 @@
     </p>
     <div id = "user-access">
         <div id = "user-icons">
+            {% if showroom.owner.profile_picture %}
             <img class src = "{{ showroom.owner.profile_picture.url }}"/>
+            {% else %}
+            <img src= "{% static 'img/user-icon.png' %}" alt="User Profile" style="height: 35px; width: 35px; border-radius: 50%; object-fit: cover">
+            {% endif %}
             {% for collaborator in accepted_collaborators %}
+            {% if request.user.profile.profile_picture %}
             <img class src = "{{ collaborator.collaborator.profile_picture.url }}"/>
+            {% else %}
+            <img src= "{% static 'img/user-icon.png' %}" alt="User Profile" style="height: 35px; width: 35px; border-radius: 50%; object-fit: cover">
+            {% endif %}
             {% endfor %}
         </div>
         <div id = "user-actions">

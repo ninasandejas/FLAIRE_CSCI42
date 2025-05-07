@@ -11,6 +11,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('closet', '0001_initial'),
+        ('closet', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -23,7 +24,18 @@ class Migration(migrations.Migration):
                 ('bio', models.TextField(blank=True)),
                 ('profile_picture', models.ImageField(blank=True, null=True, upload_to='profile_pics/')),
                 ('followers', models.ManyToManyField(blank=True, related_name='following', to=settings.AUTH_USER_MODEL)),
+                ('bio', models.TextField(blank=True)),
+                ('profile_picture', models.ImageField(blank=True, null=True, upload_to='profile_pics/')),
+                ('followers', models.ManyToManyField(blank=True, related_name='following', to=settings.AUTH_USER_MODEL)),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='WishlistItem',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('item', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='closet.clothingitem')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(

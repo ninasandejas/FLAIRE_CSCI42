@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <link href='https://fonts.googleapis.com/css?family=Playfair Display' rel='stylesheet'>
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
@@ -51,9 +52,6 @@
                         </form>
                     </div>
                 </div>
-                <!-- <a href="{% url 'user_management:profile' %}">
-                    <img src="{% static 'img/user-icon.png' %}" alt="User Profile" style="height: 24px">
-                </a> -->
             </li>
             {% else %}
             {% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'signup' %}
@@ -75,6 +73,7 @@
     </div>
     {% block content %}{% endblock %}
     {% block scripts %}{% endblock %}
+    <script src="{% static 'js/modals.js' %}"></script>
 </body>
 
 <script>

@@ -2,7 +2,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
 
-from .views import *
+from .views import (
+    UserLoginView, UserCreateView, ProfileView, ProfileSetupView, LikedOutfitsView,
+    WishlistView, OtherUserProfileView, UserFollowView, OutfitGridImagesView,
+    OutfitDetailView, SubmitCommentView
+)
 
 app_name = "user_management"
 
@@ -13,4 +17,19 @@ urlpatterns = [
     path("profile-setup/", ProfileSetupView.as_view(), name="profile_setup"),
     path("liked-outfits/", LikedOutfitsView.as_view(), name="liked_outfits"),
     path("wishlist/", WishlistView.as_view(), name="wishlist"),
+    path("profile/<str:username>/", OtherUserProfileView.as_view(), name="other_user_profile"),
+    path('api/followers/<str:username>/', UserFollowView().get_followers, name='get_followers'),
+    path('api/following/<str:username>/', UserFollowView().get_following, name='get_following'),
+    path('api/follow/<str:username>/', UserFollowView().toggle_follow, name='toggle_follow'),
+    path(
+        "outfit-grid-images/",
+        OutfitGridImagesView.as_view(),
+        name="get_outfit_images",
+    ),
+    path("outfit-details/<int:pk>/", OutfitDetailView.as_view(), name="outfit_details"),
+    path(
+        "submit-comment/<int:outfit_id>/",
+        SubmitCommentView.as_view(),
+        name="submit-comment",
+    ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

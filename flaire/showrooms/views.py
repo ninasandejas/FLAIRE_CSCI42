@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.db.models import Q
@@ -7,23 +9,29 @@ from django.urls import reverse
 
 from .forms import *
 from .models import *
-from social.models import Notification
 
 import json
 
-
-@login_required(login_url='user_management:login')
+@login_required(login_url="user_management:login")
 def showrooms(request):
-    return render(request, "showrooms/owned-showrooms.html", {"active_tab": "showrooms"})
+    return render(
+        request, "showrooms/owned-showrooms.html", {"active_tab": "showrooms"}
+    )
 
 
-@login_required(login_url='user_management:login')
+@login_required(login_url="user_management:login")
 def list_of_showrooms(request):
-    users_showrooms = Showroom.objects.filter(
-        Q(owner=request.user.profile) |
-        Q(showroomcollaborator__collaborator=request.user.profile, 
-          showroomcollaborator__status='ACCEPTED')        
-    ).distinct().order_by('-date_created')
+    users_showrooms = (
+        Showroom.objects.filter(
+            Q(owner=request.user.profile)
+            | Q(
+                showroomcollaborator__collaborator=request.user.profile,
+                showroomcollaborator__status="ACCEPTED",
+            )
+        )
+        .distinct()
+        .order_by("-date_created")
+    )
 
     page = int(request.GET.get("page", 1))
 
@@ -99,24 +107,26 @@ def showroom_detail(request, pk, slug=None):
     })
 
 
-@login_required(login_url='user_management:login')
+@login_required(login_url="user_management:login")
 def showroom_outfits(request, pk):
     showroom = Showroom.objects.get(pk=pk)
     outfits = showroom.outfits.all()
     data = []
     for outfit in outfits:
-        data.append({
-        'id': outfit.id,
-        'image': outfit.image.url if outfit.image else '',
-    })
-    return JsonResponse({'outfits': data})
+        data.append(
+            {
+                "id": outfit.id,
+                "image": outfit.image.url if outfit.image else "",
+            }
+        )
+    return JsonResponse({"outfits": data})
 
 
-@login_required(login_url='user_management:login')
+@login_required(login_url="user_management:login")
 def create_showroom(request):
     user_profile = request.user.profile
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = ShowroomCreateForm(request.POST, request.FILES)
         if form.is_valid():
             showroom = form.save(commit=False)
@@ -129,7 +139,7 @@ def create_showroom(request):
                     showroom=showroom,
                     collaborator=collab,
                     invited_by=user_profile,
-                    status='PENDING'
+                    status="PENDING",
                 )
                 Notification.objects.create(
                     sender=user_profile,
@@ -196,28 +206,28 @@ def add_outfit_to_showroom(request, pk):
 
 @login_required(login_url='user_management:login')
 def edit_showroom(request, pk):
-    if request.method == 'POST':
+    if request.method == "POST":
         try:
             showroom = Showroom.objects.get(pk=pk)
             data = json.loads(request.body)
-            new_title = data.get('title', '').strip()
+            new_title = data.get("title", "").strip()
 
             if new_title:
                 showroom.title = new_title
                 showroom.save()
-                return JsonResponse({'success': True})
+                return JsonResponse({"success": True})
             else:
-                return JsonResponse({'success': False, 'error': 'Title is empty'})
-            
+                return JsonResponse({"success": False, "error": "Title is empty"})
+
         except Exception as e:
-            return JsonResponse({'success': False, 'error': str(e)})                                
-    
-    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+            return JsonResponse({"success": False, "error": str(e)})
+
+    return JsonResponse({"success": False, "error": "Invalid request method"})
 
 
 @login_required(login_url='user_management:login')
 def follow_showroom(request, pk):
-    if request.method == 'POST':
+    if request.method == "POST":
         showroom = Showroom.objects.get(pk=pk)
         user_profile = request.user.profile
 

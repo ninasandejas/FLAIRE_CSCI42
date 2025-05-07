@@ -28,6 +28,7 @@ class Migration(migrations.Migration):
                 ('date_updated', models.DateTimeField(auto_now=True)),
                 ('owner', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='owned_showrooms', to='user_management.profile')),
                 ('tags', taggit.managers.TaggableManager(blank=True, help_text='A comma-separated list of tags.', through='taggit.TaggedItem', to='taggit.Tag', verbose_name='Tags')),
+                ('tags', taggit.managers.TaggableManager(blank=True, help_text='A comma-separated list of tags.', through='taggit.TaggedItem', to='taggit.Tag', verbose_name='Tags')),
             ],
         ),
         migrations.CreateModel(

@@ -31,9 +31,29 @@
             <button class="drawer-tab" data-category="SHOES">Shoes</button>
         </div>
         <div id="grid-container"></div>
+
+        <div id="pagination-controls">
+            <button id="prev-page" class="left-page-btn"></button>
+            <span id="page-indicator">Page 1</span>
+            <button id="next-page" class="right-page-btn"></button>
+        </div>
     </div>
 </div>
 <canvas id="hidden-canvas" style="display: none;"></canvas>
+
+<div id="modal-overlay"></div>
+
+<!-- Modal content -->
+<div id="caption-tags-modal">
+    <button id="modal-close">Back</button>
+    <h2>Add Caption and Tags</h2>
+    <label for="caption-input">Caption:</label>
+    <input type="text" id="caption-input" placeholder="Enter a caption..." />
+    <label for="tags-input">Tags (separate by commas):</label>
+    <input type="text" id="tags-input" placeholder="Tag1, Tag2, Tag3" />
+    <button id="modal-submit">Save</button>
+</div>
+
 <div id="footer"> ♡ </div>
 {% endblock %}
 

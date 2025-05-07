@@ -18,12 +18,16 @@ li {
 }
 
 .navbar {
-    list-style-type: none; /* Remove bullets */
+    list-style-type: none;
+    /* Remove bullets */
     margin: 0;
     padding: 0;
-    display: flex; /* Ensure horizontal layout */
-    align-items: center; /* Center items vertically */
-    justify-content: space-between; /* Push nav-left to left and nav-right to right */
+    display: flex;
+    /* Ensure horizontal layout */
+    align-items: center;
+    /* Center items vertically */
+    justify-content: space-between;
+    /* Push nav-left to left and nav-right to right */
 }
 
 ul.navbar {

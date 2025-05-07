@@ -1,0 +1,18 @@
+{% if profile.ootd %}
+<div>
+  <h5>Current OOTD:</h5>
+  <img src="{{ profile.ootd.image.url }}" alt="OOTD Image" class="ootd-image">
+  <p>{{ profile.ootd.caption }}</p>
+  <button id="delete-ootd-btn" class="delete-ootd-btn">Delete OOTD</button>
+</div>
+<hr>
+{% endif %}
+<h5>{% if profile.ootd %}Change{% else %}Add{% endif %} OOTD:</h5>
+<ul>
+  {% for outfit in profile.outfits.all %}
+  <li>
+    <img src="{{ outfit.image.url }}" alt="Outfit Image" class="outfit-thumbnail">
+    <a href="{% url 'closet:select_ootd' outfit.id %}" class="select-ootd-btn">Select as OOTD</a>
+  </li>
+  {% endfor %}
+</ul>

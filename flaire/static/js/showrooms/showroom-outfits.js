@@ -1,7 +1,6 @@
 const grid = document.getElementById('outfits-grid');
 const showroomId = grid.dataset.showroomId;
 
-
 // dynamically loads the outfits of the showroom
 document.addEventListener('DOMContentLoaded', () => {
   fetch(`/showrooms/${showroomId}/outfits/`)
@@ -11,12 +10,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const img = document.createElement('img');
         img.src = outfit.image;
         img.alt = `Outfit ${outfit.id}`;
+        img.classList.add("outfit-image");
+        img.dataset.outfitId = outfit.id;
 
-        grid.appendChild(img);
+        const wrapper = document.createElement("div");
+        wrapper.classList.add("post-wrapper");
+        wrapper.id = "post-wrapper";
+        wrapper.appendChild(img);
+        grid.appendChild(wrapper);
       });
     });
 });
-
 
 // editing of showromm: for now, only edits the title but i'll soon 
 // find a way to have it be a way to organize outfit order
@@ -125,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-// accept incoming invite for showroom collaborator
+// accept incoming invite for showroom collaborator:
 document.addEventListener('DOMContentLoaded', () => {
   const acceptButton = document.getElementById('accept-button');
 
@@ -152,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-// add outfits in showroom detail
+// add outfits in showroom detail:
 document.addEventListener("DOMContentLoaded", function () {
   var modal = document.getElementById("create-sr-add-outfits");
   var btn = document.getElementById("add-outfits-btn-dt");
@@ -177,7 +181,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-// loading of outfits in add outfit modal
+// loading of outfits in add outfit modal:
 const container = document.getElementById('add-outfits-sr-content');
 function loadOutfits() {
   container.innerHTML = '';
@@ -204,7 +208,7 @@ function loadOutfits() {
     });
 }
 
-
+// function to add outfit to showroom:
 function addOutfitToShowroom(outfitId) {
   fetch(`/showrooms/${showroomId}/add-outfit/`, {
     method: 'POST',
@@ -224,7 +228,7 @@ function addOutfitToShowroom(outfitId) {
   });
 }
 
-
+// cookies:
 function getCookie(name) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== '') {

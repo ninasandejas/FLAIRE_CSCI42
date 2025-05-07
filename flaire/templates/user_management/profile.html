@@ -139,7 +139,7 @@
       {% else %}
         <div class="showroom-grid">
           {% for showroom in showrooms %}
-            <a href="{% url 'showrooms:showroom_detail' showroom.id %}">
+            <a href="{% url 'showrooms:showroom_detail' slug=showroom.slug pk=showroom.id %}">
               <img
                 src="{{ showroom.cover_image.url }}"
                 alt="{{ showroom.name }}"

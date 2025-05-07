@@ -67,12 +67,11 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-
   });
 });
 
 
-// follow button js:
+// follow button:
 document.addEventListener('DOMContentLoaded', () => {
   const followButton = document.getElementById('follow-button');
 
@@ -101,6 +100,106 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+
+
+// accept incoming invite for showroom collaborator
+document.addEventListener('DOMContentLoaded', () => {
+  const acceptButton = document.getElementById('accept-button');
+
+  if (!acceptButton) return; 
+
+  acceptButton.addEventListener('click', () => {
+    fetch(`/showrooms/${showroomId}/accept/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken'),
+      },
+      body: JSON.stringify({})
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        window.location.reload();
+      } else {
+        alert("Something went wrong.");
+      }
+    });
+  });
+
+});
+
+// add outfits in showroom detail
+document.addEventListener("DOMContentLoaded", function () {
+  var modal = document.getElementById("create-sr-add-outfits");
+  var btn = document.getElementById("add-outfits-btn-dt");
+  var span = document.getElementsByClassName("close")[0];
+  
+  btn.onclick = function() {
+    modal.style.display = "block";
+    btn.disabled = true;
+    loadOutfits();
+  }
+
+  span.onclick = function() {
+    modal.style.display = "none";
+    btn.disabled = false;
+  }
+
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+      btn.disabled = false;
+    }
+  }
+});
+
+// loading of outfits in add outfit modal
+const container = document.getElementById('add-outfits-sr-content');
+function loadOutfits() {
+  container.innerHTML = '';
+  fetch(`/showrooms/${showroomId}/add-outfits/`)
+    .then(res => res.json())
+    .then(data => {
+      data.outfits.forEach(outfit => {
+        const img = document.createElement('img');
+        img.src = outfit.image;
+        img.alt = `Outfit ${outfit.id}`;
+
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'outfit-as-btn';
+        button.dataset.outfitId = outfit.id;
+
+        button.appendChild(img);
+        container.appendChild(button);
+
+        button.addEventListener('click', () => {
+          addOutfitToShowroom(outfit.id);
+        });
+      })
+    });
+}
+
+
+function addOutfitToShowroom(outfitId) {
+  fetch(`/showrooms/${showroomId}/add-outfit/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken'),
+    },
+    body: JSON.stringify({ outfit_id: outfitId })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      alert('Outfit added!');
+    } else {
+      alert('Failed to add outfit.');
+    }
+  });
+}
 
 
 function getCookie(name) {

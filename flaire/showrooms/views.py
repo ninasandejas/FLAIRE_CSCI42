@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.db.models import Q
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect, JsonResponse
@@ -69,11 +69,17 @@ def showroom_detail(request, pk, slug=None):
         showroom=showroom,
         status='ACCEPTED'
         ).select_related('collaborator')
+    invited_collaborators = ShowroomCollaborator.objects.filter(
+        showroom=showroom,
+        status='PENDING'
+        ).select_related('collaborator')
 
 
     is_follower = showroom.followers.filter(id=request.user.profile.id).exists()
 
     is_collaborator = accepted_collaborators.filter(collaborator=request.user.profile).exists()
+
+    is_invited = invited_collaborators.filter(collaborator=request.user.profile).exists()
 
     is_owner = showroom.owner==request.user.profile
 
@@ -87,8 +93,9 @@ def showroom_detail(request, pk, slug=None):
         'follower_count': follower_count,
         'show_follow_button': not (is_follower or is_collaborator or is_owner),
         'show_edit_button': is_owner or is_collaborator,
-        'if_following': is_follower
-        })
+        'if_following': is_follower,
+        'if_invited': is_invited
+    })
 
 
 @login_required(login_url='user_management:login')
@@ -149,16 +156,41 @@ def create_showroom(request):
         
 
 @login_required(login_url='user_management:login')
-def create_showroom_outfit_modal(request):
+def create_showroom_outfit_modal(request, pk):
+    showroom = Showroom.objects.get(pk=pk)
     user_profile = request.user.profile
-    outfits = user_profile.outfits.all()
+    user_outfits = user_profile.outfits.all()
+    showroom_outfits = showroom.outfits.all()
+    
+    available_outfits = user_outfits.exclude(
+        id__in=showroom_outfits.values_list('id', flat=True))
+
     data = []
-    for outfit in outfits:
+    for outfit in available_outfits:
         data.append({
         'id': outfit.id,
         'image': outfit.image.url if outfit.image else '',
     })
     return JsonResponse({'outfits': data})
+
+
+def add_outfit_to_showroom(request, pk):
+    if request.method == 'POST':
+        user_profile = request.user.profile
+        showroom = get_object_or_404(Showroom, pk=pk)
+
+        data = json.loads(request.body)
+        outfit_id = data.get('outfit_id')
+
+        try:
+            outfit = Outfit.objects.get(pk=outfit_id, owner=user_profile)
+            if not showroom.outfits.filter(pk=outfit.pk).exists():
+                ShowroomOutfit.objects.create(showroom=showroom, outfit=outfit)
+                return JsonResponse({'success': True})
+        except Outfit.DoesNotExist:
+            pass
+
+        return JsonResponse({'success': False}, status=400)
 
 
 def edit_showroom(request, pk):
@@ -190,6 +222,23 @@ def follow_showroom(request, pk):
         return JsonResponse({
             'success': True,
             'new_follower_count': showroom.followers.count(),
+        })
+    
+
+def accept_showroom_invite(request, pk):
+    if request.method == 'POST':
+        showroom = Showroom.objects.get(pk=pk)
+        user_profile = request.user.profile
+
+        collaborator = ShowroomCollaborator.objects.get(
+            showroom=showroom, 
+            collaborator=user_profile, 
+            status='PENDING')
+        collaborator.status = 'ACCEPTED'
+        collaborator.save()
+        return JsonResponse({
+            'success': True,
+            # 'new_follower_count': showroom.followers.count(),
         })
 
 

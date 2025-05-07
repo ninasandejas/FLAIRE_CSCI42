@@ -34,17 +34,23 @@
         </div>
         <div id = "user-actions">
             {% if show_follow_button %}
-            <button type="button" id = "follow-button">
-                Follow
+                {% if if_invited %}
+                <button type="button" id = "accept-button" data-state="accept">
+                    Accept
+                </button>
+                {% else %}
+                <button type="button" id = "follow-button" data-state="follow">
+                    Follow
+                </button>
+                {% endif %}
             {% endif %}
-            </button>
             {% if show_edit_button %}
             <button type="button" id = "edit-button" data-state="edit">
                 Edit
             </button>
             {% endif %}
             {% if if_following %}
-            <button type="button" id = "unfollow-button" data-state="edit">
+            <button type="button" id = "unfollow-button" data-state="unfollow">
                 Unfollow
             </button>
             {% endif %}
@@ -54,6 +60,17 @@
 
 <div id="outfits-grid" data-showroom-id ="{{ showroom.id }}">
 </div>
+
+<button id ="add-outfits-btn-dt" class = "add-outfits-btn-dt">+</button>
+
+<div id = "create-sr-add-outfits" class="modal">
+    <span class="close">&times;</span>
+    <h2 id = "add-outfit-modal-header" style="text-align: center; margin-top: 30px;">Add outfits</h2>
+    <hr class="custom-line">
+    <div class="add-outfits-sr-content" id="add-outfits-sr-content">
+    </div>
+</div>
+
 {% endblock %}
 
 {% block scripts %}

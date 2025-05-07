@@ -125,3 +125,29 @@ a:visited {
 .profile-dropdown:hover .dropbtn {
     background-color: #3e8e41;
 }
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -300px; /* hidden initially */
+    width: 300px;
+    height: 100%;
+    background-color: #f8f8f8;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+    padding: 1rem;
+    transition: right 0.3s ease;
+    z-index: 1050;
+    overflow-y: auto;
+  }
+  
+  .sidebar.show {
+    right: 0;
+  }
+  
+  .close-sidebar {
+    cursor: pointer;
+    font-size: 24px;
+    float: right;
+    margin-bottom: 1rem;
+  }
+  

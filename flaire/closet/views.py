@@ -53,7 +53,7 @@ def save_outfit(request):
 
 def clothing_item_images(request):
     category = request.GET.get("category")
-    items = ClothingItem.objects.all()
+    items = ClothingItem.objects.filter(owner=request.user.profile)
 
     if category:
         items = items.filter(category=category.upper())

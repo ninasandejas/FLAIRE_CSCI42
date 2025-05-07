@@ -69,7 +69,7 @@ class UserCreateView(CreateView):
     def form_valid(self, form):
         user = form.save()
 
-        Profile.objects.create(user=user, email_address=user.email)
+        Profile.objects.get_or_create(user=user, defaults={"email_address": user.email})
 
         login(self.request, user)
 

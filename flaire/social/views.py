@@ -12,13 +12,25 @@ from .models import Follow
 import json
 
 
+@login_required
+def explore(request):
+    return render(request, "social/explore.html", {
+        "active_tab": "explore"
+    })
+
+@login_required
+def following(request):
+    return render(request, "social/following.html", {
+        "active_tab": "following"
+    })
+
+
 class ExploreOutfitsGridView(LoginRequiredMixin, View):
     def get(self, request):
         outfits = Outfit.objects.all().order_by("-date_created")
 
         image_data = [{"id": outfit.id, "url": outfit.image.url if outfit.image else ""} for outfit in outfits]
         return JsonResponse({"images": image_data})
-
 
 class ExploreShowroomsGridView(LoginRequiredMixin, View):
     def get(self, request):

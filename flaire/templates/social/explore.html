@@ -1,19 +1,70 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/explore.css' %}">
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/social/explore.css' %}">
 {% endblock %}
 
 {% block content %}
+
+{% if request.user.is_authenticated %}
+<h2>Explore Page</h2> 
+
 <div class="tab-bar">
-  <button id="explore-outfits-tab" class="tab">Outfits</button>
+  <button id="explore-outfits-tab" class="tab active">Outfits</button>
   <button id="explore-showrooms-tab" class="tab">Showrooms</button>
 </div>
 
-<div id="explore-grid" class="grid-container"></div>
+<div class="grid-section">
+  <div id="outfits-grid" class="image-grid"></div>
+  <div id="showrooms-grid" class="image-grid" style="display: none;"></div>
+</div>
 
-{% include "modals/outfit_modal.html" %}
-<script src="{% static 'js/explore.js' %}"></script>
-<script src="{% static 'js/outfit-detail.js' %}"></script>
+<div id="modal-overlay"></div>
+
+<div id="outfit-modal" class="outfit-modal hidden">
+  <div class="modal-content">
+    <div class="close-btn">&times;</div>
+    <img id="modal-image" />
+
+    <div id="modal-text-content">
+      <p id="modal-owner" class="username">@username</p>
+      <p id="modal-caption" class="caption"></p>
+      <p id="modal-tags" class="tags">#tag1 #tag2 #tag3</p>
+      <div id="like-button">
+        <img src="{% static 'img/unliked.png' %}" alt="Heart Icon">
+      </div>
+
+      <div id="mini-navbar">
+        <button class="mini-tab active" data-tab="likes">likes</button>
+        <button class="mini-tab" data-tab="comments">comments</button>
+        <button class="mini-tab" data-tab="list">list items</button>
+      </div>
+
+      <div id="modal-tab-content">
+        <div id="modal-comments" class="hidden">
+          {% if request.user.is_authenticated %}
+          <form id="comment-form">
+            <textarea id="comment-input" rows="2" placeholder="Add a comment..."></textarea>
+            <button type="submit">Post</button>
+          </form>
+          {% endif %}
+          <div id="modal-comments-list"></div>
+        </div>
+
+
+        <!-- listed items section -->
+        <div id="modal-listed-items" class="hidden"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/social/explore.js' %}" defer></script>
+<script src="{% static 'js/social/outfit-detail.js' %}" defer></script>
 {% endblock %}

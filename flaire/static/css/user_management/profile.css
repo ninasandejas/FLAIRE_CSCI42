@@ -275,3 +275,13 @@
 .listed-item:hover .hover-buttons {
     display: flex;
 }
+
+.heart-icon {
+    font-size: 24px;
+    color: #4b2e39;
+    transition: background 0.3s, transform 0.2s ease;
+    border-radius: 50%;
+    padding: 10px;
+    display: inline-block;
+  }
+  

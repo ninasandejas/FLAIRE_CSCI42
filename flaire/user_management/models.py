@@ -29,3 +29,8 @@ class Profile(models.Model):
 class WishlistItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     item = models.ForeignKey("closet.ClothingItem", on_delete=models.CASCADE)
+
+class LikedOutfit(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    outfit = models.ForeignKey("closet.Outfit", on_delete=models.CASCADE)
+

@@ -1,8 +1,22 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Home - Flaire{% endblock %}
 
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/user_management/home.css' %}">
+{% endblock %}
+
 {% block content %}
-<h1>Welcome to Flaire!</h1>
-<p>Try visiting your <a href="{% url 'closet:closet' %}">closet</a>.</p>
+<div class="home-wrapper">
+  <div class="home-hero">
+    <h1 class="title"> Welcome to Flaire </h1>
+    <p class="subtitle">Curate your style. Flaunt your flair.</p>
+    <a href="{% url 'closet:closet' %}" class="cta-button">Go to Closet</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/user_management/home.js' %}"></script>
 {% endblock %}

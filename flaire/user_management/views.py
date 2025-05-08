@@ -5,12 +5,20 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import CreateView, FormView, UpdateView
+from .models import WishlistItem 
+from django.views.decorators.http import require_POST
+from .models import LikedOutfit
+from closet.models import Outfit
+from django.contrib.auth.decorators import login_required
+
+
+
 
 from .forms import LoginForm, ProfileSetupForm, SignUpForm
 from .models import Profile
@@ -114,11 +122,10 @@ class ProfileView(LoginRequiredMixin, View):
         )
 
 
-class LikedOutfitsView(View):
+class LikedOutfitsView(LoginRequiredMixin, View):
     def get(self, request):
-        outfits = Outfit.objects.filter(owner=request.user.profile).prefetch_related(
-            "items"
-        )
+        liked_outfit_ids = LikedOutfit.objects.filter(user=request.user).values_list("outfit_id", flat=True)
+        outfits = Outfit.objects.filter(id__in=liked_outfit_ids).prefetch_related("listed_items")
         return render(
             request,
             "user_management/liked_outfits.html",
@@ -129,18 +136,19 @@ class LikedOutfitsView(View):
         )
 
 
+
 class WishlistView(LoginRequiredMixin, View):
     def get(self, request):
-        user_profile = request.user.profile
-        clothing_items = ClothingItem.objects.filter(owner=user_profile)
+        wishlist_items = WishlistItem.objects.filter(user=request.user).select_related("item")
         return render(
             request,
             "user_management/wishlist.html",
             {
-                "items": clothing_items,
+                "items": [w.item for w in wishlist_items],  
                 "active_tab": "wishlist",
             },
         )
+
 
 
 class OutfitGridImagesView(View):
@@ -215,3 +223,49 @@ class SubmitCommentView(View):
         return JsonResponse(
             {"author": comment.author.user.username, "entry": comment.entry}
         )
+
+@csrf_exempt
+@require_POST
+def toggle_wishlist(request, item_id):
+    try:
+        item = ClothingItem.objects.get(id=item_id)
+        wishlist_item, created = WishlistItem.objects.get_or_create(user=request.user, item=item)
+        if not created:
+            wishlist_item.delete()
+            return JsonResponse({'status': 'removed'})
+        return JsonResponse({'status': 'added'})
+    except ClothingItem.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Item not found'}, status=404)
+    
+
+@csrf_exempt
+@require_POST
+def toggle_like_outfit(request, outfit_id):
+    try:
+        outfit = Outfit.objects.get(id=outfit_id)
+        liked, created = LikedOutfit.objects.get_or_create(user=request.user, outfit=outfit)
+        if not created:
+            liked.delete()
+            return JsonResponse({'status': 'unliked'})
+        return JsonResponse({'status': 'liked'})
+    except Outfit.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Outfit not found'}, status=404)
+    
+@csrf_exempt  
+def remove_from_wishlist(request, item_id):
+    if request.method == "POST":
+        try:
+            item = ClothingItem.objects.get(id=item_id)
+            item.liked_by.remove(request.user.profile)
+            return JsonResponse({"status": "removed"})
+        except ClothingItem.DoesNotExist:
+            return JsonResponse({"status": "not_found"}, status=404)
+
+    return JsonResponse({"status": "invalid_method"}, status=405)
+
+@csrf_exempt
+def unlike_outfit(request, outfit_id):
+    if request.method == "POST":
+        LikedOutfit.objects.filter(user=request.user, outfit_id=outfit_id).delete()
+        return JsonResponse({"status": "unliked"})
+    return JsonResponse({"status": "error"}, status=400)

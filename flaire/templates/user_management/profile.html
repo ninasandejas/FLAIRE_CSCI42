@@ -34,9 +34,10 @@
       <p id="modal-owner" class="username">@username</p>
       <p id="modal-caption" class="caption"></p>
       <p id="modal-tags" class="tags">#tag1 #tag2 #tag3</p>
-      <div id="like-button">
+      <div id="like-button" class="heart-btn" data-outfit-id="{{ outfit.id }}">
         <img src="{% static 'img/unliked.png' %}" alt="Heart Icon">
       </div>
+      
 
       <div id="mini-navbar">
         <button class="mini-tab active" data-tab="likes">likes</button>
@@ -69,4 +70,5 @@
 
 {% block scripts %}
 <script src="{% static 'js/user_management/profile.js'%}"> </script>
+<!-- <script src="{% static 'js/profile.js' %}"></script> -->
 {% endblock %}

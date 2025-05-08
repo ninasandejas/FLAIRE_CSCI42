@@ -5,32 +5,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <link href='https://fonts.googleapis.com/css?family=Playfair Display' rel='stylesheet'>
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <title>Flaire</title>
 </head>
 
-<body>
+<body class="for-specific">
     <div class="sidebar">
         <ul>
-            <li id="sidebar-toggle">
-                <img src="{% static 'img/menu.png' %}" alt="Menu" style="height: 24px">
-                <a href="#">FLAIRE</a>
-            </li>
-            <li>
-                <img src="{% static 'img/explore.png' %}" alt="Menu" style="height: 24px">
+            <!-- <li>
+                <a href="{% url 'home'%}">FLAIRE</a>
+                <button id="toggle-btn"></button>
+            </li> -->
+            <li class="{% if active_tab == 'explore' %}active{% endif %}">
+                <img src="{% static 'img/explore.png' %}" alt="Explore" style="height: 24px">
                 <a href="{% url 'social:explore'%}">Explore</a>
             </li>
-            <li>
-                <img src="{% static 'img/following.png' %}" alt="Menu" style="height: 24px">
+    
+            <li class="{% if active_tab == 'following' %}active{% endif %}">
+                <img src="{% static 'img/following.png' %}" alt="Following" style="height: 24px">
                 <a href="{% url 'social:following'%}">Following</a>
-            </li>
+            </li>        
         </ul>
     </div>
 
     <div class="main-content">
         <nav class="navbar">
+            <li class="{% if active_tab == 'home'%}active{% endif %}" style="float:left">
+                <a href="{% url 'home'%}">FLAIRE</a>
+            </li>
             <li class="{% if active_tab == 'wishlist'%}active{% endif %}">
                 <a href="{% url 'user_management:wishlist' %}">wishlist</a>
             </li>
@@ -65,20 +70,7 @@
             {% block content %}{% endblock %}
         </div>
     </div>
-
     {% block scripts %}{% endblock %}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const toggle = document.getElementById('sidebar-toggle');
-            const body = document.body;
-
-            toggle.addEventListener('click', function (e) {
-                e.preventDefault();  // prevent jump from href="#"
-                body.classList.toggle('sidebar-hidden');
-            });
-        });
-    </script>
-</body>
-
+</body>    
 
 </html>

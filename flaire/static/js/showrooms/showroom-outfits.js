@@ -22,8 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// editing of showromm: for now, only edits the title but i'll soon 
-// find a way to have it be a way to organize outfit order
+// editing of showromm: for now, only edits the title 
 document.addEventListener('DOMContentLoaded', () => {
   const editButton = document.getElementById('edit-button');
   const h3 = document.getElementById('showroom-title');
@@ -156,26 +155,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
+// decline incoming invite for showroom collaborator:
+document.addEventListener('DOMContentLoaded', () => {
+  const declineButton = document.getElementById('decline-button');
+
+  if (!declineButton) return; 
+
+  declineButton.addEventListener('click', () => {
+    fetch(`/showrooms/${showroomId}/decline/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken'),
+      },
+      body: JSON.stringify({})
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        window.location.reload();
+      } else {
+        alert("Something went wrong.");
+      }
+    });
+  });
+
+});
+
 // add outfits in showroom detail:
 document.addEventListener("DOMContentLoaded", function () {
   var modal = document.getElementById("create-sr-add-outfits");
   var btn = document.getElementById("add-outfits-btn-dt");
   var span = document.getElementsByClassName("close")[0];
+  const modalOverlay = document.getElementById("modal-overlay");
   
   btn.onclick = function() {
     modal.style.display = "block";
+    modalOverlay.style.display = "block";
     btn.disabled = true;
     loadOutfits();
   }
 
   span.onclick = function() {
     modal.style.display = "none";
+    modalOverlay.style.display = "none";
     btn.disabled = false;
   }
 
   window.onclick = function(event) {
     if (event.target == modal) {
       modal.style.display = "none";
+      modalOverlay.style.display = "none";
       btn.disabled = false;
     }
   }
@@ -183,6 +213,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // loading of outfits in add outfit modal:
 const container = document.getElementById('add-outfits-sr-content');
+var modal = document.getElementById("create-sr-add-outfits");
+var btn = document.getElementById("add-outfits-btn-dt");
+
 function loadOutfits() {
   container.innerHTML = '';
   fetch(`/showrooms/${showroomId}/add-outfits/`)
@@ -203,6 +236,9 @@ function loadOutfits() {
 
         button.addEventListener('click', () => {
           addOutfitToShowroom(outfit.id);
+          modal.style.display = "none";
+          btn.disabled = false;
+          window.location.reload();
         });
       })
     });
@@ -221,9 +257,8 @@ function addOutfitToShowroom(outfitId) {
   .then(res => res.json())
   .then(data => {
     if (data.success) {
-      alert('Outfit added!');
     } else {
-      alert('Failed to add outfit.');
+      alert('Failed to add outfit. May have already been added before.');
     }
   });
 }

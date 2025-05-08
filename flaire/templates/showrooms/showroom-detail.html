@@ -18,9 +18,9 @@
         </label>
         {% if showroom.tags.all %}
         <p class = "tags">
-            <span class = > </span>Tags:
+            <span class = > </span>
             {% for tag in showroom.tags.all %}
-            {{ tag.name }}
+            #{{ tag.name }}
             {% endfor %}
         </p>
         {% endif %}
@@ -44,22 +44,25 @@
             {% if show_follow_button %}
                 {% if if_invited %}
                 <button type="button" id = "accept-button" data-state="accept">
-                    Accept
+                  Accept
+                </button>
+                <button type="button" id = "decline-button" data-state="decline">
+                  Decline
                 </button>
                 {% else %}
                 <button type="button" id = "follow-button" data-state="follow">
-                    Follow
+                  Follow
                 </button>
                 {% endif %}
             {% endif %}
             {% if show_edit_button %}
             <button type="button" id = "edit-button" data-state="edit">
-                Edit
+              Edit
             </button>
             {% endif %}
             {% if if_following %}
             <button type="button" id = "unfollow-button" data-state="unfollow">
-                Unfollow
+              Unfollow
             </button>
             {% endif %}
         </div>
@@ -110,7 +113,6 @@
           {% endif %}
           <div id="modal-comments-list"></div>
         </div>
-
 
         <!-- listed items section -->
         <div id="modal-listed-items" class="hidden"></div>

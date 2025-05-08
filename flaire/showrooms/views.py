@@ -9,6 +9,7 @@ from django.urls import reverse
 
 from .forms import *
 from .models import *
+from social.models import Notification
 
 import json
 
@@ -127,7 +128,7 @@ def create_showroom(request):
     user_profile = request.user.profile
 
     if request.method == "POST":
-        form = ShowroomCreateForm(request.POST, request.FILES)
+        form = ShowroomCreateForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
             showroom = form.save(commit=False)
             showroom.owner = user_profile
@@ -158,7 +159,7 @@ def create_showroom(request):
             return redirect('showrooms:showroom_detail', pk=showroom.id, slug=showroom.slug)
 
     else:
-        form = ShowroomCreateForm()
+        form = ShowroomCreateForm(user=request.user)
 
     return render(request, 'showrooms/showroom-create.html', {
         'form': form
@@ -235,7 +236,7 @@ def follow_showroom(request, pk):
         Notification.objects.create(
             sender=user_profile,
             recipient=showroom.owner,
-            message=f"'{user_profile}' followed your showroom, '{showroom.title}'",
+            message=f"{user_profile} followed your showroom, '{showroom.title}'",
             link=reverse('showrooms:showroom_detail', kwargs={
                 'pk': showroom.id,
                 'slug': showroom.slug
@@ -287,12 +288,30 @@ def accept_showroom_invite(request, pk):
         return JsonResponse({
             'success': True,
         })
+    
+    
+@login_required(login_url='user_management:login')
+def decline_showroom_invite(request, pk):
+    if request.method == 'POST':
+        showroom = Showroom.objects.get(pk=pk)
+        user_profile = request.user.profile
 
-# @login_required
-# def user_outfits_paginated(request):
-#     outfits = request.user.profile.outfits.all()
-#     paginator = Paginator(outfits, 20)  # 20 per page
-#     page = request.GET.get('page')
-#     outfits_page = paginator.get_page(page)
-
-#     return render(request, 'showrooms/outfit-items.html', {'outfits': outfits_page})
+        collaborator = ShowroomCollaborator.objects.get(
+            showroom=showroom, 
+            collaborator=user_profile, 
+            status='PENDING')
+        
+        remove_notif = Notification.objects.get(
+            sender=showroom.owner,
+            recipient=user_profile,
+            message=f"You've been invited to collaborate on '{showroom.title}'",
+            link=reverse('showrooms:showroom_detail', kwargs={'pk': showroom.id, 'slug': showroom.slug}),
+        )
+        remove_notif.delete()
+        
+        collaborator.status = 'REJECTED'
+        collaborator.save()
+        
+        return JsonResponse({
+            'success': True,
+        })

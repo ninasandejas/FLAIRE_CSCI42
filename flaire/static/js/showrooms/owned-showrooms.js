@@ -1,8 +1,6 @@
 let currentPage = 1;
 let showroomId = null;
 
-
-// loading of list of all showrooms the user has access to
 function loadShowrooms(page = 1) {
   currentPage = page;
 
@@ -22,52 +20,26 @@ function loadShowrooms(page = 1) {
       `;
       grid.appendChild(prevArrow);
 
-      // add button
-      // if (page === 1) {
-      //   const addDiv = document.createElement('div');
-      //   addDiv.className = 'thumbnail add';
-      //   addDiv.innerHTML = `<div class="plus">+</div>`;
-      //   addDiv.addEventListener('click', () => {
-      //     const dialog = document.getElementById('dialog');
-      
-      //     // Temporary listener: wait until HTMX finishes swapping content into #dialog
-      //     const handleSwap = function (e) {
-      //       if (e.target === dialog) {    
-      //         // Show modal
-      //         const modal = new bootstrap.Modal(document.getElementById('create-modal'));
-      //         modal.show();
-      
-      //         // Remove listener after it's done to prevent re-triggers
-      //         document.body.removeEventListener('htmx:afterSwap', handleSwap);
-      //       }
-      //     };
-      
-      //     document.body.addEventListener('htmx:afterSwap', handleSwap);
-      
-      //     // Make the HTMX request
-      //     htmx.ajax('GET', '/showrooms/create/', {
-      //       target: dialog,
-      //       swap: 'innerHTML',
-      //       headers: {
-      //         'HX-Request': 'true'
-      //       }
-      //     });
-      //   });
-      //   grid.appendChild(addDiv);
-      // }
+      // add div button for create showrooms
       if (page === 1) {
+        const container = document.createElement('div');
+        container.className = 'thumbnail-container';
+      
         const addDiv = document.createElement('div');
         addDiv.className = 'thumbnail add';
         addDiv.innerHTML = `<div class="plus">+</div>`;
         addDiv.addEventListener('click', () => {
           window.location.href = '/showrooms/create/';
-          // currentStep = 1;
-          // nextStep(1);
-          // document.getElementById("create-modal").style.display = "flex";
         });
-        grid.appendChild(addDiv);
-      }
       
+        const label = document.createElement('p');
+        label.className = 'add-label';
+        label.textContent = 'Create showroom';
+      
+        container.appendChild(addDiv);
+        container.appendChild(label);
+        grid.appendChild(container);
+      }
 
       // each showroom (shown through cover image: thumbnails)
       data.showrooms.forEach(showroom => {
@@ -108,25 +80,4 @@ document.getElementById('showroom-grid').addEventListener('click', function (e) 
   }
 });
 
-// function showModal(){
-//   document.getElementById("create-modal").removeAttribute("hidden");
-    
-//     // Wait for modal to be visible before initializing select2
-//     $('.select2').select2({
-//       placeholder: "Search and select collaborators",
-//       width: '100%',
-//       dropdownParent: $('#create-modal')  // important inside modals
-//     });
-// }
-
 loadShowrooms();
-
-// document.body.addEventListener('htmx:afterSwap', function(evt) {
-//   if (evt.target.id === 'dialog') {
-//     $('.select2').select2({
-//       placeholder: "Search and select collaborators",
-//       width: '100%',
-//       dropdownParent: $('#create-modal') // ensures it renders properly in modals
-//     });
-//   }
-// });

@@ -136,14 +136,7 @@
   transform: translate(-50%, -50%);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  background-color: #F4E6F0;
-}
-
-.modal-content {
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
+  background-color: #FDF9F6;
 }
 
 .close {

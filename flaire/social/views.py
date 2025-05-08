@@ -47,3 +47,7 @@ def fetch_notifications(request):
         'is_read': n.is_read,
     } for n in notifications]
     return JsonResponse({'notifications': data})
+
+
+def display_explore(request):
+    return

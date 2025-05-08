@@ -1,45 +1,19 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
 
-{% block content %}
-<style>
-    .tab-content {
-        display: none;
-    }
-    .tab-content.active {
-        display: block;
-    }
-</style>
-
-<div class="tab-navigation">
-    <button onclick="showTab('outfits')">Outfits</button> |
-    <button onclick="showTab('showrooms')">Showrooms</button>
-</div>
-
-<div id="outfits" class="tab-content active">
-    <h2>Explore Outfits</h2>
-    {% for outfit in outfits %}
-        <img src="{{ outfit.image.url }}" alt="Outfit" />
-    {% empty %}
-        <p>No outfits to explore.</p>
-    {% endfor %}
-</div>
-
-<div id="showrooms" class="tab-content">
-    <h2>Explore Showrooms</h2>
-    {% for showroom in showrooms %}
-        <div>{{ showroom.name }}</div>
-    {% empty %}
-        <p>No showrooms to explore.</p>
-    {% endfor %}
-</div>
-
-<script>
-    function showTab(tabId) {
-        const contents = document.querySelectorAll('.tab-content');
-        contents.forEach(c => c.classList.remove('active'));
-
-        document.getElementById(tabId).classList.add('active');
-    }
-</script>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/explore.css' %}">
 {% endblock %}
 
+{% block content %}
+<div class="tab-bar">
+  <button id="explore-outfits-tab" class="tab">Outfits</button>
+  <button id="explore-showrooms-tab" class="tab">Showrooms</button>
+</div>
+
+<div id="explore-grid" class="grid-container"></div>
+
+{% include "modals/outfit_modal.html" %}
+<script src="{% static 'js/explore.js' %}"></script>
+<script src="{% static 'js/outfit-detail.js' %}"></script>
+{% endblock %}

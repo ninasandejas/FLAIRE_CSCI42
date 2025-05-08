@@ -1,0 +1,149 @@
+.outfit-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FDF9F6;
+    padding: 20px;
+    border-radius: 8px;
+    width: 75vw;
+    height: 75vh;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.modal-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 2fr 5fr 5fr;
+    grid-template-areas:
+        "outfitimg usernamearea"
+        "outfitimg captiontagsarea"
+        "outfitimg countandlistarea";
+    gap: 20px;
+    max-width: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+#modal-image {
+    grid-area: outfitimg;
+    height: 73vh;
+    min-height: 400px;
+    width: auto;
+    border-radius: 8px;
+}
+
+#modal-text-content {
+    grid-area: usernamearea;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-right: 40px;
+}
+
+.username {
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.caption {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.tags {
+    font-style: italic;
+    color: #7B6A73;
+    font-size: 1rem;
+}
+
+#mini-navbar {
+    display: flex;
+    gap: 15px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+.mini-tab {
+    background: none;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    color: #482738;
+}
+
+.mini-tab.active {
+    border-bottom: 2px solid #482738;
+}
+
+#modal-tab-content {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 10px;
+}
+
+/* Listed items and hover buttons */
+.listed-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.listed-item img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.hover-buttons {
+    display: none;
+    margin-top: 5px;
+    gap: 5px;
+}
+
+.hover-buttons button {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border: none;
+    border-radius: 15px;
+    background-color: #F4E6F0;
+    color: #482738;
+    cursor: pointer;
+}
+
+.hover-buttons button:hover {
+    background-color: #DFBCD4;
+    color: #FDF9F6;
+}
+
+.listed-item:hover .hover-buttons {
+    display: flex;
+}
+
+#modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 900;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: #482738;
+}

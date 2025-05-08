@@ -14,11 +14,6 @@
 
 .post-wrapper {
     cursor: pointer;
-    transition: transform 0.2s;
-}
-
-.post-wrapper:hover {
-    transform: scale(1.02);
 }
 
 .outfit-image {
@@ -27,3 +22,4 @@
     object-fit: cover;
     border-radius: 8px;
 }
+

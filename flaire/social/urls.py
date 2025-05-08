@@ -12,12 +12,6 @@ urlpatterns = [
     path("explore-showrooms/", ExploreShowroomsGridView.as_view(), name="explore-showrooms"),
     path("following-outfits/", FollowingOutfitsGridView.as_view(), name="following-outfits"),
     path("following-showrooms/", FollowingShowroomsGridView.as_view(), name="following-showrooms"),
-    # path("outfit-details/<int:pk>/", OutfitDetailView.as_view(), name="outfit_details"),
-    # path(
-    #     "submit-comment/<int:outfit_id>/",
-    #     SubmitCommentView.as_view(),
-    #     name="submit-comment",
-    # ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

@@ -182,18 +182,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-// add outfits in showroom detail:
+// open modals (add outfits + showroom owners list)
 document.addEventListener("DOMContentLoaded", function () {
   var modal = document.getElementById("create-sr-add-outfits");
-  var btn = document.getElementById("add-outfits-btn-dt");
+  var addOutfitBtn = document.getElementById("add-outfits-btn-dt");
   var span = document.getElementsByClassName("close")[0];
+
+  const ocModalBtn = document.getElementById('user-icons');
   const modalOverlay = document.getElementById("modal-overlay");
+  const ocModal = document.getElementById('oc-user-div');
+  var ocSpan = document.getElementsByClassName("close-ocdiv")[0];
   
-  btn.onclick = function() {
+  // show add outfits modal
+  addOutfitBtn.onclick = function() {
     modal.style.display = "block";
     modalOverlay.style.display = "block";
     btn.disabled = true;
     loadOutfits();
+  }
+
+  // show list of owner and collaborators of a showroom
+  ocModalBtn.onclick = function() {
+    ocModal.style.display = "block";
+    modalOverlay.style.display = "block";
   }
 
   span.onclick = function() {
@@ -202,11 +213,20 @@ document.addEventListener("DOMContentLoaded", function () {
     btn.disabled = false;
   }
 
+  ocSpan.onclick = function() {
+    ocModal.style.display = "none";
+    modalOverlay.style.display = "none";
+  }
+
   window.onclick = function(event) {
     if (event.target == modal) {
       modal.style.display = "none";
       modalOverlay.style.display = "none";
       btn.disabled = false;
+    }
+    if (event.target == ocModal) {
+      ocModal.style.display = "none";
+      modalOverlay.style.display = "none";
     }
   }
 });

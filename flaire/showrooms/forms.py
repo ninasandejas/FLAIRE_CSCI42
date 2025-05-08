@@ -12,6 +12,7 @@ class ShowroomCreateForm(forms.ModelForm):
         widget=forms.SelectMultiple(attrs=
             {'class': 'select2'})
     ) 
+
     class Meta:
         model = Showroom
         fields = ['title', 'cover_image', 'is_public', 'tags', 'collaborators']
@@ -21,3 +22,7 @@ class ShowroomCreateForm(forms.ModelForm):
         super(ShowroomCreateForm, self).__init__(*args, **kwargs)
         if user:
             self.fields['collaborators'].queryset = Profile.objects.exclude(user=user)
+        self.fields['tags'].help_text = ''
+        self.fields['tags'].widget.attrs.update({
+            'placeholder': 'Add up to 3 tags, separated by commas',
+            'style': 'width: 30%;'})

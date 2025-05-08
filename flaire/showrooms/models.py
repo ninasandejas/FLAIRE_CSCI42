@@ -51,7 +51,6 @@ class ShowroomOutfit(models.Model):
     showroom = models.ForeignKey(Showroom, on_delete=models.CASCADE)
     outfit = models.ForeignKey(Outfit, on_delete=models.CASCADE)
     date_added = models.DateTimeField(auto_now_add=True)
-    # notes = models.TextField(blank=True, null=True)
     
     class Meta:
         unique_together = ('showroom', 'outfit')

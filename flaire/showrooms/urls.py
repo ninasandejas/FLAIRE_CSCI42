@@ -23,7 +23,3 @@ urlpatterns = [
     path('<int:pk>/decline/', views.decline_showroom_invite, name='decline_showroominv'),
     path('<int:pk>/add-outfit/', views.add_outfit_to_showroom, name='add_outfit_to_sr'),
 ] 
-# if settings.DEBUG:
-#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-# else:
-#     urlpatterns += staticfiles_urlpatterns()

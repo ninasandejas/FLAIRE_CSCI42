@@ -86,11 +86,8 @@ def showroom_detail(request, pk, slug=None):
 
 
     is_follower = showroom.followers.filter(id=request.user.profile.id).exists()
-
     is_collaborator = accepted_collaborators.filter(collaborator=request.user.profile).exists()
-
     is_invited = invited_collaborators.filter(collaborator=request.user.profile).exists()
-
     is_owner = showroom.owner==request.user.profile
 
     if slug != showroom.slug:
@@ -274,13 +271,19 @@ def accept_showroom_invite(request, pk):
             collaborator=user_profile, 
             status='PENDING')
         
-        remove_notif = Notification.objects.get(
-            sender=showroom.owner,
-            recipient=user_profile,
-            message=f"You've been invited to collaborate on '{showroom.title}'",
-            link=reverse('showrooms:showroom_detail', kwargs={'pk': showroom.id, 'slug': showroom.slug}),
-        )
-        remove_notif.delete()
+        # thinking of removing this since i think history of invites is still ok !
+        # remove_notif = Notification.objects.get(
+        #     sender=showroom.owner,
+        #     recipient=user_profile,
+        #     message=f"You've been invited to collaborate on '{showroom.title}'",
+        #     link=reverse('showrooms:showroom_detail', kwargs={'pk': showroom.id, 'slug': showroom.slug}),
+        # )
+        # remove_notif.delete()
+        
+        ShowroomFollower.objects.filter(
+            showroom=showroom,
+            profile=user_profile
+        ).delete()
         
         collaborator.status = 'ACCEPTED'
         collaborator.save()
@@ -301,13 +304,13 @@ def decline_showroom_invite(request, pk):
             collaborator=user_profile, 
             status='PENDING')
         
-        remove_notif = Notification.objects.get(
-            sender=showroom.owner,
-            recipient=user_profile,
-            message=f"You've been invited to collaborate on '{showroom.title}'",
-            link=reverse('showrooms:showroom_detail', kwargs={'pk': showroom.id, 'slug': showroom.slug}),
-        )
-        remove_notif.delete()
+        # remove_notif = Notification.objects.get(
+        #     sender=showroom.owner,
+        #     recipient=user_profile,
+        #     message=f"You've been invited to collaborate on '{showroom.title}'",
+        #     link=reverse('showrooms:showroom_detail', kwargs={'pk': showroom.id, 'slug': showroom.slug}),
+        # )
+        # remove_notif.delete()
         
         collaborator.status = 'REJECTED'
         collaborator.save()

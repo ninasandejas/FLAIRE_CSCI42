@@ -7,19 +7,16 @@ from .models import *
 class ShowroomCollaboratorInline(admin.TabularInline):
     model = ShowroomCollaborator
     extra = 1
-    # autocomplete_fields = ['outfit']
 
 
 class ShowroomOutfitInline(admin.TabularInline):
     model = ShowroomOutfit
     extra = 1
-    # autocomplete_fields = ['outfit']
 
 
 class ShowroomFollowerInline(admin.TabularInline):
     model = ShowroomFollower
     extra = 1
-    # autocomplete_fields = ['outfit']
 
 
 class ShowroomAdmin(admin.ModelAdmin):
@@ -30,8 +27,6 @@ class ShowroomAdmin(admin.ModelAdmin):
     readonly_fields = ("date_created", "date_updated")
     inlines = [ShowroomCollaboratorInline, ShowroomOutfitInline, ShowroomFollowerInline]
     ordering = ("-date_created",)
-
-    # filter_horizontal = ('collaborators', 'outfits')
 
 
 admin.site.register(Showroom, ShowroomAdmin)

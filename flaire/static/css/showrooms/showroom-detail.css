@@ -13,6 +13,18 @@
   border-radius: 50%;
   object-fit: cover;
   gap: 8px;
+  border: 2px solid #FDF9F6;
+  margin-left: -15px;
+  z-index: 1;
+  transition: all 0.2s ease;
+}
+
+#user-icons img:first-child {
+  margin-left: 0;
+}
+
+#user-icons img:hover {
+  z-index: 10;
 }
 
 #user-actions button {
@@ -29,21 +41,12 @@
   color: #ffffff;
 }
 
-
 #outfits-grid {
   margin-top: 40px;
   column-count: 4;
   column-gap: 1.25vw;
   padding: 1rem;
 }
-
-/* #outfits-grid img {
-  width: 100%;
-  margin-bottom: 1rem;
-  border-radius: 12px;
-  display: block;
-  break-inside: avoid;
-} */
 
 .showroom-header {
   margin-left: 35px;
@@ -139,7 +142,7 @@
   background-color: #FDF9F6;
 }
 
-.close {
+.close, .close-ocdiv {
   color: #aaaaaa;
   float: right;
   font-size: 28px;
@@ -148,8 +151,8 @@
   margin-top: 15px;
 }
 
-.close:hover,
-.close:focus {
+.close:hover, .close:focus, 
+.close-ocdiv:hover, .close-ocdiv:focus {
 color: #000;
 text-decoration: none;
 cursor: pointer;
@@ -428,4 +431,37 @@ cursor: pointer;
 
 .listed-item:hover .hover-buttons {
   display: flex;
+}
+
+.profile-pic-small {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #db8bb5;
+}
+
+#oc-user-div {
+  display: none;
+  position: fixed;
+  z-index: 1001;
+  background-color: #fefefe;
+  top: 50%;
+  left: 50%;
+  padding: 20px;
+  border: 1px solid #888;
+  transform: translate(-50%, -50%);
+  width: 60vh;
+  max-width: 500px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.oc-username {
+  font-size: 16px;
+  font-weight: bold;
+  color: #482738;
+  flex-grow: 1;
+  text-align: left;
+  margin-left: 10px; 
 }

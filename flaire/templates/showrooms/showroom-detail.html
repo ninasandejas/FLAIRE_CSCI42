@@ -28,43 +28,52 @@
     <div id = "user-access">
         <div id = "user-icons">
             {% if showroom.owner.profile_picture %}
-            <img class src = "{{ showroom.owner.profile_picture.url }}"/>
+            <img src = "{{ showroom.owner.profile_picture.url }}"/>
             {% else %}
             <img src= "{% static 'img/user-icon.png' %}" alt="User Profile" style="height: 35px; width: 35px; border-radius: 50%; object-fit: cover">
             {% endif %}
-            {% for collaborator in accepted_collaborators %}
-            {% if request.user.profile.profile_picture %}
-            <img class src = "{{ collaborator.collaborator.profile_picture.url }}"/>
+
+            {% for profile in accepted_collaborators %}
+            {% if profile.collaborator.profile_picture %}
+            <img src = "{{ profile.collaborator.profile_picture.url }}"/>
             {% else %}
             <img src= "{% static 'img/user-icon.png' %}" alt="User Profile" style="height: 35px; width: 35px; border-radius: 50%; object-fit: cover">
             {% endif %}
             {% endfor %}
         </div>
         <div id = "user-actions">
-            {% if show_follow_button %}
-                {% if if_invited %}
-                <button type="button" id = "accept-button" data-state="accept">
-                  Accept
-                </button>
-                <button type="button" id = "decline-button" data-state="decline">
-                  Decline
-                </button>
-                {% else %}
-                <button type="button" id = "follow-button" data-state="follow">
-                  Follow
-                </button>
-                {% endif %}
-            {% endif %}
-            {% if show_edit_button %}
-            <button type="button" id = "edit-button" data-state="edit">
-              Edit
-            </button>
-            {% endif %}
-            {% if if_following %}
-            <button type="button" id = "unfollow-button" data-state="unfollow">
-              Unfollow
-            </button>
-            {% endif %}
+          {% if if_invited %}
+          <button type="button" id = "accept-button" data-state="accept">
+            Accept
+          </button>
+          <button type="button" id = "decline-button" data-state="decline">
+            Decline
+          </button>
+          {% endif %}
+
+          {% if show_follow_button %}
+          {% if if_invited %}
+          {% else %}
+          <button type="button" id = "follow-button" data-state="follow">
+            Follow
+          </button>
+          {% endif %}
+          {% endif %}
+
+          {% if show_edit_button %}
+          <button type="button" id = "edit-button" data-state="edit">
+            Edit
+          </button>
+          {% endif %}
+
+          {% if if_following %}
+          {% if if_invited %}
+          {% else %}
+          <button type="button" id = "unfollow-button" data-state="unfollow">
+            Unfollow
+          </button>
+          {% endif %}
+          {% endif %}
         </div>
     </div>
 </div>
@@ -120,6 +129,37 @@
     </div>
   </div>
 </div>
+
+<div id = "oc-user-div">
+  <span class="close-ocdiv">&times;</span>
+  <h2>Users</h2>
+  <hr>
+  <ul id = "oc-modal-user-list">
+    <!-- owner -->
+    <li class = "user-link">
+      {% if showroom.owner.profile_picture %}
+      <img src="{{ showroom.owner.profile_picture.url }}" alt="{{ showroom.owner.username }}'s profile picture" class="profile-pic-small">
+      {% else %}
+      <img src= "{% static 'img/user-icon.png' %}" alt="User Profile" style="height: 35px; width: 35px; border-radius: 50%; object-fit: cover" class="profile-pic-small">
+      {% endif %}
+      <a class="oc-username" href = "{% url 'user_management:other_user_profile' username=showroom.owner.user.username %}">
+        {{ showroom.owner.user.username }}
+      </a>
+    </li>
+    <!-- collaborator/s -->
+    {% for profile in accepted_collaborators %}
+    <li class = "user-link">
+      {% if profile.collaborator.profile_picture %}
+      <img src = "{{ profile.collaborator.profile_picture.url }}" class="profile-pic-small">
+      {% else %}
+      <img src= "{% static 'img/user-icon.png' %}" alt="User Profile" style="height: 35px; width: 35px; border-radius: 50%; object-fit: cover" class="profile-pic-small">
+      {% endif %}
+      <a class="oc-username" href="{% url 'user_management:other_user_profile' username=profile.collaborator.user.username %}">
+        {{ profile.collaborator.user.username }}
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
 </div>
 
 {% endblock %}

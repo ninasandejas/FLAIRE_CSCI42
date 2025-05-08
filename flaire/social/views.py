@@ -35,15 +35,15 @@ class ExploreOutfitsGridView(LoginRequiredMixin, View):
 class ExploreShowroomsGridView(LoginRequiredMixin, View):
     def get(self, request):
         showrooms = Showroom.objects.all().order_by("-date_updated")
-        showroom_data = [
+        image_data = [
             {
                 "id": showroom.id,
-                "url": showroom.cover_image.url if showroom.cover_image else "",
-                "title": showroom.title
+                "title": showroom.title,
+                "cover_image": showroom.cover_image.url if showroom.cover_image else "",
             }
-            for showroom in showrooms
+        for showroom in showrooms
         ]
-        return JsonResponse({"showrooms": showroom_data})
+        return JsonResponse({"images": image_data})
 
 
 class FollowingOutfitsGridView(LoginRequiredMixin, View):
@@ -61,78 +61,12 @@ class FollowingShowroomsGridView(LoginRequiredMixin, View):
         following_ids = Follow.objects.filter(follower=request.user.profile).values_list('following_id', flat=True)
         following_profiles = Profile.objects.filter(id__in=following_ids)
         showrooms = Showroom.objects.filter(owner__in=following_profiles).order_by("-date_created")
-
-        showroom_data = [
+        image_data = [
             {
                 "id": showroom.id,
-                "url": showroom.cover_image.url if showroom.cover_image else "",
-                "title": showroom.title
+                "title": showroom.title,
+                "cover_image": showroom.cover_image.url if showroom.cover_image else "",
             }
-            for showroom in showrooms
+        for showroom in showrooms
         ]
-        return JsonResponse({"showrooms": showroom_data})
-
-
-class OutfitDetailView(View):
-    def get(self, request, pk):
-        outfit = Outfit.objects.get(pk=pk)
-
-        tags = (
-            [tag.name for tag in outfit.tags.all()] if hasattr(outfit, "tags") else []
-        )
-
-        if hasattr(outfit, "comments"):
-            comments = [
-                {"author": comment.author.user.username, "entry": comment.entry}
-                for comment in outfit.comments.all()
-            ]
-        else:
-            comments = []
-
-        listed_items = []
-        if hasattr(outfit, "listed_items"):
-            listed_items = [
-                {
-                    "id": item.id,
-                    "url": item.image.url,
-                    "name": item.name,
-                    "brand": item.brand,
-                    "owner": item.owner.user.username,
-                }
-                for item in outfit.listed_items.all()
-            ]
-
-        outfit_data = {
-            "id": outfit.id,
-            "url": outfit.image.url,
-            "caption": outfit.caption or "",
-            "tags": tags,
-            "likes": outfit.likes.count() if hasattr(outfit, "likes") else 0,
-            "comments": [
-                {
-                    "author": comment.author.user.username,
-                    "entry": comment.entry,
-                }
-                for comment in outfit.comments.all()
-            ],
-            "listed_items": listed_items,
-            "owner": (
-                outfit.owner.user.username if hasattr(outfit, "owner") else "unknown"
-            ),
-        }
-
-        return JsonResponse(outfit_data)
-
-
-@method_decorator(csrf_exempt, name="dispatch")
-class SubmitCommentView(View):
-    def post(self, request, outfit_id):
-        data = json.loads(request.body)
-        entry = data.get("entry")
-        outfit = Outfit.objects.get(id=outfit_id)
-        comment = Comment.objects.create(
-            outfit=outfit, author=request.user.profile, entry=entry
-        )
-        return JsonResponse(
-            {"author": comment.author.user.username, "entry": comment.entry}
-        )
+        return JsonResponse({"images": image_data})

@@ -2,22 +2,21 @@
 {% load static %}
 
 {% block styles %}
-<link rel="stylesheet" href="{% static 'css/social/explore.css' %}">
+<link rel="stylesheet" href="{% static 'css/social/social.css' %}">
 {% endblock %}
 
 {% block content %}
 
 {% if request.user.is_authenticated %}
-<h2>Explore Page</h2> 
 
 <div class="tab-bar">
-  <button id="explore-outfits-tab" class="tab active">Outfits</button>
-  <button id="explore-showrooms-tab" class="tab">Showrooms</button>
+  <button id="explore-outfits-tab" class="tab active"><h2>Outfits</h2> </button>
+  <button id="explore-showrooms-tab" class="tab"><h2>Showrooms</h2> </button>
 </div>
 
 <div class="grid-section">
   <div id="outfits-grid" class="image-grid"></div>
-  <div id="showrooms-grid" class="image-grid" style="display: none;"></div>
+  <div id="showrooms-grid" class="image-grid hidden"></div>
 </div>
 
 <div id="modal-overlay"></div>
@@ -51,9 +50,6 @@
           {% endif %}
           <div id="modal-comments-list"></div>
         </div>
-
-
-        <!-- listed items section -->
         <div id="modal-listed-items" class="hidden"></div>
       </div>
     </div>

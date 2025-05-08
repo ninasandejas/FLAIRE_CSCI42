@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   outfitTab.addEventListener("click", () => {
     activateTab(outfitTab);
     outfitsGrid.classList.remove("hidden-grid");
+    showroomsGrid.innerHTML = ""; 
     showroomsGrid.classList.add("hidden-grid");
     outfitsGrid.innerHTML = "";
     loadOutfits();
@@ -20,12 +21,12 @@ document.addEventListener("DOMContentLoaded", () => {
   showroomTab.addEventListener("click", () => {
     activateTab(showroomTab);
     outfitsGrid.classList.add("hidden-grid");
+    outfitsGrid.innerHTML = ""; 
     showroomsGrid.classList.remove("hidden-grid");
     showroomsGrid.innerHTML = "";
     loadShowrooms();
   });
 
-  // Load outfits by default
   loadOutfits();
 
   function loadOutfits() {
@@ -46,7 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
           outfitsGrid.appendChild(wrapper);
         });
 
-        // Modal click
         outfitsGrid.querySelectorAll(".outfit-image").forEach(img => {
           img.addEventListener("click", (e) => {
             const outfitId = e.currentTarget.dataset.outfitId;
@@ -64,27 +64,23 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(res => res.json())
       .then(data => {
         showroomsGrid.innerHTML = "";
-        data.showrooms.forEach(showroom => {
+        data.images.forEach(showroom => {
           const img = document.createElement("img");
-          img.src = showroom.url;
+          img.src = showroom.cover_image;  
           img.alt = showroom.title;
-          img.classList.add("showroom-thumbnail");
+          img.classList.add("showroom-image");
           img.dataset.showroomId = showroom.id;
 
           const wrapper = document.createElement("div");
           wrapper.classList.add("post-wrapper");
           wrapper.appendChild(img);
           showroomsGrid.appendChild(wrapper);
-        });
-
-        // Click handler to visit showroom page
-        showroomsGrid.querySelectorAll(".showroom-thumbnail").forEach(img => {
-          img.addEventListener("click", (e) => {
-            const showroomId = e.currentTarget.dataset.showroomId;
-            window.location.href = `/showroom/${showroomId}/`;
+  
+          img.addEventListener("click", () => {
+            window.location.href = `/showrooms/${showroom.id}`;
           });
         });
       })
-      .catch(err => console.error("Error loading following showrooms:", err));
+      .catch(error => console.error('Error loading showrooms:', error));
   }
 });

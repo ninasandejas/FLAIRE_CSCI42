@@ -8,16 +8,15 @@
 {% block content %}
 
 {% if request.user.is_authenticated %}
-<h2>Following Page</h2>
 
 <div class="tab-bar">
-  <button id="following-outfits-tab" class="tab active">Outfits</button>
-  <button id="following-showrooms-tab" class="tab">Showrooms</button>
+  <button id="following-outfits-tab" class="tab active"><h2>Outfits</h2> </button>
+  <button id="following-showrooms-tab" class="tab"><h2>Showrooms</h2> </button>
 </div>
 
 <div class="grid-section">
   <div id="outfits-grid" class="image-grid"></div>
-  <div id="showrooms-grid" class="image-grid" style="display: none;"></div>
+  <div id="showrooms-grid" class="image-grid hidden"></div>
 </div>
 
 <div id="modal-overlay"></div>

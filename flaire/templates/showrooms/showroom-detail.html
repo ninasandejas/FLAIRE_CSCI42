@@ -11,38 +11,160 @@
 <div class="showroom-header">
     <h3 class = "showroom-title" id = "showroom-title">{{ showroom.title }}</h3>
     <input type="text" id="edit-title" style="display: none;" />
-    <p>
+    <p class = "fit-n-followers">
         fits: <span id = "outfit_count">{{ outfit_count }}</span>
         <label style="margin-left: 27px;">
             followers:  <span id = "follower-count">{{ follower_count }}</span>
         </label>
+        {% if showroom.tags.all %}
+        <p class = "tags">
+            <span class = > </span>
+            {% for tag in showroom.tags.all %}
+            #{{ tag.name }}
+            {% endfor %}
+        </p>
+        {% endif %}
     </p>
     <div id = "user-access">
         <div id = "user-icons">
-            <img class src = "{{ showroom.owner.profile_picture.url }}"/>
-            {% for collaborator in accepted_collaborators %}
-            <img class src = "{{ collaborator.collaborator.profile_picture.url }}"/>
+            {% if showroom.owner.profile_picture %}
+            <img src = "{{ showroom.owner.profile_picture.url }}"/>
+            {% else %}
+            <img src= "{% static 'img/user-icon.png' %}" alt="User Profile" style="height: 35px; width: 35px; border-radius: 50%; object-fit: cover">
+            {% endif %}
+
+            {% for profile in accepted_collaborators %}
+            {% if profile.collaborator.profile_picture %}
+            <img src = "{{ profile.collaborator.profile_picture.url }}"/>
+            {% else %}
+            <img src= "{% static 'img/user-icon.png' %}" alt="User Profile" style="height: 35px; width: 35px; border-radius: 50%; object-fit: cover">
+            {% endif %}
             {% endfor %}
         </div>
         <div id = "user-actions">
-            {% if show_follow_button %}
-            <button type="button" id = "follow-button">
-                Follow
-            {% endif %}
-            </button>
-            {% if show_edit_button %}
-            <button type="button" id = "edit-button" data-state="edit">
-                Edit
-            </button>
-            {% endif %}
+          {% if if_invited %}
+          <button type="button" id = "accept-button" data-state="accept">
+            Accept
+          </button>
+          <button type="button" id = "decline-button" data-state="decline">
+            Decline
+          </button>
+          {% endif %}
+
+          {% if show_follow_button %}
+          {% if if_invited %}
+          {% else %}
+          <button type="button" id = "follow-button" data-state="follow">
+            Follow
+          </button>
+          {% endif %}
+          {% endif %}
+
+          {% if show_edit_button %}
+          <button type="button" id = "edit-button" data-state="edit">
+            Edit
+          </button>
+          {% endif %}
+
+          {% if if_following %}
+          {% if if_invited %}
+          {% else %}
+          <button type="button" id = "unfollow-button" data-state="unfollow">
+            Unfollow
+          </button>
+          {% endif %}
+          {% endif %}
         </div>
     </div>
 </div>
 
 <div id="outfits-grid" data-showroom-id ="{{ showroom.id }}">
 </div>
+
+<button id ="add-outfits-btn-dt" class = "add-outfits-btn-dt">+</button>
+
+<div id = "create-sr-add-outfits" class="modal">
+    <span class="close">&times;</span>
+    <h2 id = "add-outfit-modal-header" style="text-align: center; margin-top: 30px;">Add outfits</h2>
+    <hr class="custom-line">
+    <div class="add-outfits-sr-content" id="add-outfits-sr-content">
+    </div>
+</div>
+
+<div id="modal-overlay"></div>
+
+<div id="outfit-modal" class="outfit-modal hidden">
+  <div class="modal-content">
+    <div class="close-btn">&times;</div>
+    <img id="modal-image" />
+
+    <div id="modal-text-content">
+      <p id="modal-owner" class="username">@username</p>
+      <p id="modal-caption" class="caption"></p>
+      <p id="modal-tags" class="tags">#tag1 #tag2 #tag3</p>
+      <div id="like-button">
+        <img src="{% static 'img/unliked.png' %}" alt="Heart Icon">
+      </div>
+
+      <div id="mini-navbar">
+        <button class="mini-tab active" data-tab="likes">likes</button>
+        <button class="mini-tab" data-tab="comments">comments</button>
+        <button class="mini-tab" data-tab="list">list items</button>
+      </div>
+
+      <div id="modal-tab-content">
+        <div id="modal-comments" class="hidden">
+          {% if request.user.is_authenticated %}
+          <form id="comment-form">
+            <textarea id="comment-input" rows="2" placeholder="Add a comment..."></textarea>
+            <button type="submit">Post</button>
+          </form>
+          {% endif %}
+          <div id="modal-comments-list"></div>
+        </div>
+
+        <!-- listed items section -->
+        <div id="modal-listed-items" class="hidden"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id = "oc-user-div">
+  <span class="close-ocdiv">&times;</span>
+  <h2>Users</h2>
+  <hr>
+  <ul id = "oc-modal-user-list">
+    <!-- owner -->
+    <li class = "user-link">
+      {% if showroom.owner.profile_picture %}
+      <img src="{{ showroom.owner.profile_picture.url }}" alt="{{ showroom.owner.username }}'s profile picture" class="profile-pic-small">
+      {% else %}
+      <img src= "{% static 'img/user-icon.png' %}" alt="User Profile" style="height: 35px; width: 35px; border-radius: 50%; object-fit: cover" class="profile-pic-small">
+      {% endif %}
+      <a class="oc-username" href = "{% url 'user_management:other_user_profile' username=showroom.owner.user.username %}">
+        {{ showroom.owner.user.username }}
+      </a>
+    </li>
+    <!-- collaborator/s -->
+    {% for profile in accepted_collaborators %}
+    <li class = "user-link">
+      {% if profile.collaborator.profile_picture %}
+      <img src = "{{ profile.collaborator.profile_picture.url }}" class="profile-pic-small">
+      {% else %}
+      <img src= "{% static 'img/user-icon.png' %}" alt="User Profile" style="height: 35px; width: 35px; border-radius: 50%; object-fit: cover" class="profile-pic-small">
+      {% endif %}
+      <a class="oc-username" href="{% url 'user_management:other_user_profile' username=profile.collaborator.user.username %}">
+        {{ profile.collaborator.user.username }}
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+
 {% endblock %}
 
 {% block scripts %}
 <script src="{% static 'js/showrooms/showroom-outfits.js' %}"></script>
+<script src="{% static 'js/showrooms/sr-outfits-modal.js' %}"></script>
 {% endblock %}

@@ -3,17 +3,26 @@ from .models import *
 
 
 class ShowroomCreateForm(forms.ModelForm):
-    # assume for now that they can invite any user (not just people that they are following or being followed)
+    title = forms.CharField(
+        widget=forms.TextInput(attrs=
+            {'class': 'form-control', 'placeholder': 'like "Boho-chic Outfits'}))
     collaborators = forms.ModelMultipleChoiceField(
-        queryset=Profile.objects.all(),
+        queryset=Profile.objects.none(),
         required=False,
-       widget=forms.SelectMultiple(attrs={'class': 'select2'})
+        widget=forms.SelectMultiple(attrs=
+            {'class': 'select2'})
     ) 
-    outfits = forms.ModelMultipleChoiceField(
-        queryset=Outfit.objects.none(),  # we will just override in view
-        required=False,
-        widget=forms.CheckboxSelectMultiple
-    )
+
     class Meta:
         model = Showroom
-        fields = ['title', 'cover_image', 'tags', 'is_public', 'collaborators', 'outfits']
+        fields = ['title', 'cover_image', 'is_public', 'tags', 'collaborators']
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(ShowroomCreateForm, self).__init__(*args, **kwargs)
+        if user:
+            self.fields['collaborators'].queryset = Profile.objects.exclude(user=user)
+        self.fields['tags'].help_text = ''
+        self.fields['tags'].widget.attrs.update({
+            'placeholder': 'Add up to 3 tags, separated by commas',
+            'style': 'width: 30%;'})

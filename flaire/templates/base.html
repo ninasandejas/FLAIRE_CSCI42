@@ -34,20 +34,24 @@
                 <a href="{% url 'closet:closet' %}">closet</a>
             </li>
             {% if request.user.is_authenticated %}
-            <li class="{% if active_tab == 'closet'%}active{% endif %}">
-                <form method="POST" action="{% url 'logout' %}" class = "logout-form">
-                    {% csrf_token %}
-                    <button type="submit" class="logout-button">Logout</button>
-                </form>
-            </li>
             <li class="{% if active_tab == 'profile'%}active{% endif %}">
-                <a href="{% url 'user_management:profile' %}">
-                    {% if user.profile.profile_picture %}
-                        <img src="{{ user.profile.profile_picture.url }}" alt="User Profile" style="height: 24px">
+                <div class = "profile-dropdown">
+                    {% if request.user.profile.profile_picture %}
+                    <button class = "profbtn">
+                        <img src="{{ request.user.profile.profile_picture.url }}" alt="User Profile" style="height: 35px; width: 35px; border-radius: 50%; object-fit: cover">
+                    </button>
                     {% else %}
-                        <img src="{% static 'img/user-icon.png' %}" alt="Default Profile" style="height: 24px">
+                    <img src= "{% static 'img/user-icon.png' %}" alt="User Profile" style="height: 35px; width: 35px; border-radius: 50%; object-fit: cover">
                     {% endif %}
-                </a>
+                    <div class = "dropdown-content">
+                        <a href="{% url 'user_management:profile' %}">profile</a>
+                        <a href="#" id="open-notifications">notifications</a>
+                        <form method="POST" action="{% url 'logout' %}" class = "logout-form">
+                            {% csrf_token %}
+                            <button type="submit" class="logout-button">Logout</button>
+                        </form>
+                    </div>
+                </div>
             </li>
             {% else %}
             {% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'signup' %}
@@ -58,13 +62,65 @@
             </li>
             {% endif %}
             {% endif %}
-
-           
         </ul>
     </nav>
+    <div id="notification-sidebar" class="sidebar">
+        <span class="close-sidebar">&times;</span>
+        <h4>Notifications</h4>
+        <div id="notifications-list">
+          <!-- notifications will load here -->
+        </div>
+    </div>
     {% block content %}{% endblock %}
     {% block scripts %}{% endblock %}
     <script src="{% static 'js/modals.js' %}"></script>
 </body>
 
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('notification-sidebar');
+      const openBtn = document.getElementById('open-notifications');
+      const closeBtn = document.querySelector('.close-sidebar');
+    
+      openBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        sidebar.classList.add('show');
+
+        // fetch user's notifications
+        fetch('/social/notifications/')
+        .then(res => res.json())
+        .then(data => {
+            const container = document.getElementById('notifications-list');
+            container.innerHTML = '';
+
+            if (data.notifications.length === 0) {
+            container.innerHTML = '<p>No notifications.</p>';
+            } else {
+            data.notifications.forEach(notif => {
+                const div = document.createElement('div');
+                div.className = 'notif-item';
+                div.innerHTML = `
+                <a href = "${notif.link}">${notif.message}</a>
+                <small>${new Date(notif.created_at).toLocaleString()}</small>`;
+                container.appendChild(div);
+            });
+            }
+        })
+        .catch(err => {
+            console.error('Error fetching notifications:', err);
+        });
+        });
+    
+      closeBtn.addEventListener('click', function() {
+        sidebar.classList.remove('show');
+      });
+    
+      window.addEventListener('click', function(e) {
+        if (e.target === sidebar) {
+          sidebar.classList.remove('show');
+        }
+      });
+    });
+</script>
+    
 </html>

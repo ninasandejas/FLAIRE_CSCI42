@@ -5,6 +5,7 @@ from .models import WishlistItem
 from .models import LikedOutfit
 from closet.models import ClothingItem, Comment, Outfit
 from showrooms.models import Showroom
+from social.models import Notification
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -12,7 +13,7 @@ from django.contrib.auth.models import User
 from django.db.models import Count, Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
@@ -257,6 +258,16 @@ class OtherUserProfileView(View):
             profile.followers.remove(request.user)
         else:
             profile.followers.add(request.user)
+            user_to_follow = User.objects.get(username=username)
+            # creating notification for every follow from a user
+            Notification.objects.create(
+                    sender=request.user.profile,
+                    recipient=user_to_follow.profile,
+                    message=f"{request.user.username} followed you.",
+                    link = reverse('user_management:other_user_profile', kwargs={'username': request.user.username}),
+                    is_read=False
+                )
+            
 
         return redirect("user_management:other_user_profile", username=username)
 

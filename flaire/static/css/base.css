@@ -56,7 +56,10 @@ a {
 .logout-form {
     display: inline;
     margin: 0;
-    padding: 0;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+
 }
 
 .logout-button {
@@ -70,8 +73,7 @@ a {
     padding: 0;
 }
 
-.logout-button:hover,
-.navbar li a:hover {
+.navbar li a:hover, .logout-button:hover {
     text-decoration: underline;
 }
 
@@ -83,7 +85,7 @@ a:visited {
     color: #CBA1BE;
 }
 
-.logout-button {
+.profbtn {
     background: none;
     border: none;
     color: inherit;
@@ -93,3 +95,62 @@ a:visited {
     font-family: inherit;
     text-decoration: none;
 }
+  
+.profile-dropdown {
+    position: relative;
+    display: inline-block;
+}
+  
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 12px;
+}
+  
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover, .logout-form:hover {background-color: #f1f1f1}
+
+.profile-dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.profile-dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -500px; /* hidden initially */
+    width: 300px;
+    height: 100%;
+    background-color: #f8f8f8;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+    padding: 1rem;
+    transition: right 0.3s ease;
+    z-index: 1050;
+    overflow-y: auto;
+  }
+  
+  .sidebar.show {
+    right: 0;
+  }
+  
+  .close-sidebar {
+    cursor: pointer;
+    font-size: 24px;
+    float: right;
+    margin-bottom: 1rem;
+  }
+  

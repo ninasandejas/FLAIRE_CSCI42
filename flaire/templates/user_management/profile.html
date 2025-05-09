@@ -125,16 +125,17 @@
       {% if is_own_profile %}
       <p>No showrooms. <a href="{% url 'showrooms:showrooms' %}">Go to showrooms</a></p>
       {% else %}
-      <p>No showrooms.</p>
-      {% endif %}
-      {% else %}
-      <div class="showroom-grid">
-        {% for showroom in showrooms %}
-        <a href="{% url 'showrooms:showroom_detail' showroom.id %}">
-          <img src="{{ showroom.cover_image.url }}" alt="{{ showroom.name }}" class="showroom-image" />
-        </a>
-        {% endfor %}
-      </div>
+        <div class="showroom-grid">
+          {% for showroom in showrooms %}
+            <a href="{% url 'showrooms:showroom_detail' slug=showroom.slug pk=showroom.id %}">
+              <img
+                src="{{ showroom.cover_image.url }}"
+                alt="{{ showroom.name }}"
+                class="showroom-image"
+              />
+            </a>
+          {% endfor %}
+        </div>
       {% endif %}
     </div>
   </section>

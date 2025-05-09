@@ -1,28 +1,23 @@
-import logging
-
 import json
+import logging
 
 from closet.models import ClothingItem, Comment, Outfit
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.db.models import Count, Q
 from django.http import JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import CreateView, FormView, UpdateView
-from django.shortcuts import render, redirect
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
-from django.utils.decorators import method_decorator
-
-from .forms import LoginForm, ProfileSetupForm, SignUpForm, ProfileForm
-from .models import Profile
-from django.contrib.auth.decorators import login_required
 from showrooms.models import Showroom
-from django.db.models import Q, Count
+
+from .forms import LoginForm, ProfileForm, ProfileSetupForm, SignUpForm
+from .models import Profile
 
 logger = logging.getLogger(__name__)
 
@@ -72,7 +67,7 @@ class UserCreateView(CreateView):
     def form_valid(self, form):
         user = form.save()
 
-        Profile.objects.create(user=user, email_address=user.email)
+        Profile.objects.get_or_create(user=user, defaults={"email_address": user.email})
 
         login(self.request, user)
 
@@ -105,14 +100,22 @@ class ProfileSetupView(LoginRequiredMixin, UpdateView):
 class ProfileView(LoginRequiredMixin, View):
     def get(self, request):
         if not request.user.is_authenticated:
-            return redirect('user_management:login')
+            return redirect("user_management:login")
 
         profile, created = Profile.objects.get_or_create(user=request.user)
         clothing_items = ClothingItem.objects.filter(owner=profile) if profile else []
-        showrooms = Showroom.objects.filter(
-            Q(owner=profile) |
-            Q(showroomcollaborator__collaborator=profile, showroomcollaborator__status='ACCEPTED')
-        ).annotate(follower_count=Count('followers')).order_by('-follower_count').distinct()[:3]
+        showrooms = (
+            Showroom.objects.filter(
+                Q(owner=profile)
+                | Q(
+                    showroomcollaborator__collaborator=profile,
+                    showroomcollaborator__status="ACCEPTED",
+                )
+            )
+            .annotate(follower_count=Count("followers"))
+            .order_by("-follower_count")
+            .distinct()[:3]
+        )
 
         form = ProfileForm(instance=profile)
 
@@ -137,10 +140,18 @@ class ProfileView(LoginRequiredMixin, View):
             return redirect("user_management:profile")
 
         clothing_items = ClothingItem.objects.filter(owner=profile) if profile else []
-        showrooms = Showroom.objects.filter(
-            Q(owner=profile) |
-            Q(showroomcollaborator__collaborator=profile, showroomcollaborator__status='ACCEPTED')
-        ).annotate(follower_count=Count('followers')).order_by('-follower_count').distinct()[:3]
+        showrooms = (
+            Showroom.objects.filter(
+                Q(owner=profile)
+                | Q(
+                    showroomcollaborator__collaborator=profile,
+                    showroomcollaborator__status="ACCEPTED",
+                )
+            )
+            .annotate(follower_count=Count("followers"))
+            .order_by("-follower_count")
+            .distinct()[:3]
+        )
 
         return render(
             request,
@@ -197,10 +208,18 @@ class OtherUserProfileView(View):
             return redirect("user_management:profile")
 
         clothing_items = ClothingItem.objects.filter(owner=profile) if profile else []
-        showrooms = Showroom.objects.filter(
-            Q(owner=profile) |
-            Q(showroomcollaborator__collaborator=profile, showroomcollaborator__status='ACCEPTED')
-        ).annotate(follower_count=Count('followers')).order_by('-follower_count').distinct()[:3]
+        showrooms = (
+            Showroom.objects.filter(
+                Q(owner=profile)
+                | Q(
+                    showroomcollaborator__collaborator=profile,
+                    showroomcollaborator__status="ACCEPTED",
+                )
+            )
+            .annotate(follower_count=Count("followers"))
+            .order_by("-follower_count")
+            .distinct()[:3]
+        )
 
         is_following = profile.followers.filter(id=request.user.id).exists()
 
@@ -245,8 +264,16 @@ class UserFollowView(View):
         followers_data = [
             {
                 "username": follower.username,
-                "profile_picture_url": follower.profile.profile_picture.url if follower.profile.profile_picture else "",
-                "follow_status": "Unfollow" if follower.profile.followers.filter(id=request.user.id).exists() else "Follow",
+                "profile_picture_url": (
+                    follower.profile.profile_picture.url
+                    if follower.profile.profile_picture
+                    else ""
+                ),
+                "follow_status": (
+                    "Unfollow"
+                    if follower.profile.followers.filter(id=request.user.id).exists()
+                    else "Follow"
+                ),
             }
             for follower in followers
         ]
@@ -262,8 +289,14 @@ class UserFollowView(View):
             following_data = [
                 {
                     "username": profile.user.username,
-                    "profile_picture_url": profile.profile_picture.url if profile.profile_picture else "",
-                    "follow_status": "Unfollow" if profile.followers.filter(id=request.user.id).exists() else "Follow",
+                    "profile_picture_url": (
+                        profile.profile_picture.url if profile.profile_picture else ""
+                    ),
+                    "follow_status": (
+                        "Unfollow"
+                        if profile.followers.filter(id=request.user.id).exists()
+                        else "Follow"
+                    ),
                 }
                 for profile in following_profiles
             ]
@@ -272,7 +305,10 @@ class UserFollowView(View):
             return JsonResponse(following_data, safe=False)
         except Exception as e:
             logger.error(f"Error in get_following: {e}")
-            return JsonResponse({'error': 'An error occurred while fetching following data.'}, status=500)
+            return JsonResponse(
+                {"error": "An error occurred while fetching following data."},
+                status=500,
+            )
 
     @method_decorator(login_required)
     def toggle_follow(self, request, username):
@@ -290,7 +326,9 @@ class UserFollowView(View):
             return JsonResponse({"new_status": new_status})
         except Exception as e:
             logger.error(f"Error in toggle_follow: {e}")
-            return JsonResponse({"error": "An error occurred while toggling follow status."}, status=500)
+            return JsonResponse(
+                {"error": "An error occurred while toggling follow status."}, status=500
+            )
 
 
 class OutfitGridImagesView(View):

@@ -9,7 +9,10 @@ from user_management.models import Profile
 
 class ClothingItem(models.Model):
     owner = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name="clothing_items", null=True
+        Profile,
+        on_delete=models.CASCADE,
+        related_name="uploaded_clothing_items",
+        null=True,
     )
     name = models.CharField(max_length=100, null=True, blank=True)
     image = models.ImageField(upload_to="clothingitemimages/", blank=False)
@@ -71,6 +74,13 @@ class ClothingItem(models.Model):
                 except tinify.Error as e:
                     print("❌ TinyPNG compression failed:", e)
 
+    saved_by = models.ManyToManyField(
+        Profile,
+        through="ClosetItem",
+        related_name="clothing_items_in_closet",
+        blank=True,
+    )
+
 
 class Outfit(models.Model):
     owner = models.ForeignKey(
@@ -86,6 +96,17 @@ class Outfit(models.Model):
     )
     tags = TaggableManager(blank=True)
     likes = models.ManyToManyField(Profile, related_name="liked_outfits", blank=True)
+
+
+class ClosetItem(models.Model):
+    closet_owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    clothing_item = models.ForeignKey(ClothingItem, on_delete=models.CASCADE)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("closet_owner", "clothing_item")
+        ordering = ["date_added"]
+        verbose_name_plural = "Closet Items"
 
 
 class Comment(models.Model):

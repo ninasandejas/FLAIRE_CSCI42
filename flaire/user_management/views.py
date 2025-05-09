@@ -207,6 +207,8 @@ class OtherUserProfileView(View):
         except User.DoesNotExist:
             return redirect("user_management:profile")
 
+        outfits = Outfit.objects.filter(owner=profile).order_by("-date_created")
+
         clothing_items = ClothingItem.objects.filter(owner=profile) if profile else []
         showrooms = (
             Showroom.objects.filter(
@@ -229,6 +231,7 @@ class OtherUserProfileView(View):
             {
                 "profile": profile,
                 "items": clothing_items,
+                "outfits": outfits,
                 "showrooms": showrooms,
                 "is_following": is_following,
                 "is_own_profile": False,
@@ -332,10 +335,15 @@ class UserFollowView(View):
 
 
 class OutfitGridImagesView(View):
-    def get(self, request):
-        outfits = Outfit.objects.filter(owner=request.user.profile).order_by(
-            "-date_created"
-        )
+    def get(self, request, username=None):
+        if username:
+            user = get_object_or_404(User, username=username)
+            profile = user.profile
+        else:
+            profile = request.user.profile
+
+        outfits = Outfit.objects.filter(owner=profile).order_by("-date_created")
+
         image_data = [{"id": outfit.id, "url": outfit.image.url} for outfit in outfits]
         return JsonResponse({"images": image_data})
 

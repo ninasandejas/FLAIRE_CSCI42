@@ -39,7 +39,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadOutfits();
     function loadOutfits() {
-        fetch(`/outfit-grid-images/`)
+        const loggedInProfile = document.querySelector('meta[name="logged-in-profile"]').content;
+        const profileCurrentlyViewing = document.querySelector('meta[name="profile-currently-viewing"]').content;
+
+        const endpoint = loggedInProfile === profileCurrentlyViewing
+            ? "/outfit-grid-images/"
+            : `/outfit-grid-images/${profileCurrentlyViewing}/`;
+
+        fetch(endpoint)
             .then(res => res.json())
             .then(data => {
                 data.images.forEach(outfit => {

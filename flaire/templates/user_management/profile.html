@@ -253,7 +253,8 @@
 
 <script src="{% static 'js/user_management/profile.js' %}"></script>
 <script src="{% static 'js/user_management/followers_and_following.js' %}"></script>
-<meta name="username" content="{{ request.user.username }}">
+<meta name="logged-in-profile" content="{{ request.user.username }}">
+<meta name="profile-currently-viewing" content="{{ profile.user.username }}">
 
 {% endif %}
 {% endblock %}

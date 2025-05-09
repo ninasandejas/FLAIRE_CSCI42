@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -13,28 +14,13 @@
 </head>
 
 <body class="for-specific">
-    <div class="sidebar">
-        <ul>
-            <!-- <li>
-                <a href="{% url 'home'%}">FLAIRE</a>
-                <button id="toggle-btn"></button>
-            </li> -->
-            <li class="{% if active_tab == 'explore' %}active{% endif %}">
-                <img src="{% static 'img/explore.png' %}" alt="Explore" style="height: 24px">
-                <a href="{% url 'social:explore'%}">Explore</a>
-            </li>
-    
-            <li class="{% if active_tab == 'following' %}active{% endif %}">
-                <img src="{% static 'img/following.png' %}" alt="Following" style="height: 24px">
-                <a href="{% url 'social:following'%}">Following</a>
-            </li>        
-        </ul>
-    </div>
-
-    <div class="main-content">
-        <nav class="navbar">
+    <nav id="header">
+        <ul class="navbar">
             <li class="{% if active_tab == 'home'%}active{% endif %}" style="float:left">
                 <a href="{% url 'home'%}">FLAIRE</a>
+            </li>
+            <li class="{% if active_tab == 'explore' %}active{% endif %}">
+                <a href="{% url 'social:explore' %}">explore</a>
             </li>
             <li class="{% if active_tab == 'wishlist'%}active{% endif %}">
                 <a href="{% url 'user_management:wishlist' %}">wishlist</a>
@@ -46,31 +32,93 @@
                 <a href="{% url 'closet:closet' %}">closet</a>
             </li>
             {% if request.user.is_authenticated %}
-            <li>
-                <form method="POST" action="{% url 'logout' %}" class="logout-form">
-                    {% csrf_token %}
-                    <button type="submit" class="logout-button">Logout</button>
-                </form>
-            </li>
             <li class="{% if active_tab == 'profile'%}active{% endif %}">
-                <a href="{% url 'user_management:profile' %}">
-                    <img src="{% static 'img/user-icon.png' %}" alt="User Profile" style="height: 24px">
-                </a>
+                <div class = "profile-dropdown">
+                    {% if request.user.profile.profile_picture %}
+                    <button class = "profbtn">
+                        <img src="{{ request.user.profile.profile_picture.url }}" alt="User Profile" style="height: 35px; width: 35px; border-radius: 50%; object-fit: cover">
+                    </button>
+                    {% else %}
+                    <img src= "{% static 'img/user-icon.png' %}" alt="User Profile" style="height: 35px; width: 35px; border-radius: 50%; object-fit: cover">
+                    {% endif %}
+                    <div class = "dropdown-content">
+                        <a href="{% url 'user_management:profile' %}">profile</a>
+                        <a href="#" id="open-notifications">notifications</a>
+                        <form method="POST" action="{% url 'logout' %}" class = "logout-form">
+                            {% csrf_token %}
+                            <button type="submit" class="logout-button">Logout</button>
+                        </form>
+                    </div>
+                </div>
             </li>
             {% else %}
             {% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'signup' %}
             <li>
-                <a href="{% url 'user_management:login' %}">login</a>
+                <a href="{% url 'user_management:login' %}">
+                    login
+                </a>
             </li>
             {% endif %}
             {% endif %}
-        </nav>
-
-        <div class="page-content">
-            {% block content %}{% endblock %}
+        </ul>
+    </nav>
+    <div id="notification-sidebar" class="sidebar">
+        <span class="close-sidebar">&times;</span>
+        <h4>Notifications</h4>
+        <div id="notifications-list">
+          <!-- notifications will load here -->
         </div>
     </div>
+    {% block content %}{% endblock %}
     {% block scripts %}{% endblock %}
-</body>    
+    <script src="{% static 'js/modals.js' %}"></script>
+</body>
 
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('notification-sidebar');
+      const openBtn = document.getElementById('open-notifications');
+      const closeBtn = document.querySelector('.close-sidebar');
+    
+      openBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        sidebar.classList.add('show');
+
+        // fetch user's notifications
+        fetch('/social/notifications/')
+        .then(res => res.json())
+        .then(data => {
+            const container = document.getElementById('notifications-list');
+            container.innerHTML = '';
+
+            if (data.notifications.length === 0) {
+            container.innerHTML = '<p>No notifications.</p>';
+            } else {
+            data.notifications.forEach(notif => {
+                const div = document.createElement('div');
+                div.className = 'notif-item';
+                div.innerHTML = `
+                <a href = "${notif.link}">${notif.message}</a>
+                <small>${new Date(notif.created_at).toLocaleString()}</small>`;
+                container.appendChild(div);
+            });
+            }
+        })
+        .catch(err => {
+            console.error('Error fetching notifications:', err);
+        });
+        });
+    
+      closeBtn.addEventListener('click', function() {
+        sidebar.classList.remove('show');
+      });
+    
+      window.addEventListener('click', function(e) {
+        if (e.target === sidebar) {
+          sidebar.classList.remove('show');
+        }
+      });
+    });
+</script>
+    
 </html>

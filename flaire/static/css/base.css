@@ -139,10 +139,14 @@ ul.navbar li {
     text-decoration: none;
 }
 
-.sidebar ul li.active h3 {
-    color: #FDF9F6; /* Light background contrast */
-    background-color: #482738; /* Your main color */
-    padding: 0.5em 1em;
-    border-radius: px;
+.sidebar ul li.active {
+    background-color: #482738; Highlight color
+    color: #FDF9F6; /* Light text for contrast */
     font-weight: bold;
+    padding: 0.1em;
+    border-radius: 0.5em;
+}
+
+.sidebar ul li.active a {
+    color: #FDF9F6; /* Ensures the link color matches the highlight */
 }

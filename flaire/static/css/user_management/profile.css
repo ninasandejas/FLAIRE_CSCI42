@@ -146,9 +146,9 @@
 
 .ootd-widget {
   width: 300px;
-  height: 475px;
+  height: 454px;
   text-align: center;
-  display: block;
+  display: fle;
   padding: 20px;
   border-radius: 10px;
   background-color: #ece4e4;
@@ -160,7 +160,7 @@
   border-radius: 10px;
   margin-top: auto;
   margin-bottom: auto;
-  display: block;
+  display: flex;
   position: relative;
   top: 50%;
   transform: translateY(-50%);
@@ -175,40 +175,51 @@
 }
 
 .wishlist-widget {
-  height: 200px;
+  position: relative; /* Enable positioning of child elements */
+  height: 250px;
+  width: 300px; /* Set a fixed width */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Prevent image overflow */
   border-radius: 10px;
   background-color: #ece4e4;
-  display: flex;
-  padding: 33px 10px 21px;
-  align-items: center;
-  gap: 20px;
-  justify-content: space-between;
-  margin-bottom: 20px;
 }
 
 .wishlist-nav-prev,
 .wishlist-nav-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
   padding: 0;
   outline: none;
   display: flex;
   justify-content: center;
-  align-items: center
+  align-items: center;
+  cursor: pointer;
+}
+
+.wishlist-nav-prev {
+  left: 10px; /* Position at the left side */
+}
+
+.wishlist-nav-next {
+  right: 10px; /* Position at the right side */
 }
 
 .wishlist-nav-prev img,
 .wishlist-nav-next img {
-  aspect-ratio: 0.52;
-  object-fit: contain;
   width: 10px;
   height: auto;
-  cursor: pointer;
+  object-fit: contain;
 }
 
 .wishlist-main-image {
+  max-width: 90%;
+  max-height: 90%;
   object-fit: contain;
-  width: 100%;
 }
 
 /* Showroom Section */
@@ -216,6 +227,7 @@
 .showroom-widget {
   display: flex;
   flex-direction: column;
+  height: 150px;
   border-radius: 10px;
   padding: 33px 10px 21px;
   align-items: center;
@@ -385,9 +397,8 @@
 .user-item {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
   padding: 10px;
-  border-bottom: 1px solid #ddd;
 }
 
 .profile-pic-small {
@@ -396,6 +407,8 @@
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #db8bb5;
+  margin-right: 10px;
+  margin-bottom: -10px;
 }
 
 .follower-username {

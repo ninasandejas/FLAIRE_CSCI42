@@ -40,10 +40,10 @@
 
         {% if is_own_profile %}
         <div class="action-buttons">
-          <a href="liked-outfits/" class="action-btn heart-btn" aria-label="Saved Items">
+          <a href="{% url 'user_management:liked_outfits' %}" class="action-btn heart-btn" aria-label="Saved Items">
             <img src="{% static 'img/heart.png' %}" alt="Heart" class="heart-img">
           </a>
-          <a href="#" class="action-btn dressing-room-btn" aria-label="Dressing Room">
+          <a href="{% url 'closet:closet' %}" class="action-btn dressing-room-btn" aria-label="Dressing Room">
             <img src="{% static 'img/dressing-room.png' %}" alt="Dressing Room" class="dressing-room-img">
           </a>
         </div>
@@ -53,10 +53,8 @@
 
       <h2 class="profile-username">@{{ profile.user.username }}</h2>
       <div class="profile-stats" data-username="{{ profile.user.username }}">
-        <p class="stat-item" data-type="followers" data-count="{{ profile.followers.count }}">{{ profile.followers.count
-          }} followers</p>
-        <p class="stat-item" data-type="following" data-count="{{ profile.user.following.count }}">{{
-          profile.user.following.count }} following</p>
+        <p class="stat-item" data-type="followers" data-count="{{ profile.followers.count }}">{{ profile.followers.count }} followers</p>
+        <p class="stat-item" data-type="following" data-count="{{ profile.user.following.count }}">{{ profile.user.following.count }} following</p>
       </div>
 
       <blockquote class="profile-bio">{{ profile.bio }}</blockquote>
@@ -142,7 +140,7 @@
         {% else %}
           <div class="showroom-grid">
             {% for showroom in showrooms %}
-              <a href="{% url 'showrooms:showroom_detail' showroom.id %}">
+              <a href="/showrooms/{{ showroom.slug }}-{{ showroom.id }}/">
                 <img
                   src="{{ showroom.cover_image.url }}"
                   alt="{{ showroom.name }}"
@@ -273,6 +271,7 @@
 <script src="{% static 'js/user_management/followers_and_following.js' %}"></script>
 <meta name="logged-in-profile" content="{{ request.user.username }}">
 <meta name="profile-currently-viewing" content="{{ profile.user.username }}">
+<meta name="username" content="{{ request.user.username }}">
 
 {% endif %}
 {% endblock %}

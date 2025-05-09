@@ -107,7 +107,8 @@ class ProfileView(LoginRequiredMixin, View):
             return redirect("user_management:login")
 
         profile, created = Profile.objects.get_or_create(user=request.user)
-        clothing_items = ClothingItem.objects.filter(owner=profile) if profile else []
+        wishlist_items = WishlistItem.objects.filter(user=request.user).select_related("item")
+        clothing_items = [w.item for w in wishlist_items] if profile else []
         showrooms = (
             Showroom.objects.filter(
                 Q(owner=profile)
@@ -143,7 +144,8 @@ class ProfileView(LoginRequiredMixin, View):
             form.save()
             return redirect("user_management:profile")
 
-        clothing_items = ClothingItem.objects.filter(owner=profile) if profile else []
+        wishlist_items = WishlistItem.objects.filter(user=request.user).select_related("item")
+        clothing_items = [w.item for w in wishlist_items] if profile else []
         showrooms = (
             Showroom.objects.filter(
                 Q(owner=profile)

@@ -10,9 +10,17 @@
   font-family: 'Playfair Display', serif;
 }
 
+.profile-grid, .widgets-grid {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  gap: 20px;
+}
+
 /* User Info Column */
 
 #user-info-column {
+  display: flex;
   flex: 1;
   max-width: 25%;
   height: 500px;
@@ -90,11 +98,6 @@
   max-width: 1097px;
 }
 
-.profile-grid {
-  display: flex;
-  gap: 20px;
-}
-
 .profile-username {
   color: #482738;
   font-size: 32px;
@@ -141,14 +144,9 @@
 
 /* OOTD Section */
 
-.ootd-section {
-  flex: 1;
-  max-width: 30%;
-}
-
 .ootd-widget {
   width: 300px;
-  height: 530px;
+  height: 475px;
   text-align: center;
   display: block;
   padding: 20px;
@@ -209,7 +207,6 @@
 }
 
 .wishlist-main-image {
-  aspect-ratio: 1.5;
   object-fit: contain;
   width: 100%;
 }
@@ -219,7 +216,6 @@
 .showroom-widget {
   display: flex;
   flex-direction: column;
-  height: 200px;
   border-radius: 10px;
   padding: 33px 10px 21px;
   align-items: center;

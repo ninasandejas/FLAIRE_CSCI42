@@ -62,80 +62,99 @@
       <blockquote class="profile-bio">{{ profile.bio }}</blockquote>
     </div>
   </section>
-
-  {% if profile.ootd %}
-  <section class="ootd-section">
-    <h3 class="widget-title">ootd</h3>
-    <div class="ootd-widget">
-      {% if is_own_profile %}
-      {% if profile.ootd %}
-      <a href="#" id="manage-ootd-btn">
-        <img src="{{ profile.ootd.image.url }}" alt="OOTD Image" class="ootd-image">
-      </a>
-      {% else %}
-      <p>No OOTD selected.</p>
-      <button id="add-ootd-btn" class="select-ootd-btn">Add OOTD</button>
-      {% endif %}
-      {% else %}
-      {% if profile.ootd %}
-      <img src="{{ profile.ootd.image.url }}" alt="OOTD Image" class="ootd-image">
-      {% else %}
-      <p>No OOTD selected.</p>
-      {% endif %}
-      {% endif %}
-    </div>
-  </section>
-  {% else %}
-  <section class="ootd-section">
-    <h3 class="widget-title">ootd</h3>
-    <div class="ootd-widget">
-      {% if is_own_profile %}
-      <p>No OOTD selected.</p>
-      <button id="add-ootd-btn" class="select-ootd-btn">Add OOTD</button>
-      {% else %}
-      <p>No OOTD selected.</p>
-      {% endif %}
-    </div>
-  </section>
-  {% endif %}
-
-  <section class="wishlist-showroom-section">
-    <h3 class="widget-title">wishlist</h3>
-    <div class="wishlist-widget">
-      {% if not items %}
-      {% if is_own_profile %}
-      <p>No items in wishlist. <a href="{% url 'user_management:wishlist' %}">Go to wishlist</a></p>
-      {% else %}
-      <p>No items in wishlist.</p>
-      {% endif %}
-      {% else %}
-      <button class="wishlist-nav-prev" aria-label="Previous wishlist item">
-        <img src="{% static 'img/nav-left.png' %}" alt="previous" />
-      </button>
-      <img id="wishlist-main-image" src="{{ items.0.image.url }}" alt="Wishlist Item" class="wishlist-main-image" />
-      <button class="wishlist-nav-next" aria-label="Next wishlist item">
-        <img src="{% static 'img/nav-right.png' %}" alt="next" />
-      </button>
-      {% endif %}
-    </div>
-
-    <h3 class="widget-title">top showrooms</h3>
-    <div class="showroom-widget">
-      {% if not showrooms %}
-      {% if is_own_profile %}
-      <p>No showrooms. <a href="{% url 'showrooms:showrooms' %}">Go to showrooms</a></p>
-      {% else %}
-      <div class="showroom-grid">
-        {% for showroom in showrooms %}
-        <a href="{% url 'showrooms:showroom_detail' slug=showroom.slug pk=showroom.id %}">
-          <img src="{{ showroom.cover_image.url }}" alt="{{ showroom.name }}" class="showroom-image" />
-        </a>
-        {% endfor %}
+  
+  <section class="widgets-grid">
+    {% if profile.ootd %}
+    <section class="ootd-section">
+      <h3 class="widget-title">ootd</h3>
+      <div class="ootd-widget">
+        {% if is_own_profile %}
+          {% if profile.ootd %}
+            <a href="#" id="manage-ootd-btn">
+              <img src="{{ profile.ootd.image.url }}" alt="OOTD Image" class="ootd-image">
+            </a>
+          {% else %}
+            <p>No OOTD selected.</p>
+            <button id="add-ootd-btn" class="select-ootd-btn">Add OOTD</button>
+          {% endif %}
+        {% else %}
+          {% if profile.ootd %}
+            <img src="{{ profile.ootd.image.url }}" alt="OOTD Image" class="ootd-image">
+          {% else %}
+            <p>No OOTD selected.</p>
+          {% endif %}
+        {% endif %}
       </div>
-      {% endif %}
-      {% endif %}
-    </div>
-  </section>
+    </section>
+    {% else %}
+    <section class="ootd-section">
+      <h3 class="widget-title">ootd</h3>
+      <div class="ootd-widget">
+        {% if is_own_profile %}
+          <p>No OOTD selected.</p>
+          <button id="add-ootd-btn" class="select-ootd-btn">Add OOTD</button>
+        {% else %}
+          <p>No OOTD selected.</p>
+        {% endif %}
+      </div>
+    </section>
+    {% endif %}
+
+    <section class="wishlist-showroom-section">
+      <h3 class="widget-title">wishlist</h3>
+      <div class="wishlist-widget">
+        {% if not items %}
+          {% if is_own_profile %}
+            <p>No items in wishlist. <a href="{% url 'user_management:wishlist' %}">Go to wishlist</a></p>
+          {% else %}
+            <p>No items in wishlist.</p>
+          {% endif %}
+        {% else %}
+          <button class="wishlist-nav-prev" aria-label="Previous wishlist item">
+            <img
+              src="{% static 'img/nav-left.png' %}"
+              alt="previous"
+            />
+          </button>
+          <img
+            id="wishlist-main-image"
+            src="{{ items.0.image.url }}"
+            alt="Wishlist Item"
+            class="wishlist-main-image"
+          />
+          <button class="wishlist-nav-next" aria-label="Next wishlist item">
+            <img
+              src="{% static 'img/nav-right.png' %}"
+              alt="next"
+            />
+          </button>
+        {% endif %}
+      </div>
+
+      <h3 class="widget-title">top showrooms</h3>
+      <div class="showroom-widget">
+        {% if not showrooms %}
+          {% if is_own_profile %}
+            <p>No showrooms. <a href="{% url 'showrooms:showrooms' %}">Go to showrooms</a></p>
+          {% else %}
+            <p>No showrooms.</p>
+          {% endif %}
+        {% else %}
+          <div class="showroom-grid">
+            {% for showroom in showrooms %}
+              <a href="{% url 'showrooms:showroom_detail' showroom.id %}">
+                <img
+                  src="{{ showroom.cover_image.url }}"
+                  alt="{{ showroom.name }}"
+                  class="showroom-image"
+                />
+              </a>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </section>
+</section>
 </div>
 
 <div id="edit-profile-modal" class="profile-modal">

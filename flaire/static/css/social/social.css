@@ -1,4 +1,4 @@
-/* ======= Tab Bar ======= */
+/* Tab Bar */
 .tab-bar {
   display: flex;
   justify-content: center;
@@ -34,7 +34,7 @@
   width: 250px;
 }
 
-/* ======= Outfits Grid ======= */
+/* Outfits Display */
 #outfits-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -62,7 +62,7 @@
   display: none;
 }
 
-/* ======= Showrooms Styles ======= */
+/* Showrooms Display */
 #showrooms-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -85,8 +85,7 @@
   border-radius: 8px;
 }
 
-
-/* ======= Outfit Modal ======= */
+/* Outfit Modal */
 .outfit-modal {
   position: fixed;
   top: 50%;

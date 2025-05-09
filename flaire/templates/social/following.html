@@ -6,21 +6,34 @@
 {% endblock %}
 
 {% block content %}
-
 {% if request.user.is_authenticated %}
+<div class="social-container">
+  <div class="side-navbar">
+    <ul>
+      <li class="{% if active_tab == 'explore' %}active{% endif %}">
+          <a href="{% url 'social:explore'%}">Explore</a>
+      </li>
+      <li class="{% if active_tab == 'following' %}active{% endif %}">
+          <a href="{% url 'social:following'%}">Following</a>
+      </li>        
+    </ul>
+  </div>
 
-<div class="search-container">
-  <input type="text" id="search-bar" placeholder="Search by tags..." />
-</div>
+  <div class="social-main-content">
+    <div class="search-container">
+      <input type="text" id="search-bar" placeholder="Search by tags..." />
+    </div>
 
-<div class="tab-bar">
-  <button id="following-outfits-tab" class="tab active"><h2>Outfits</h2> </button>
-  <button id="following-showrooms-tab" class="tab"><h2>Showrooms</h2> </button>
-</div>
+    <div class="tab-bar">
+      <button id="following-outfits-tab" class="tab active"><h2>Outfits</h2></button>
+      <button id="following-showrooms-tab" class="tab"><h2>Showrooms</h2></button>
+    </div>
 
-<div class="grid-section">
-  <div id="outfits-grid" class="image-grid"></div>
-  <div id="showrooms-grid" class="image-grid hidden"></div>
+    <div class="grid-section">
+      <div id="outfits-grid" class="image-grid"></div>
+      <div id="showrooms-grid" class="image-grid hidden"></div>
+    </div>
+  </div>
 </div>
 
 <div id="modal-overlay"></div>
@@ -59,7 +72,6 @@
     </div>
   </div>
 </div>
-
 {% endif %}
 {% endblock %}
 

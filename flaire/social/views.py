@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from user_management.models import Profile
 from closet.models import ClothingItem, Comment, Outfit
-from showrooms.models import Showroom
+from showrooms.models import Showroom, ShowroomFollower, ShowroomCollaborator
 from .models import Follow
 import json
 
@@ -58,9 +58,12 @@ class FollowingOutfitsGridView(LoginRequiredMixin, View):
 
 class FollowingShowroomsGridView(LoginRequiredMixin, View):
     def get(self, request):
-        following_ids = Follow.objects.filter(follower=request.user.profile).values_list('following_id', flat=True)
-        following_profiles = Profile.objects.filter(id__in=following_ids)
-        showrooms = Showroom.objects.filter(owner__in=following_profiles).order_by("-date_created")
+        following_showrooms = ShowroomFollower.objects.filter(profile=request.user.profile)
+        following_showroom_ids = following_showrooms.values_list('showroom_id', flat=True)
+        collaborator_showrooms = ShowroomCollaborator.objects.filter(collaborator=request.user.profile)
+        collaborator_showroom_ids = collaborator_showrooms.values_list('showroom_id', flat=True)
+        showroom_ids = following_showroom_ids.union(collaborator_showroom_ids)
+        showrooms = Showroom.objects.filter(id__in=showroom_ids).order_by("-date_updated")
         image_data = [
             {
                 "id": showroom.id,

@@ -21,6 +21,19 @@
   color: #482738;
 }
 
+.search-container {
+  padding: 20px 40px 0;
+  text-align: left;
+}
+
+#search-bar {
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1px solid #482738;
+  border-radius: 8px;
+  width: 250px;
+}
+
 /* ======= Outfits Grid ======= */
 #outfits-grid {
   display: grid;
@@ -40,7 +53,7 @@
 
 .outfit-image {
   max-width: 100%;
-  height: auto;
+  height: 350px;
   object-fit: cover;
   border-radius: 8px;
 }
@@ -67,7 +80,7 @@
 
 .showroom-image {
   width: 100%;
-  height: auto;
+  height: 350px;
   object-fit: cover;
   border-radius: 8px;
 }

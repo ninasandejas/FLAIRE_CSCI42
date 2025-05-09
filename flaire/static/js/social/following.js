@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const showroomTab = document.getElementById("following-showrooms-tab");
   const outfitsGrid = document.getElementById("outfits-grid");
   const showroomsGrid = document.getElementById("showrooms-grid");
+  const searchInput = document.getElementById("search-bar"); 
 
   const activateTab = (tabToActivate) => {
     [outfitTab, showroomTab].forEach(tab => tab.classList.remove("active"));
@@ -29,11 +30,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadOutfits();
 
-  function loadOutfits() {
-    fetch(`/social/following-outfits/`)
+  searchInput.addEventListener("input", () => {
+    const searchQuery = searchInput.value.trim().toLowerCase(); 
+    if (outfitTab.classList.contains("active")) {
+      loadOutfits(searchQuery); 
+    } else if (showroomTab.classList.contains("active")) {
+      loadShowrooms(searchQuery);
+    }
+  });
+
+  function loadOutfits(searchQuery = "") {
+    let url = "/social/following-outfits/";
+    if (searchQuery) {
+      url += `?search=${encodeURIComponent(searchQuery)}`;
+    }
+  
+    fetch(url)
       .then(res => res.json())
       .then(data => {
-        outfitsGrid.innerHTML = "";
+        outfitsGrid.innerHTML = ""; 
         data.images.forEach(outfit => {
           const img = document.createElement("img");
           img.src = outfit.url;
@@ -56,21 +71,26 @@ document.addEventListener("DOMContentLoaded", () => {
           });
         });
       })
-      .catch(err => console.error("Error loading following outfits:", err));
+      .catch(err => console.error("Error loading outfits:", err));
   }
 
-  function loadShowrooms() {
-    fetch(`/social/following-showrooms/`)
+  function loadShowrooms(searchQuery = "") {
+    let url = "/social/following-showrooms/";
+    if (searchQuery) {
+      url += `?search=${encodeURIComponent(searchQuery)}`;
+    }
+
+    fetch(url)
       .then(res => res.json())
       .then(data => {
-        showroomsGrid.innerHTML = "";
-        data.images.forEach(showroom => {
+          showroomsGrid.innerHTML = "";  
+          data.images.forEach(showroom => {
           const img = document.createElement("img");
           img.src = showroom.cover_image;  
           img.alt = showroom.title;
           img.classList.add("showroom-image");
           img.dataset.showroomId = showroom.id;
-
+  
           const wrapper = document.createElement("div");
           wrapper.classList.add("post-wrapper");
           wrapper.appendChild(img);

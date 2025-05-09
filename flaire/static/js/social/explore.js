@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const showroomTab = document.getElementById("explore-showrooms-tab");
   const outfitsGrid = document.getElementById("outfits-grid");
   const showroomsGrid = document.getElementById("showrooms-grid");
+  const searchInput = document.getElementById("search-bar"); 
+
 
   const activateTab = (tabToActivate) => {
     [outfitTab, showroomTab].forEach(tab => tab.classList.remove("active"));
@@ -29,8 +31,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadOutfits();
 
-  function loadOutfits() {
-    fetch(`/social/explore-outfits/`)
+  searchInput.addEventListener("input", () => {
+    const searchQuery = searchInput.value.trim().toLowerCase(); 
+    if (outfitTab.classList.contains("active")) {
+      loadOutfits(searchQuery); 
+    } else if (showroomTab.classList.contains("active")) {
+      loadShowrooms(searchQuery);
+    }
+  });
+
+
+  function loadOutfits(searchQuery = "") {
+    let url = "/social/explore-outfits/";
+    if (searchQuery) {
+      url += `?search=${encodeURIComponent(searchQuery)}`;
+    }
+  
+    fetch(url)
       .then(res => res.json())
       .then(data => {
         outfitsGrid.innerHTML = ""; 
@@ -59,8 +76,14 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch(err => console.error("Error loading outfits:", err));
   }
 
-  function loadShowrooms() {
-    fetch('/social/explore-showrooms/')
+  
+  function loadShowrooms(searchQuery = "") {
+    let url = "/social/explore-showrooms/";
+    if (searchQuery) {
+      url += `?search=${encodeURIComponent(searchQuery)}`;
+    }
+
+    fetch(url)
       .then(res => res.json())
       .then(data => {
           showroomsGrid.innerHTML = "";  

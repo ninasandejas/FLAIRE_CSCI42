@@ -9,6 +9,10 @@
 
 {% if request.user.is_authenticated %}
 
+<div class="search-container">
+  <input type="text" id="search-bar" placeholder="Search by tags..." />
+</div>
+
 <div class="tab-bar">
   <button id="following-outfits-tab" class="tab active"><h2>Outfits</h2> </button>
   <button id="following-showrooms-tab" class="tab"><h2>Showrooms</h2> </button>
@@ -50,8 +54,6 @@
           {% endif %}
           <div id="modal-comments-list"></div>
         </div>
-
-        <!-- listed items section -->
         <div id="modal-listed-items" class="hidden"></div>
       </div>
     </div>

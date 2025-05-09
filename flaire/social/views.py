@@ -38,6 +38,7 @@ class ExploreShowroomsGridView(LoginRequiredMixin, View):
         image_data = [
             {
                 "id": showroom.id,
+                "slug": showroom.slug,
                 "title": showroom.title,
                 "cover_image": showroom.cover_image.url if showroom.cover_image else "",
             }
@@ -67,6 +68,7 @@ class FollowingShowroomsGridView(LoginRequiredMixin, View):
         image_data = [
             {
                 "id": showroom.id,
+                "slug": showroom.slug,
                 "title": showroom.title,
                 "cover_image": showroom.cover_image.url if showroom.cover_image else "",
             }

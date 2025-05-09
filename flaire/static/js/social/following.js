@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
           showroomsGrid.appendChild(wrapper);
   
           img.addEventListener("click", () => {
-            window.location.href = `/showrooms/${showroom.id}`;
+            window.location.href = `/showrooms/${showroom.slug}-${showroom.id}/`;
           });
         });
       })

@@ -7,7 +7,19 @@ from .views import unlike_outfit
 
 
 
-from .views import *
+from .views import (
+    LikedOutfitsView,
+    OtherUserProfileView,
+    OutfitDetailView,
+    OutfitGridImagesView,
+    ProfileSetupView,
+    ProfileView,
+    SubmitCommentView,
+    UserCreateView,
+    UserFollowView,
+    UserLoginView,
+    WishlistView,
+)
 
 app_name = "user_management"
 
@@ -19,7 +31,32 @@ urlpatterns = [
     path("liked-outfits/", LikedOutfitsView.as_view(), name="liked_outfits"),
     path("wishlist/", WishlistView.as_view(), name="wishlist"),
     path(
+        "profile/<str:username>/",
+        OtherUserProfileView.as_view(),
+        name="other_user_profile",
+    ),
+    path(
+        "api/followers/<str:username>/",
+        UserFollowView().get_followers,
+        name="get_followers",
+    ),
+    path(
+        "api/following/<str:username>/",
+        UserFollowView().get_following,
+        name="get_following",
+    ),
+    path(
+        "api/follow/<str:username>/",
+        UserFollowView().toggle_follow,
+        name="toggle_follow",
+    ),
+    path(
         "outfit-grid-images/",
+        OutfitGridImagesView.as_view(),
+        name="get_outfit_images",
+    ),
+    path(
+        "outfit-grid-images/<str:username>/",
         OutfitGridImagesView.as_view(),
         name="get_outfit_images",
     ),

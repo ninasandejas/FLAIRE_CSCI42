@@ -2,6 +2,7 @@
 
 import django.db.models.deletion
 import taggit.managers
+import taggit.managers
 from django.db import migrations, models
 
 
@@ -10,6 +11,9 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        ('closet', '0002_initial'),
+        ('taggit', '0006_rename_taggeditem_content_type_object_id_taggit_tagg_content_8fc721_idx'),
+        ('user_management', '0001_initial'),
         ('closet', '0002_initial'),
         ('taggit', '0006_rename_taggeditem_content_type_object_id_taggit_tagg_content_8fc721_idx'),
         ('user_management', '0001_initial'),

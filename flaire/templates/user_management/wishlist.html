@@ -13,9 +13,18 @@
 
 <div class="wishlist-container">
     {% for item in items %}
-      <div class="wishlist-item">
-        <img src="{{ item.image.url }}" alt="Clothing Item">
+    <div class="wishlist-item" data-item-id="{{ item.id }}">
+      <img src="{{ item.image.url }}" alt="{{ item.name }}">
+    
+      <div class="item-overlay">
+        <p class="item-name">{{ item.name }}</p>
+        <p class="item-brand">{{ item.brand }}</p>
       </div>
+    
+      <button class="remove-btn" data-item-id="{{ item.id }}">×</button>
+    </div>
+    
+    
     {% empty %}
       <p>No items in your wishlist yet.</p>
     {% endfor %}
@@ -38,5 +47,82 @@
       }, i * 100);
     }
   });
+
+  document.querySelectorAll('.wishlist-item').forEach(item => {
+  item.addEventListener('mouseenter', () => {
+    for (let i = 0; i < 8; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('glitter');
+      sparkle.style.left = `${Math.random() * 100}%`;
+      sparkle.style.top = `${Math.random() * 100}%`;
+      sparkle.style.animationDelay = `${Math.random() * 0.5}s`;
+      item.appendChild(sparkle);
+      sparkle.addEventListener('animationend', () => sparkle.remove());
+    }
+  });
+});
+
+document.querySelectorAll('.remove-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation(); // prevents modal from opening
+    const itemId = btn.closest('.wishlist-item').dataset.itemId;
+
+    fetch(`/toggle-wishlist/${itemId}/`, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": getCSRFToken(),
+      },
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "removed") {
+        btn.closest('.wishlist-item').remove();
+      }
+    })
+    .catch(() => {
+      alert("Couldn't remove item from wishlist.");
+    });
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const removeButtons = document.querySelectorAll(".remove-btn");
+
+  removeButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      const itemId = button.dataset.itemId;
+
+      fetch(`/remove-from-wishlist/${itemId}/`, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": getCSRFToken(), 
+        },
+      })
+      .then(response => {
+        if (response.ok) {
+          // remove from UI
+          button.closest(".wishlist-item").remove();
+        } else {
+          alert("Removed item from wishlist.");
+        }
+      })
+      .catch(err => {
+        console.error("Error removing from wishlist:", err);
+        alert("Error while removing.");
+      });
+    });
+  });
+});
+
+function getCSRFToken() {
+    return (
+      document.querySelector('[name=csrfmiddlewaretoken]')?.value ||
+      document.cookie
+        .split("; ")
+        .find(row => row.startsWith("csrftoken"))
+        ?.split("=")[1]
+    );
+  }
+
 </script>
 {% endblock %}

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import ClothingItem, Comment, Outfit
+from .models import ClosetItem, ClothingItem, Comment, Outfit
 
 
 class ClothingItemAdmin(admin.ModelAdmin):
@@ -22,6 +22,14 @@ class ClothingItemAdmin(admin.ModelAdmin):
     ordering = ("-date_created",)
 
 
+class ClosetItemAdmin(admin.ModelAdmin):
+    list_display = ("id", "closet_owner", "clothing_item", "date_added")
+    list_filter = ("closet_owner",)
+    search_fields = ("closet_owner__user__username", "clothing_item__name")
+    readonly_fields = ("date_added",)
+    ordering = ("-date_added",)
+
+
 class OutfitAdmin(admin.ModelAdmin):
     list_display = ("id", "owner", "caption", "date_created", "date_updated")
     list_filter = ("date_created",)
@@ -41,5 +49,6 @@ class CommentAdmin(admin.ModelAdmin):
 
 
 admin.site.register(ClothingItem, ClothingItemAdmin)
+admin.site.register(ClosetItem, ClosetItemAdmin)
 admin.site.register(Outfit, OutfitAdmin)
 admin.site.register(Comment, CommentAdmin)

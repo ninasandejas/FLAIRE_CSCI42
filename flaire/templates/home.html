@@ -1,8 +1,35 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Home - Flaire{% endblock %}
 
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/user_management/home.css' %}">
+{% endblock %}
+
 {% block content %}
-<h1>Welcome to Flaire!</h1>
-<p>Try visiting your <a href="{% url 'closet:closet' %}">closet</a>.</p>
+<div class="home-layout">
+  <div class="hero-centered">
+    <h1><span class="sparkle"></span> Welcome to Flaire <span class="sparkle"></span></h1>
+    <p class="tagline">Curate your style. Flaunt your flair.</p>
+    <a href="{% url 'closet:closet' %}" class="cta-button">Go to Closet</a>
+  </div>
+
+  <div class="pyramid-grid">
+    <div class="pyramid-item grid12"><img src="{% static 'img/grid12.jpg' %}" alt="Style 0"></div>
+    <div class="pyramid-item grid2"><img src="{% static 'img/grid2.jpg' %}" alt="Style 2"></div>
+    <div class="pyramid-item grid3"><img src="{% static 'img/grid6.jpg' %}" alt="Style 3"></div>
+    <div class="pyramid-item grid4"><img src="{% static 'img/grid7.jpg' %}" alt="Style 4"></div>
+    <div class="pyramid-item grid5"><img src="{% static 'img/grid8.jpg' %}" alt="Style 5"></div>
+    
+  </div>
+</div>
+
+<div id="glitter-trail-container"></div>
+
+  
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/user_management/home.js' %}"></script>
 {% endblock %}

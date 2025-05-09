@@ -158,7 +158,7 @@
   width: 100%;
   height: auto;
   border-radius: 10px;
-margin-top: auto;
+  margin-top: auto;
   margin-bottom: auto;
   display: block;
   position: relative;
@@ -188,11 +188,11 @@ margin-top: auto;
 
 .wishlist-nav-prev,
 .wishlist-nav-next {
-  background: none;        
-  border: none;  
-  padding: 0;  
-  outline: none; 
-  display: flex;  
+  background: none;
+  border: none;
+  padding: 0;
+  outline: none;
+  display: flex;
   justify-content: center;
   align-items: center
 }
@@ -200,9 +200,9 @@ margin-top: auto;
 .wishlist-nav-prev img,
 .wishlist-nav-next img {
   aspect-ratio: 0.52;
-  object-fit: contain; 
+  object-fit: contain;
   width: 10px;
-  height: auto; 
+  height: auto;
   cursor: pointer;
 }
 
@@ -228,7 +228,7 @@ margin-top: auto;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-   gap: 5px;
+  gap: 5px;
   width: 100%;
 }
 
@@ -406,19 +406,19 @@ margin-top: auto;
   color: #482738;
   flex-grow: 1;
   text-align: left;
-  margin-left: 10px; 
+  margin-left: 10px;
 }
 
 .follow-unfollow-btn {
   padding: 5px 10px;
-  background-color: #db8bb5; 
+  background-color: #db8bb5;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 12px;
   font-family: 'Playfair Display', serif;
-  margin-left: auto; 
+  margin-left: auto;
   margin-right: 10px;
   text-align: center;
 }
@@ -478,10 +478,10 @@ margin-top: auto;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 2fr 5fr 5fr;
   grid-template-areas:
-      "outfitimg usernamearea"
-      "outfitimg captiontagsarea"
-      "outfitimg countandlistarea"
-      "outfitimg countandlistarea"
+    "outfitimg usernamearea"
+    "outfitimg captiontagsarea"
+    "outfitimg countandlistarea"
+    "outfitimg countandlistarea"
   ;
   margin: 0 auto;
   overflow-y: auto;
@@ -671,5 +671,14 @@ margin-top: auto;
 }
 
 .listed-item:hover .hover-buttons {
-  display: flex;
+    display: flex;
+}
+
+.heart-icon {
+    font-size: 24px;
+    color: #4b2e39;
+    transition: background 0.3s, transform 0.2s ease;
+    border-radius: 50%;
+    padding: 10px;
+    display: inline-block;
 }

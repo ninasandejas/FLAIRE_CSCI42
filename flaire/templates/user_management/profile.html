@@ -16,48 +16,50 @@
   <section class="profile-grid">
 
     <div class="profile-content">
-      
+
       <div class="profile-pic-container">
-      
+
         {% if profile.profile_picture %}
-          <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="profile-pic-large">
+        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="profile-pic-large">
         {% else %}
-          <img src="{% static 'img/user-icon.png' %}" alt="Default Profile Picture" class="profile-pic-large">
+        <img src="{% static 'img/user-icon.png' %}" alt="Default Profile Picture" class="profile-pic-large">
         {% endif %}
-      
+
         {% if is_own_profile %}
-          <a href="#" class="edit-icon" aria-label="Edit Profile">
-            <img src="{% static 'img/edit.png' %}" alt="Edit" class="edit-img">
+        <a href="#" class="edit-icon" aria-label="Edit Profile">
+          <img src="{% static 'img/edit.png' %}" alt="Edit" class="edit-img">
+        </a>
+        {% else %}
+        <form method="POST" action="{% url 'user_management:other_user_profile' profile.user.username %}">
+          {% csrf_token %}
+          <button type="submit" class="follow-btn">
+            {% if is_following %}Unfollow{% else %}Follow{% endif %}
+          </button>
+        </form>
+        {% endif %}
+
+        {% if is_own_profile %}
+        <div class="action-buttons">
+          <a href="liked-outfits/" class="action-btn heart-btn" aria-label="Saved Items">
+            <img src="{% static 'img/heart.png' %}" alt="Heart" class="heart-img">
           </a>
-        {% else %}
-          <form method="POST" action="{% url 'user_management:other_user_profile' profile.user.username %}">
-            {% csrf_token %}
-            <button type="submit" class="follow-btn">
-              {% if is_following %}Unfollow{% else %}Follow{% endif %}
-            </button>
-          </form>
-        {% endif %}
-
-        {% if is_own_profile %}
-          <div class="action-buttons">
-            <a href="liked-outfits/" class="action-btn heart-btn" aria-label="Saved Items">
-              <img src="{% static 'img/heart.png' %}" alt="Heart" class="heart-img">
-            </a>
-            <a href="#" class="action-btn dressing-room-btn" aria-label="Dressing Room">
-              <img src="{% static 'img/dressing-room.png' %}" alt="Dressing Room" class="dressing-room-img">
-            </a>
-          </div>
+          <a href="#" class="action-btn dressing-room-btn" aria-label="Dressing Room">
+            <img src="{% static 'img/dressing-room.png' %}" alt="Dressing Room" class="dressing-room-img">
+          </a>
+        </div>
         {% endif %}
 
       </div>
-    
-    <h2 class="profile-username">@{{ profile.user.username }}</h2>
+
+      <h2 class="profile-username">@{{ profile.user.username }}</h2>
       <div class="profile-stats" data-username="{{ profile.user.username }}">
-        <p class="stat-item" data-type="followers" data-count="{{ profile.followers.count }}">{{ profile.followers.count }} followers</p>
-        <p class="stat-item" data-type="following" data-count="{{ profile.user.following.count }}">{{ profile.user.following.count }} following</p>
+        <p class="stat-item" data-type="followers" data-count="{{ profile.followers.count }}">{{ profile.followers.count
+          }} followers</p>
+        <p class="stat-item" data-type="following" data-count="{{ profile.user.following.count }}">{{
+          profile.user.following.count }} following</p>
       </div>
-    
-    <blockquote class="profile-bio">{{ profile.bio }}</blockquote>
+
+      <blockquote class="profile-bio">{{ profile.bio }}</blockquote>
     </div>
   </section>
   
@@ -198,15 +200,15 @@
     <h2 id="modal-title">Followers</h2>
     <ul id="modal-user-list">
       {% if modal_user_list|length == 0 %}
-        <p>no users</p>
+      <p>no users</p>
       {% else %}
-        {% for user in modal_user_list %}
-        <li class="user-item">
-          <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}'s profile picture" class="profile-pic-small">
-          <span class="follower-username">{{ user.username }}</span>
-          <button class="follow-unfollow-btn">{{ user.follow_status }}</button>
-        </li>
-        {% endfor %}
+      {% for user in modal_user_list %}
+      <li class="user-item">
+        <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}'s profile picture" class="profile-pic-small">
+        <span class="follower-username">{{ user.username }}</span>
+        <button class="follow-unfollow-btn">{{ user.follow_status }}</button>
+      </li>
+      {% endfor %}
       {% endif %}
     </ul>
   </div>
@@ -227,9 +229,10 @@
       <p id="modal-owner" class="username">@username</p>
       <p id="modal-caption" class="caption"></p>
       <p id="modal-tags" class="tags">#tag1 #tag2 #tag3</p>
-      <div id="like-button">
+      <div id="like-button" class="heart-btn" data-outfit-id="{{ outfit.id }}">
         <img src="{% static 'img/unliked.png' %}" alt="Heart Icon">
       </div>
+
 
       <div id="mini-navbar">
         <button class="mini-tab active" data-tab="likes">likes</button>
@@ -268,7 +271,8 @@
 
 <script src="{% static 'js/user_management/profile.js' %}"></script>
 <script src="{% static 'js/user_management/followers_and_following.js' %}"></script>
-<meta name="username" content="{{ request.user.username }}">
+<meta name="logged-in-profile" content="{{ request.user.username }}">
+<meta name="profile-currently-viewing" content="{{ profile.user.username }}">
 
 {% endif %}
 {% endblock %}

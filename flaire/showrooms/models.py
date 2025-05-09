@@ -4,10 +4,12 @@ from closet.models import Outfit
 from django.core.exceptions import ValidationError
 from taggit.managers import TaggableManager
 from django.utils import timezone
+from django.utils.text import slugify
 
 
 class Showroom(models.Model):
     title = models.CharField(max_length=255)
+    slug = models.SlugField(blank=True)
     owner = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name="owned_showrooms", null=True
     )
@@ -40,13 +42,15 @@ class Showroom(models.Model):
     def __str__(self):
         return self.title
     
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
 
 class ShowroomOutfit(models.Model):
     showroom = models.ForeignKey(Showroom, on_delete=models.CASCADE)
     outfit = models.ForeignKey(Outfit, on_delete=models.CASCADE)
     date_added = models.DateTimeField(auto_now_add=True)
-    # notes = models.TextField(blank=True, null=True)
     
     class Meta:
         unique_together = ('showroom', 'outfit')

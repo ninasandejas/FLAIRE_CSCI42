@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import render
 from user_management.models import Profile
 from closet.models import Outfit
@@ -34,3 +35,19 @@ def following(request):
         "showrooms": showrooms,
         "active_tab": "following"
     })
+
+
+@login_required
+def fetch_notifications(request):
+    notifications = request.user.profile.receive_notifications.order_by('-created_at')[:10]
+    data = [{
+        'message': n.message,
+        'link': n.link,
+        'created_at': n.created_at.strftime('%Y-%m-%d %H:%M'),
+        'is_read': n.is_read,
+    } for n in notifications]
+    return JsonResponse({'notifications': data})
+
+
+def display_explore(request):
+    return

@@ -158,3 +158,5 @@ cython_debug/
 
 # media folder
 media/
+
+dump.html

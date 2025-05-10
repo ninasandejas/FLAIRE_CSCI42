@@ -15,6 +15,7 @@ from .views import (
     UserFollowView,
     UserLoginView,
     WishlistView,
+    add_to_closet,
     toggle_like_outfit,
     toggle_wishlist,
     unlike_outfit,
@@ -76,5 +77,6 @@ urlpatterns = [
         views.remove_from_wishlist,
         name="remove_from_wishlist",
     ),
-    path("unlike-outfit/<int:outfit_id>/", views.unlike_outfit, name="unlike_outfit"),
+    path("unlike-outfit/<int:outfit_id>/", unlike_outfit, name="unlike_outfit"),
+    path("add-to-closet/<int:item_id>/", add_to_closet, name="add_to_closet"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

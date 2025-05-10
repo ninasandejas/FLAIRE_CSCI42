@@ -1,11 +1,7 @@
 import json
 import logging
 
-from .models import WishlistItem 
-from .models import LikedOutfit
-from closet.models import ClothingItem, Comment, Outfit
-from showrooms.models import Showroom
-from social.models import Notification
+from closet.models import ClosetItem, ClothingItem, Comment, Outfit
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -19,9 +15,11 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic.edit import CreateView, FormView, UpdateView
+from showrooms.models import Showroom
+from social.models import Notification
 
 from .forms import LoginForm, ProfileForm, ProfileSetupForm, SignUpForm
-from .models import Profile
+from .models import LikedOutfit, Profile, WishlistItem
 
 logger = logging.getLogger(__name__)
 
@@ -107,7 +105,9 @@ class ProfileView(LoginRequiredMixin, View):
             return redirect("user_management:login")
 
         profile, created = Profile.objects.get_or_create(user=request.user)
-        wishlist_items = WishlistItem.objects.filter(user=request.user).select_related("item")
+        wishlist_items = WishlistItem.objects.filter(user=request.user).select_related(
+            "item"
+        )
         clothing_items = [w.item for w in wishlist_items] if profile else []
         showrooms = (
             Showroom.objects.filter(
@@ -144,7 +144,9 @@ class ProfileView(LoginRequiredMixin, View):
             form.save()
             return redirect("user_management:profile")
 
-        wishlist_items = WishlistItem.objects.filter(user=request.user).select_related("item")
+        wishlist_items = WishlistItem.objects.filter(user=request.user).select_related(
+            "item"
+        )
         clothing_items = [w.item for w in wishlist_items] if profile else []
         showrooms = (
             Showroom.objects.filter(
@@ -174,8 +176,12 @@ class ProfileView(LoginRequiredMixin, View):
 
 class LikedOutfitsView(LoginRequiredMixin, View):
     def get(self, request):
-        liked_outfit_ids = LikedOutfit.objects.filter(user=request.user).values_list("outfit_id", flat=True)
-        outfits = Outfit.objects.filter(id__in=liked_outfit_ids).prefetch_related("listed_items")
+        liked_outfit_ids = LikedOutfit.objects.filter(user=request.user).values_list(
+            "outfit_id", flat=True
+        )
+        outfits = Outfit.objects.filter(id__in=liked_outfit_ids).prefetch_related(
+            "listed_items"
+        )
         return render(
             request,
             "user_management/liked_outfits.html",
@@ -186,20 +192,21 @@ class LikedOutfitsView(LoginRequiredMixin, View):
         )
 
 
-
 class WishlistView(LoginRequiredMixin, View):
     def get(self, request):
-        wishlist_items = WishlistItem.objects.filter(user=request.user).select_related("item")
+        wishlist_items = WishlistItem.objects.filter(user=request.user).select_related(
+            "item"
+        )
         return render(
             request,
             "user_management/wishlist.html",
             {
-                "items": [w.item for w in wishlist_items],  
+                "items": [w.item for w in wishlist_items],
                 "active_tab": "wishlist",
             },
         )
 
-      
+
 class OtherUserProfileView(View):
     def get(self, request, username):
         # check if the username matches the logged-in user's username
@@ -263,13 +270,15 @@ class OtherUserProfileView(View):
             user_to_follow = User.objects.get(username=username)
             # creating notification for every follow from a user
             Notification.objects.create(
-                    sender=request.user.profile,
-                    recipient=user_to_follow.profile,
-                    message=f"{request.user.username} followed you.",
-                    link = reverse('user_management:other_user_profile', kwargs={'username': request.user.username}),
-                    is_read=False
-                )
-            
+                sender=request.user.profile,
+                recipient=user_to_follow.profile,
+                message=f"{request.user.username} followed you.",
+                link=reverse(
+                    "user_management:other_user_profile",
+                    kwargs={"username": request.user.username},
+                ),
+                is_read=False,
+            )
 
         return redirect("user_management:other_user_profile", username=username)
 
@@ -388,6 +397,9 @@ class OutfitDetailView(View):
                     "name": item.name,
                     "brand": item.brand,
                     "owner": item.owner.user.username,
+                    "is_in_closet": ClosetItem.objects.filter(
+                        closet_owner=request.user.profile, clothing_item=item
+                    ).exists(),
                 }
                 for item in outfit.listed_items.all()
             ]
@@ -427,34 +439,44 @@ class SubmitCommentView(View):
             {"author": comment.author.user.username, "entry": comment.entry}
         )
 
+
 @csrf_exempt
 @require_POST
 def toggle_wishlist(request, item_id):
     try:
         item = ClothingItem.objects.get(id=item_id)
-        wishlist_item, created = WishlistItem.objects.get_or_create(user=request.user, item=item)
+        wishlist_item, created = WishlistItem.objects.get_or_create(
+            user=request.user, item=item
+        )
         if not created:
             wishlist_item.delete()
-            return JsonResponse({'status': 'removed'})
-        return JsonResponse({'status': 'added'})
+            return JsonResponse({"status": "removed"})
+        return JsonResponse({"status": "added"})
     except ClothingItem.DoesNotExist:
-        return JsonResponse({'status': 'error', 'message': 'Item not found'}, status=404)
-    
+        return JsonResponse(
+            {"status": "error", "message": "Item not found"}, status=404
+        )
+
 
 @csrf_exempt
 @require_POST
 def toggle_like_outfit(request, outfit_id):
     try:
         outfit = Outfit.objects.get(id=outfit_id)
-        liked, created = LikedOutfit.objects.get_or_create(user=request.user, outfit=outfit)
+        liked, created = LikedOutfit.objects.get_or_create(
+            user=request.user, outfit=outfit
+        )
         if not created:
             liked.delete()
-            return JsonResponse({'status': 'unliked'})
-        return JsonResponse({'status': 'liked'})
+            return JsonResponse({"status": "unliked"})
+        return JsonResponse({"status": "liked"})
     except Outfit.DoesNotExist:
-        return JsonResponse({'status': 'error', 'message': 'Outfit not found'}, status=404)
-    
-@csrf_exempt  
+        return JsonResponse(
+            {"status": "error", "message": "Outfit not found"}, status=404
+        )
+
+
+@csrf_exempt
 def remove_from_wishlist(request, item_id):
     if request.method == "POST":
         try:
@@ -466,9 +488,19 @@ def remove_from_wishlist(request, item_id):
 
     return JsonResponse({"status": "invalid_method"}, status=405)
 
+
 @csrf_exempt
 def unlike_outfit(request, outfit_id):
     if request.method == "POST":
         LikedOutfit.objects.filter(user=request.user, outfit_id=outfit_id).delete()
         return JsonResponse({"status": "unliked"})
     return JsonResponse({"status": "error"}, status=400)
+
+
+@require_POST
+def add_to_closet(request, item_id):
+    item = get_object_or_404(ClothingItem, id=item_id)
+    obj, created = ClosetItem.objects.get_or_create(
+        closet_owner=request.user.profile, clothing_item=item
+    )
+    return JsonResponse({"status": "added" if created else "already_in_closet"})

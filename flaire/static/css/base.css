@@ -1,10 +1,23 @@
+/* Global Reset and Base Styles */
 * {
-    font-family: 'Playfair Display';
+    font-family: 'Playfair Display', serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
     background-color: #FDF9F6;
     color: #482738;
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    min-height: 100vh;
+    transition: grid-template-columns 0.3s ease;
+    overflow: hidden;
+}
+
+body.sidebar-hidden {
+    grid-template-columns: 0 1fr;
 }
 
 p,
@@ -12,31 +25,78 @@ li {
     font-size: 18px;
 }
 
-#header {
-    border-bottom: 2px solid #CBA1BE;
-    padding: 15px;
+a {
+    text-decoration: none;
+    color: #482738;
+}
+
+a:visited {
+    color: #482738;
+}
+
+a:hover,
+.logout-button:hover,
+.navbar li a:hover {
+    text-decoration: underline;
+}
+
+.sidebar {
+    height: 100vh;
+    padding: 1em;
+    background-color: #CBA1BE;
+    position: sticky;
+    top: 0;
+    overflow: hidden;
+    width: 250px;
+    transition: opacity 0.3s ease, width 0.3s ease;
+}
+
+body.sidebar-hidden .sidebar {
+    width: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    display: flex;
+    align-items: center;
+    gap: 0.1em;
+    margin-bottom: 0em;
+    white-space: nowrap;
+}
+
+.sidebar a,
+.sidebar .logo {
+    border-radius: 0.5em;
+    padding: 0.85em;
+    text-decoration: none;
+    color: #482738;
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .navbar {
     list-style-type: none;
-    /* Remove bullets */
-    margin: 0;
-    padding: 0;
-    display: flex;
-    /* Ensure horizontal layout */
-    align-items: center;
-    /* Center items vertically */
-    justify-content: space-between;
-    /* Push nav-left to left and nav-right to right */
-}
-
-ul.navbar {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
     display: flex;
     align-items: center;
-    user-select: none;
+    justify-content: flex-end;
+    gap: 2em;
+    border-bottom: 2px solid #CBA1BE;
+    padding: 1em;
+    background-color: #FDF9F6;
 }
 
 ul.navbar li:first-child {
@@ -49,8 +109,16 @@ ul.navbar li {
     font-size: 18px;
 }
 
-a {
-    text-decoration: none;
+.navbar li {
+    display: inline;
+    margin-left: 20px;
+    font-size: 18px;
+}
+
+.page-content {
+    padding: 2em;
+    overflow-y: auto;
+    flex-grow: 1;
 }
 
 .logout-form {
@@ -71,6 +139,20 @@ a {
     cursor: pointer;
     text-transform: lowercase;
     padding: 0;
+    text-decoration: none;
+}
+
+//nina
+.sidebar ul li.active {     //nina's sidebar (change name)
+    background-color: #482738; Highlight color
+    color: #FDF9F6; /* Light text for contrast */
+    font-weight: bold;
+    padding: 0.1em;
+    border-radius: 0.5em;
+}
+
+.sidebar ul li.active a {     //nina's sidebar (change name)
+    color: #FDF9F6; /* Ensures the link color matches the highlight */  
 }
 
 .navbar li a:hover,

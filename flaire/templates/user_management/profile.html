@@ -53,10 +53,8 @@
 
       <h2 class="profile-username">@{{ profile.user.username }}</h2>
       <div class="profile-stats" data-username="{{ profile.user.username }}">
-        <p class="stat-item" data-type="followers" data-count="{{ profile.followers.count }}">{{ profile.followers.count
-          }} followers</p>
-        <p class="stat-item" data-type="following" data-count="{{ profile.user.following.count }}">{{
-          profile.user.following.count }} following</p>
+        <p class="stat-item" data-type="followers" data-count="{{ profile.followers.count }}">{{profile.followers.count}} followers</p>
+        <p class="stat-item" data-type="following" data-count="{{ profile.user.following.count }}">{{profile.user.following.count }} following</p>
       </div>
 
       <blockquote class="profile-bio">{{ profile.bio }}</blockquote>

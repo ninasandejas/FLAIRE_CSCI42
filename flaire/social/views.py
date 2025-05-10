@@ -4,6 +4,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.db.models import Q
 from user_management.models import Profile
@@ -11,9 +12,6 @@ from closet.models import ClothingItem, Comment, Outfit
 from showrooms.models import Showroom, ShowroomFollower, ShowroomCollaborator
 from .models import Follow
 import json
-
-
-
 
 @login_required
 def explore(request):
@@ -26,7 +24,6 @@ def following(request):
     return render(request, "social/following.html", {
         "active_tab": "following"
     })
-
 
 class ExploreOutfitsGridView(LoginRequiredMixin, View):
     def get(self, request):
@@ -125,3 +122,18 @@ class FollowingShowroomsGridView(LoginRequiredMixin, View):
             for showroom in showrooms
         ]
         return JsonResponse({"images": image_data})
+  
+@login_required
+def fetch_notifications(request):
+    notifications = request.user.profile.receive_notifications.order_by('-created_at')[:10]
+    data = [{
+        'message': n.message,
+        'link': n.link,
+        'created_at': n.created_at.strftime('%Y-%m-%d %H:%M'),
+        'is_read': n.is_read,
+    } for n in notifications]
+    return JsonResponse({'notifications': data})
+
+
+def display_explore(request):
+    return

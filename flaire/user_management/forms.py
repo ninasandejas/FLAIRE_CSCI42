@@ -80,3 +80,9 @@ class ProfileSetupForm(forms.ModelForm):
             raise forms.ValidationError("You must fill in at least one field (profile picture or bio).")
 
         return cleaned_data
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['bio', 'profile_picture']

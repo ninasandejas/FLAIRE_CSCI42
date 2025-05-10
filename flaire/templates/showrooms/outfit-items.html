@@ -1,0 +1,8 @@
+{% for outfit in outfits %}
+  <div class="outfit-thumbnail">
+    <img src="{{ outfit.image.url }}" alt="{{ outfit.name }}">
+    <p>{{ outfit.name }}</p>
+  </div>
+{% empty %}
+  <p>No outfits found.</p>
+{% endfor %}

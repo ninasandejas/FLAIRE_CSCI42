@@ -3,19 +3,29 @@
   grid-template-columns: 5vw 1fr 1fr 1fr 1fr 5vw;
   gap: 16px;
   align-items: center;
+  margin-top: 8vh;
 }
-  
+
 .thumbnail {
   overflow: hidden;
   text-align: center;
 }
 
-.thumbnail img {
-  margin-top: 8vh;
+.thumbnail.add, .thumbnail img {
   height: 70vh;
   width: 20vw;
+}
+
+.thumbnail img {
   border-radius: 12px;
   object-fit: cover;
+}
+
+.thumbnail-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* gap: 0.5rem; */
 }
 
 .thumbnail.add {
@@ -25,11 +35,17 @@
   justify-content: center;
   align-items: center;
   font-size: 3rem;
-  color: #a66b9b; 
-  height: 70vh;
-  width: 20vw;
+  color: #a66b9b;
   cursor: pointer;
   transition: background-color 0.2s ease;
+}
+
+.add-label {
+  /* font-size: 1rem;
+  font-family: "Playfair Display", serif; */
+  color: transparent;
+  text-align: center;
+  
 }
 
 .thumbnail.add:hover {
@@ -59,7 +75,6 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
-  
 
 .thumbnail.pagination-arrow:first-child {
   grid-column: 1;

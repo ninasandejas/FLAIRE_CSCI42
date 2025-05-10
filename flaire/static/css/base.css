@@ -124,7 +124,10 @@ ul.navbar li {
 .logout-form {
     display: inline;
     margin: 0;
-    padding: 0;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+
 }
 
 .logout-button {
@@ -139,7 +142,8 @@ ul.navbar li {
     text-decoration: none;
 }
 
-.sidebar ul li.active {
+//nina
+.sidebar ul li.active {     //nina's sidebar (change name)
     background-color: #482738; Highlight color
     color: #FDF9F6; /* Light text for contrast */
     font-weight: bold;
@@ -147,6 +151,94 @@ ul.navbar li {
     border-radius: 0.5em;
 }
 
-.sidebar ul li.active a {
-    color: #FDF9F6; /* Ensures the link color matches the highlight */
+.sidebar ul li.active a {     //nina's sidebar (change name)
+    color: #FDF9F6; /* Ensures the link color matches the highlight */  
+}
+
+.navbar li a:hover,
+.logout-button:hover {
+    text-decoration: underline;
+}
+
+a:visited {
+    color: #482738;
+}
+
+.active a {
+    color: #CBA1BE;
+}
+
+.profbtn {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+    text-decoration: none;
+}
+
+.profile-dropdown {
+    position: relative;
+    display: inline-block;
+    z-index: 9800;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #FDF9F6;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 12px;
+}
+
+.dropdown-content a {
+    color: #482738;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.1s ease-in-out;
+}
+
+.dropdown-content a:hover,
+.logout-form:hover {
+    background-color: #F4E6F0;
+}
+
+.profile-dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.profile-dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -500px;
+    /* hidden initially */
+    width: 300px;
+    height: 100%;
+    background-color: #FDF9F6;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    transition: right 0.3s ease;
+    z-index: 9900;
+    overflow-y: auto;
+}
+
+.sidebar.show {
+    right: 0;
+}
+
+.close-sidebar {
+    cursor: pointer;
+    font-size: 24px;
+    float: right;
+    margin-bottom: 1rem;
 }

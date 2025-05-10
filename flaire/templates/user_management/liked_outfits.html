@@ -1,34 +1,35 @@
-{% extends 'base.html' %} {% load static %} {% block title %} Liked Outfits
-{%endblock %} {% block styles %}
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap"
-/>
-<link
-  rel="stylesheet"
-  type="text/css"
-  <link rel="stylesheet" href="{% static 'css/user_management/liked_outfits.css' %}">
-/>
+{% extends 'base.html' %}
+{% load static %}
 
-{% endblock %} {% block content %}
+{% block title %}Liked Outfits{% endblock %}
 
+{% block styles %}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" />
+<link rel="stylesheet" href="{% static 'css/user_management/liked_outfits.css' %}" />
+
+{% endblock %}
+
+{% block content %}
 <div class="header">
   <h1 class="text-2xl font-bold italic text-gray-700">Liked Outfits</h1>
 </div>
 
 <div class="container">
   {% for outfit in outfits %}
-  <div class="outfit-card">
-    <div class="heart-container">
-      <span class="heart-icon">&#10084;</span>
+    <div class="outfit-card" data-outfit-id="{{ outfit.id }}">
+      <div class="heart-container">
+        <span class="heart-icon">&#10084;</span>
+      </div>
+      <button class="remove-liked-btn" data-outfit-id="{{ outfit.id }}">×</button>
+      <img src="{{ outfit.image.url }}" alt="Outfit {{ forloop.counter }}" />
     </div>
-    <img src="{{ outfit.image.url }}" alt="Outfit {{ forloop.counter }}" />
-  </div>
   {% empty %}
-  <p>No liked outfits yet.</p>
-  {% endfor %} {% endblock %}
+    <p>No liked outfits yet.</p>
+  {% endfor %}
 </div>
+
+
+{% endblock %}
 
 {% block scripts %}
 <script>
@@ -42,8 +43,41 @@
         document.body.appendChild(bubble);
 
         bubble.addEventListener("animationend", () => bubble.remove());
-      }, i * 100); 
+      }, i * 100);
     }
   });
+
+  function getCSRFToken() {
+  const cookie = document.cookie.match(/csrftoken=([^;]+)/);
+  return cookie ? cookie[1] : "";
+}
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".remove-liked-btn").forEach(button => {
+      button.addEventListener("click", () => {
+        const outfitId = button.dataset.outfitId;
+
+        fetch(`/unlike-outfit/${outfitId}/`, {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": getCSRFToken(),
+          },
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === "unliked") {
+            const card = button.closest(".outfit-card");
+            card.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+            card.style.opacity = 0;
+            card.style.transform = "scale(0.95)";
+            setTimeout(() => card.remove(), 300);
+          } else {
+            alert("Something went wrong.");
+          }
+        });
+      });
+    });
+  });
 </script>
+
 {% endblock %}

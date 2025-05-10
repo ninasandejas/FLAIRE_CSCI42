@@ -1,32 +1,29 @@
 import json
+import logging
 
+from .models import WishlistItem 
+from .models import LikedOutfit
 from closet.models import ClothingItem, Comment, Outfit
+from showrooms.models import Showroom
+from social.models import Notification
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.db.models import Count, Q
 from django.http import JsonResponse
-from django.shortcuts import redirect, render
-from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from django.views.generic.edit import CreateView, FormView, UpdateView
 
-from .forms import LoginForm, ProfileSetupForm, SignUpForm
+from .forms import LoginForm, ProfileForm, ProfileSetupForm, SignUpForm
 from .models import Profile
 
-# class UserUpdateView(LoginRequiredMixin, UpdateView):
-#     model = Profile
-#     form_class = ProfileForm
-#     template_name = 'user_detail.html'
-#     success_url = reverse_lazy('homepage:homepage')
-
-#     def get_object(self, queryset=None):
-#         return self.request.user.profile
-
-#     def form_valid(self, form):
-#         form.save()
-#         return super().form_valid(form)
+logger = logging.getLogger(__name__)
 
 
 class UserLoginView(FormView):
@@ -74,7 +71,7 @@ class UserCreateView(CreateView):
     def form_valid(self, form):
         user = form.save()
 
-        Profile.objects.create(user=user, email_address=user.email)
+        Profile.objects.get_or_create(user=user, defaults={"email_address": user.email})
 
         login(self.request, user)
 
@@ -106,19 +103,79 @@ class ProfileSetupView(LoginRequiredMixin, UpdateView):
 
 class ProfileView(LoginRequiredMixin, View):
     def get(self, request):
-        profile = Profile.objects.get(user=request.user)
+        if not request.user.is_authenticated:
+            return redirect("user_management:login")
+
+        profile, created = Profile.objects.get_or_create(user=request.user)
+        wishlist_items = WishlistItem.objects.filter(user=request.user).select_related("item")
+        clothing_items = [w.item for w in wishlist_items] if profile else []
+        showrooms = (
+            Showroom.objects.filter(
+                Q(owner=profile)
+                | Q(
+                    showroomcollaborator__collaborator=profile,
+                    showroomcollaborator__status="ACCEPTED",
+                )
+            )
+            .annotate(follower_count=Count("followers"))
+            .order_by("-follower_count")
+            .distinct()[:3]
+        )
+
+        form = ProfileForm(instance=profile)
+
         return render(
             request,
             "user_management/profile.html",
-            {"profile": profile, "active_tab": "profile"},
+            {
+                "profile": profile,
+                "items": clothing_items,
+                "showrooms": showrooms,
+                "form": form,
+                "active_tab": "profile",
+                "is_own_profile": True,
+            },
+        )
+
+    def post(self, request):
+        profile = request.user.profile
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect("user_management:profile")
+
+        wishlist_items = WishlistItem.objects.filter(user=request.user).select_related("item")
+        clothing_items = [w.item for w in wishlist_items] if profile else []
+        showrooms = (
+            Showroom.objects.filter(
+                Q(owner=profile)
+                | Q(
+                    showroomcollaborator__collaborator=profile,
+                    showroomcollaborator__status="ACCEPTED",
+                )
+            )
+            .annotate(follower_count=Count("followers"))
+            .order_by("-follower_count")
+            .distinct()[:3]
+        )
+
+        return render(
+            request,
+            "user_management/profile.html",
+            {
+                "profile": profile,
+                "items": clothing_items,
+                "showrooms": showrooms,
+                "form": form,
+                "active_tab": "profile",
+            },
         )
 
 
-class LikedOutfitsView(View):
+class LikedOutfitsView(LoginRequiredMixin, View):
     def get(self, request):
-        outfits = Outfit.objects.filter(owner=request.user.profile).prefetch_related(
-            "items"
-        )
+        liked_outfit_ids = LikedOutfit.objects.filter(user=request.user).values_list("outfit_id", flat=True)
+        outfits = Outfit.objects.filter(id__in=liked_outfit_ids).prefetch_related("listed_items")
         return render(
             request,
             "user_management/liked_outfits.html",
@@ -129,25 +186,179 @@ class LikedOutfitsView(View):
         )
 
 
+
 class WishlistView(LoginRequiredMixin, View):
     def get(self, request):
-        user_profile = request.user.profile
-        clothing_items = ClothingItem.objects.filter(owner=user_profile)
+        wishlist_items = WishlistItem.objects.filter(user=request.user).select_related("item")
         return render(
             request,
             "user_management/wishlist.html",
             {
-                "items": clothing_items,
+                "items": [w.item for w in wishlist_items],  
                 "active_tab": "wishlist",
             },
         )
 
+      
+class OtherUserProfileView(View):
+    def get(self, request, username):
+        # check if the username matches the logged-in user's username
+        if username == request.user.username:
+            return redirect("user_management:profile")
+
+        try:
+            user = User.objects.get(username=username)
+            profile = user.profile
+        except User.DoesNotExist:
+            return redirect("user_management:profile")
+
+        outfits = Outfit.objects.filter(owner=profile).order_by("-date_created")
+
+        clothing_items = ClothingItem.objects.filter(owner=profile) if profile else []
+        showrooms = (
+            Showroom.objects.filter(
+                Q(owner=profile)
+                | Q(
+                    showroomcollaborator__collaborator=profile,
+                    showroomcollaborator__status="ACCEPTED",
+                )
+            )
+            .annotate(follower_count=Count("followers"))
+            .order_by("-follower_count")
+            .distinct()[:3]
+        )
+
+        is_following = profile.followers.filter(id=request.user.id).exists()
+
+        return render(
+            request,
+            "user_management/profile.html",
+            {
+                "profile": profile,
+                "items": clothing_items,
+                "outfits": outfits,
+                "showrooms": showrooms,
+                "is_following": is_following,
+                "is_own_profile": False,
+                "active_tab": "profile",
+            },
+        )
+
+    def post(self, request, username):
+        try:
+            user = User.objects.get(username=username)
+            profile = user.profile
+        except User.DoesNotExist:
+            return redirect("user_management:profile")
+
+        # Prevent users from following themselves
+        if user == request.user:
+            return redirect("user_management:other_user_profile", username=username)
+
+        # Correct the follow/unfollow logic
+        if profile.followers.filter(id=request.user.id).exists():
+            profile.followers.remove(request.user)
+        else:
+            profile.followers.add(request.user)
+            user_to_follow = User.objects.get(username=username)
+            # creating notification for every follow from a user
+            Notification.objects.create(
+                    sender=request.user.profile,
+                    recipient=user_to_follow.profile,
+                    message=f"{request.user.username} followed you.",
+                    link = reverse('user_management:other_user_profile', kwargs={'username': request.user.username}),
+                    is_read=False
+                )
+            
+
+        return redirect("user_management:other_user_profile", username=username)
+
+
+class UserFollowView(View):
+    @method_decorator(login_required)
+    def get_followers(self, request, username):
+        profile = get_object_or_404(Profile, user__username=username)
+        followers = profile.followers.all()
+        followers_data = [
+            {
+                "username": follower.username,
+                "profile_picture_url": (
+                    follower.profile.profile_picture.url
+                    if follower.profile.profile_picture
+                    else ""
+                ),
+                "follow_status": (
+                    "Unfollow"
+                    if follower.profile.followers.filter(id=request.user.id).exists()
+                    else "Follow"
+                ),
+            }
+            for follower in followers
+        ]
+        if not followers_data:
+            return JsonResponse([], safe=False)
+        return JsonResponse(followers_data, safe=False)
+
+    @method_decorator(login_required)
+    def get_following(self, request, username):
+        user = get_object_or_404(User, username=username)
+        try:
+            following_profiles = Profile.objects.filter(followers=user)
+            following_data = [
+                {
+                    "username": profile.user.username,
+                    "profile_picture_url": (
+                        profile.profile_picture.url if profile.profile_picture else ""
+                    ),
+                    "follow_status": (
+                        "Unfollow"
+                        if profile.followers.filter(id=request.user.id).exists()
+                        else "Follow"
+                    ),
+                }
+                for profile in following_profiles
+            ]
+            if not following_data:
+                return JsonResponse([], safe=False)
+            return JsonResponse(following_data, safe=False)
+        except Exception as e:
+            logger.error(f"Error in get_following: {e}")
+            return JsonResponse(
+                {"error": "An error occurred while fetching following data."},
+                status=500,
+            )
+
+    @method_decorator(login_required)
+    def toggle_follow(self, request, username):
+        try:
+            user_to_follow = get_object_or_404(User, username=username)
+            profile_to_follow = user_to_follow.profile
+
+            if profile_to_follow.followers.filter(id=request.user.id).exists():
+                profile_to_follow.followers.remove(request.user)
+                new_status = "Follow"
+            else:
+                profile_to_follow.followers.add(request.user)
+                new_status = "Unfollow"
+
+            return JsonResponse({"new_status": new_status})
+        except Exception as e:
+            logger.error(f"Error in toggle_follow: {e}")
+            return JsonResponse(
+                {"error": "An error occurred while toggling follow status."}, status=500
+            )
+
 
 class OutfitGridImagesView(View):
-    def get(self, request):
-        outfits = Outfit.objects.filter(owner=request.user.profile).order_by(
-            "-date_created"
-        )
+    def get(self, request, username=None):
+        if username:
+            user = get_object_or_404(User, username=username)
+            profile = user.profile
+        else:
+            profile = request.user.profile
+
+        outfits = Outfit.objects.filter(owner=profile).order_by("-date_created")
+
         image_data = [{"id": outfit.id, "url": outfit.image.url} for outfit in outfits]
         return JsonResponse({"images": image_data})
 
@@ -215,3 +426,49 @@ class SubmitCommentView(View):
         return JsonResponse(
             {"author": comment.author.user.username, "entry": comment.entry}
         )
+
+@csrf_exempt
+@require_POST
+def toggle_wishlist(request, item_id):
+    try:
+        item = ClothingItem.objects.get(id=item_id)
+        wishlist_item, created = WishlistItem.objects.get_or_create(user=request.user, item=item)
+        if not created:
+            wishlist_item.delete()
+            return JsonResponse({'status': 'removed'})
+        return JsonResponse({'status': 'added'})
+    except ClothingItem.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Item not found'}, status=404)
+    
+
+@csrf_exempt
+@require_POST
+def toggle_like_outfit(request, outfit_id):
+    try:
+        outfit = Outfit.objects.get(id=outfit_id)
+        liked, created = LikedOutfit.objects.get_or_create(user=request.user, outfit=outfit)
+        if not created:
+            liked.delete()
+            return JsonResponse({'status': 'unliked'})
+        return JsonResponse({'status': 'liked'})
+    except Outfit.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Outfit not found'}, status=404)
+    
+@csrf_exempt  
+def remove_from_wishlist(request, item_id):
+    if request.method == "POST":
+        try:
+            item = ClothingItem.objects.get(id=item_id)
+            item.liked_by.remove(request.user.profile)
+            return JsonResponse({"status": "removed"})
+        except ClothingItem.DoesNotExist:
+            return JsonResponse({"status": "not_found"}, status=404)
+
+    return JsonResponse({"status": "invalid_method"}, status=405)
+
+@csrf_exempt
+def unlike_outfit(request, outfit_id):
+    if request.method == "POST":
+        LikedOutfit.objects.filter(user=request.user, outfit_id=outfit_id).delete()
+        return JsonResponse({"status": "unliked"})
+    return JsonResponse({"status": "error"}, status=400)

@@ -12,7 +12,5 @@ urlpatterns = [
     path("explore-showrooms/", ExploreShowroomsGridView.as_view(), name="explore-showrooms"),
     path("following-outfits/", FollowingOutfitsGridView.as_view(), name="following-outfits"),
     path("following-showrooms/", FollowingShowroomsGridView.as_view(), name="following-showrooms"),
+    path('notifications/', views.fetch_notifications, name='notifs')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
-

@@ -149,7 +149,6 @@
   width: 300px;
   height: 454px;
   text-align: center;
-  display: fle;
   padding: 20px;
   border-radius: 10px;
   background-color: #ece4e4;
@@ -177,10 +176,8 @@
 
 .wishlist-widget {
   position: relative;
-  /* Enable positioning of child elements */
   height: 250px;
-  width: 300px;
-  /* Set a fixed width */
+  width: 330px;
   display: flex;
   align-items: center;
   justify-content: center;

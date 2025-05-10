@@ -221,7 +221,8 @@ class OtherUserProfileView(View):
 
         outfits = Outfit.objects.filter(owner=profile).order_by("-date_created")
 
-        clothing_items = ClothingItem.objects.filter(owner=profile) if profile else []
+        wishlist_items = WishlistItem.objects.filter(user=profile.user).select_related("item")
+        clothing_items = [w.item for w in wishlist_items] if profile else []
         showrooms = (
             Showroom.objects.filter(
                 Q(owner=profile)
